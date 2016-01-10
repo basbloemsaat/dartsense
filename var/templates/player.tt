@@ -1,0 +1,62 @@
+[% USE DataPrinter %]
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    [% INCLUDE "head.tt" %]
+    <title>Demo ratings</title>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/" class="btn btn-default pull-right"><i class="fa fa-list"></i> Terug naar de lijst</a>
+        <h1> Speler [% player.name %] </h1>
+        <h2> Rating: [% player.rating %] </h2>
+        <table class="table table-striped table-condensed">
+            <tr>
+                <th>
+                    Datum
+                </th>
+                <th>
+                    Ronde
+                </th>
+                <th>
+                    Speler 1
+                </th>
+                <th>
+                    Speler 2
+                </th>
+                <th>
+                    Score
+                </th>
+                <th>
+                    Rating
+                </th>
+            </tr>
+            [% FOR game IN player.matches %]
+            <tr>
+                <td>
+                    [% game.date %]
+                </td>
+                <td>
+                    [% game.get_round() %]
+                </td>
+                <td>
+                    <a href="player_[% game.player1.name %].html">[% game.player1.name %]</a>
+                </td>
+                <td>
+                    <a href="player_[% game.player2.name %].html">[% game.player2.name %]</a>
+                </td>
+                <td>
+                    [% game.score1 %] - [% game.score2 %]
+                </td>
+                <td>
+                    [% index = loop.index() %] [% player.cumulative.$index %] ( [% player.mutations.$index %] ) [%# DataPrinter.dump_html(bla) %]
+                </td>
+            </tr>
+            [% END %]
+        </table>
+    </div>
+</body>
+
+</html>
