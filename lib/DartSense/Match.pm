@@ -44,24 +44,13 @@ sub calcratings($self) {
     my $p1_rating = $self->{player1}->get_rating;
     my $p2_rating = $self->{player2}->get_rating;
 
-    # p $p1_score;
-    # p $p1_rating;
-    # p $p2_score;
-    # p $p2_rating;
-
-    my $E1 = 1 / ( 1 + 10**( ( $p1_rating - $p2_rating ) / $factor ) );
-    my $E2 = 1 / ( 1 + 10**( ( $p2_rating - $p1_rating ) / $factor ) );
+    my $E1 = 1 / ( 1 + 10**( ( $p2_rating - $p1_rating ) / $factor ) );
+    my $E2 = 1 / ( 1 + 10**( ( $p1_rating - $p2_rating ) / $factor ) );
     my $p1_mutation = round($K * ( $p1_score - $E1 ));
     my $p2_mutation = round($K * ( $p2_score - $E2 ));
 
-    # p $E1;
-    # p $p1_mutation;
-    # p $E2;
-    # p $p2_mutation;
-
     $self->{player1}->addMutation($p1_mutation);
     $self->{player2}->addMutation($p2_mutation);
-
 }
 
 1;
