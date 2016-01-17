@@ -42,10 +42,10 @@
                     [% game.get_round() %]
                 </td>
                 <td>
-                    <a href="player_[% game.player1.name %].html">[% game.player1.name %]</a>
+                    [% INCLUDE gameplayerlink gameplayer=game.player1 %]
                 </td>
                 <td>
-                    <a href="player_[% game.player2.name %].html">[% game.player2.name %]</a>
+                    [% INCLUDE gameplayerlink gameplayer=game.player2 %]
                 </td>
                 <td>
                     [% game.score1 %] - [% game.score2 %]
@@ -54,9 +54,18 @@
                     [% index = loop.index() %] [% player.cumulative.$index %] ( [% player.mutations.$index %] ) [%# DataPrinter.dump_html(bla) %]
                 </td>
             </tr>
+                    [%# DataPrinter.dump_html(game.player1) %]
             [% END %]
         </table>
     </div>
 </body>
 
 </html>
+
+[% BLOCK gameplayerlink %] 
+[% IF  gameplayer.name== player.name%]
+    [% gameplayer.name %]
+[% ELSE %]
+    <a href="player_[% gameplayer.name %].html">[% gameplayer.name %]</a>
+[% END %]
+[% END %]
