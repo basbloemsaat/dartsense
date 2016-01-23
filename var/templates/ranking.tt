@@ -3,7 +3,7 @@
 
 <head>
     [% INCLUDE "head.tt" %]
-    <title>Demo ratings</title>
+    <title>ELO Ratings</title>
 </head>
 
 <body>
