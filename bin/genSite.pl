@@ -31,8 +31,9 @@ my $options = { file => '', };
 
 GetOptions( "file=s" => \$options->{file}, );
 
-my $aoa = csv( in => $options->{file} );
+my $aoa     = csv( in => $options->{file} );
 my $headers = shift @{$aoa};
+my $passes  = 10;
 
 for ( @{$aoa} ) {
     my %args;
@@ -51,20 +52,34 @@ for ( @{$aoa} ) {
 
 @matches = sort { $a->get_seq cmp $b->get_seq } @matches;
 
-for my $match (@matches) {
-    $match->calcratings;    
+for ( 1 .. $passes ) {
+    for my $player (@players) {
+        $player->resetPass;
+    }
+    for my $match (@matches) {
+        $match->calcratings;
+    }
 }
 
 @players = sort { $b->{rating} <=> $a->{rating} } @players;
+
 # p @players;
 
-my $template = Template->new({INCLUDE_PATH => "$FindBin::Bin/../var/templates"});
-$template->process("ranking.tt", {players => \@players}, "$FindBin::Bin/../var/www/index.html") || die $template->error();
+my $template
+    = Template->new( { INCLUDE_PATH => "$FindBin::Bin/../var/templates" } );
+$template->process(
+    "ranking.tt",
+    { players => \@players },
+    "$FindBin::Bin/../var/www/index.html"
+) || die $template->error();
 
 for (@players) {
-    $template->process("player.tt", {player => $_}, "$FindBin::Bin/../var/www/player_" . $_->get_name . ".html") || die $template->error();
+    $template->process(
+        "player.tt",
+        { player => $_ },
+        "$FindBin::Bin/../var/www/player_" . $_->get_name . ".html"
+    ) || die $template->error();
 }
-
 
 # p @matches;
 # # p $aoa;

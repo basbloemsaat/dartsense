@@ -2,29 +2,40 @@
 <html lang="en">
 
 <head>
-    [%  INCLUDE "head.tt" %]
+    [% INCLUDE "head.tt" %]
     <title>Demo ratings</title>
 </head>
 
 <body>
     <div class="container">
-        <h1> Ratings </h1>
-        <table class="table table-striped table-condensed">
-            <tr>
-                <th> Speler </th>
-                <th> Rating </th>
-            </tr>
-            [% FOR player IN players %]
-            <tr>
-                <td>
-                    <a href="player_[% player.name %].html">[% player.name %]</a>
-                </td>
-                <td>
-                    [% player.rating %]
-                </td>
-            </tr>
-            [% END %]
-        </table>
+        <div class="row">
+            <h3>ELO ratings van SV Austerlitz, sectie Darts.</h3>
+            <p>
+                Deze ratings zijn gebaseerd op wedstrijden tijdens de reguliere dartavonden. De verandering in de rating hangt per wedstrijd af van de score en van de sterkte van de spelers. Omdat we pas begonnen zijn met deze berekening, voeren we hem meerdere keren uit, om de beginstand niet van invloed te laten zijn.
+            </p>
+            <p>
+                Klik op de naam van een darter om zijn resultaten en ratingverloop te bekijken.
+            </p>
+        </div>
+        <div class="row">
+            <h1> Ratings </h1>
+            <table class="table table-striped table-condensed">
+                <tr>
+                    <th> Speler </th>
+                    <th> Rating </th>
+                </tr>
+                [% FOR player IN players %]
+                <tr>
+                    <td>
+                        <a href="player_[% player.name %].html">[% player.name %]</a>
+                    </td>
+                    <td>
+                        [% player.rating %]
+                    </td>
+                </tr>
+                [% END %]
+            </table>
+        </div>
     </div>
 </body>
 

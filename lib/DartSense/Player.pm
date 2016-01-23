@@ -43,4 +43,11 @@ sub addMutation($self, $mutation) {
     return $self->{rating};
 }
 
+sub resetPass($self) {
+    $self->{matches}    = [];
+    $self->{mutations}  = [];
+    $self->{cumulative} = [];
+    $self->{ratecount}  = 0;
+}
+
 1;
