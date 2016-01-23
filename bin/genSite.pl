@@ -33,7 +33,7 @@ GetOptions( "file=s" => \$options->{file}, );
 
 my $aoa     = csv( in => $options->{file} );
 my $headers = shift @{$aoa};
-my $passes  = 10;
+my $passes  = 5;
 
 for ( @{$aoa} ) {
     my %args;
