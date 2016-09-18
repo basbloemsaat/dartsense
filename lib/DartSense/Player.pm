@@ -17,37 +17,19 @@ use experimental 'signatures';
 no warnings "experimental::signatures";
 
 __PACKAGE__->follow_best_practice;
-__PACKAGE__->mk_accessors( 'name', 'rating', 'ratecount' );
+__PACKAGE__->mk_accessors( 'name' );
 
 sub new($class, $args) {
     my $self = $class->SUPER::new($args);
 
-    $self->{matches}    = [];
-    $self->{mutations}  = [];
-    $self->{cumulative} = [];
-    $self->{ratecount}  = 0;
-    $self->{rating}     = 1000;
+    $self->{finishes}   = [];
+    $self->{lollies}    = 0;
+    $self->{matchcount} = 0;
+    $self->{max}        = 0;
+    $self->{score}      = 0;
+
     return $self;
 
-}
-
-sub addMatch($self, $match) {
-    push @{ $self->{matches} }, $match;
-    return @{ $self->{matches} };
-}
-
-sub addMutation($self, $mutation) {
-    push @{ $self->{mutations} }, $mutation;
-    $self->{rating} += $mutation;
-    push @{ $self->{cumulative} }, $self->{rating};
-    return $self->{rating};
-}
-
-sub resetPass($self) {
-    $self->{matches}    = [];
-    $self->{mutations}  = [];
-    $self->{cumulative} = [];
-    $self->{ratecount}  = 0;
 }
 
 1;
