@@ -14,8 +14,11 @@ use Excel::Writer::XLSX;
 use File::Spec;
 use FindBin;
 use Getopt::Long;
+use HTML::Table;
 use Spreadsheet::XLSX;
 use Template;
+use WWW::Mechanize;
+use YAML 'LoadFile';
 
 use lib "$FindBin::Bin/../lib";
 
@@ -25,10 +28,17 @@ use DartSense::Player;
 use experimental 'signatures';
 no warnings "experimental::signatures";
 
-my $options = { file => '', };
-GetOptions( "file=s" => \$options->{file}, );
+my $options = { file => '', updatesite => 0 };
+GetOptions(
+    "file=s"     => \$options->{file},
+    "updatesite" => \$options->{updatesite},
+);
 
 die unless ( $options->{file} );
+p $options;
+
+my $config = LoadFile('/home/bas/.darts.yaml');
+p $config;
 
 my $file  = File::Spec->rel2abs( $options->{file} );
 my $excel = Spreadsheet::XLSX->new($file);
@@ -82,73 +92,166 @@ foreach my $matchdata (@matches) {
     parsePlayer( 2, $matchdata );
 }
 
-my @players_stand = sort { $a->{matchcount} <=> $b->{matchcount} } @players;
-@players_stand = sort { $b->{score} <=> $a->{score} } @players_stand;
-
-my @players_180
-    = sort { $b->{max} <=> $a->{max} } grep { $_->{max} } @players;
-my @players_finishes = sort { $b->{finishes}->[0] <=> $a->{finishes}->[0] }
-    grep { @{ $_->{finishes} } } @players;
-
 unlink("/tmp/standen_$lastdate.xlsx");
 my $workbook = Excel::Writer::XLSX->new("/tmp/standen_$lastdate.xlsx");
 
+my %tables;
+
+my @players_stand
+    = sort { $a->{matchcount} <=> $b->{matchcount} } @players;
+@players_stand = sort { $b->{score} <=> $a->{score} } @players_stand;
 {
-    my $worksheet_stand = $workbook->add_worksheet('stand');
-    $worksheet_stand->write_row( 0, 0,
-        [ 'Stand', 'Naam', 'Punten', 'Wedstrijden', 'Gemiddeld', ] );
+    my @table
+        = ( [ 'Stand', 'Naam', 'Punten', 'Wedstrijden', 'Gemiddeld', ] );
     my $i = 1;
     foreach my $player (@players_stand) {
-        $worksheet_stand->write( $i, 0, $i );
-        $worksheet_stand->write( $i, 1, $player->{name} );
-        $worksheet_stand->write( $i, 2, $player->{score} );
-        $worksheet_stand->write( $i, 3, $player->{matchcount} );
-        $worksheet_stand->write( $i, 4,
-            sprintf( "%0.2f", $player->{score} / $player->{matchcount} ) );
+        my @row = (
+            $i, $player->{name}, $player->{score}, $player->{matchcount},
+            sprintf( "%0.2f", $player->{score} / $player->{matchcount} ),
+        );
+
+        push @table, \@row;
         $i++;
     }
+
+    my $worksheet = storeTable( 'stand', \@table );
+}
+
+my @players_180
+    = sort { $b->{max} <=> $a->{max} } grep { $_->{max} } @players;
+{
+    my @table = ( [ 'Naam', 'x 180' ] );
+    foreach my $player (@players_180) {
+        my @row = ( $player->{name}, $player->{max}, );
+        push @table, \@row;
+    }
+
+    my $worksheet = storeTable( '180', \@table );
+
+}
+
+my @players_finishes = sort { $b->{finishes}->[0] <=> $a->{finishes}->[0] }
+    grep { @{ $_->{finishes} } } @players;
+{
+    my @table = ( [ 'Naam', 'Finishes 100+', ] );
+    foreach my $player (@players_finishes) {
+        my @row = ( $player->{name}, join( ', ', @{ $player->{finishes} } ) );
+        push @table, \@row;
+    }
+
+    my $worksheet = storeTable( 'finishes', \@table );
+}
+
+my @players_lollies = sort { $b->{lollies} <=> $a->{lollies} }
+    grep { $_->{lollies} } @players;
+{
+    my @table = ( [ 'Naam', 'Lollies', ] );
+    foreach my $player (@players_lollies) {
+        my @row = ( $player->{name}, $player->{lollies}, );
+        push @table, \@row;
+    }
+
+    my $worksheet = storeTable( 'lollies', \@table );
 }
 
 {
-    my $worksheet_180 = $workbook->add_worksheet('180');
-    $worksheet_180->write_row( 0, 0, [ '', 'Naam', 'x 180', ] );
+    my @table = (
+        [   'Stand',     'Naam', 'Punten',        'Wedstrijden',
+            'Gemiddeld', '180',  '100+ finishes', 'lollies'
+        ]
+    );
     my $i = 1;
-    foreach my $player (@players_180) {
-        $worksheet_180->write( $i, 0, $i );
-        $worksheet_180->write( $i, 1, $player->{name} );
-        $worksheet_180->write( $i, 2, $player->{max} );
+    foreach my $player (@players_stand) {
+        my @row = (
+            $i,
+            $player->{name},
+            $player->{score},
+            $player->{matchcount},
+            sprintf( "%0.2f", $player->{score} / $player->{matchcount} ),
+            $player->{max},
+            join( ', ', @{ $player->{finishes} } ),
+            $player->{lollies},
+        );
+        push @table, \@row;
         $i++;
     }
-}
-{
-    my $worksheet_finish = $workbook->add_worksheet('finish');
-    $worksheet_finish->write_row( 0, 0, [ '', 'Naam', 'Finishes 100+', ] );
-    my $i = 1;
-    foreach my $player (@players_finishes) {
-        $worksheet_finish->write( $i, 0, $i );
-        $worksheet_finish->write( $i, 1, $player->{name} );
-        $worksheet_finish->write( $i, 2,
-            join( ', ', @{ $player->{finishes} } ) );
-        $i++;
-    }
-}
-{
-    my @players_lollies = sort { $b->{lollies} <=> $a->{lollies} }
-        grep { $_->{lollies} } @players;
-    my $worksheet_lolly = $workbook->add_worksheet('lolly');
-    $worksheet_lolly->write_row( 0, 0, [ '', 'Naam', "Lolly's", ] );
-    my $i = 1;
-    foreach my $player (@players_lollies) {
-        $worksheet_lolly->write( $i, 0, $i );
-        $worksheet_lolly->write( $i, 1, $player->{name} );
-        $worksheet_lolly->write( $i, 2, $player->{lollies} );
-        $i++;
-    }
+
+    my $worksheet = storeTable( 'alles', \@table );
+
 }
 
 $workbook->close();
 
+my $mech;
+if ( $options->{updatesite} ) {
+    $mech = WWW::Mechanize->new();
+    $mech->get('https://svausterlitz.voetbalassist.nl/cms/index.aspx');
+    my $res = $mech->submit_form(
+        form_name => 'aspnetForm',
+        fields    => {
+            'ctl00$Content$gebruikersnaam' => $config->{website}->{username},
+            'ctl00$Content$wachtwoord'     => $config->{website}->{password},
+        },
+        button => 'ctl00$Content$SubmitBtn'
+    );
+
+    if ( $res->is_success ) {
+
+        # my $c = $res->decoded_content;
+        # p $c;
+        updatePage('stand');
+        updatePage(180);
+        updatePage('finishes');
+        updatePage('lollies');
+    }
+
+}
+
 exit;
+
+sub updatePage {
+    my $name = shift;
+
+    my $aoa = $tables{$name};
+
+    my $pages = {
+        stand =>
+            'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=412',
+        180 =>
+            'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=413',
+        finishes =>
+            'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=414',
+        lollies =>
+            'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=493',
+    };
+
+    my $table = HTML::Table->new($aoa);
+    $table->setBorder(1);
+    my $t = $table->getTable;
+
+    my $content = $table . '<p>' . 'updated 2';
+
+    $mech->get( $pages->{$name} );
+    my $res = $mech->submit_form(
+        form_name => 'aspnetForm',
+        fields    => {
+            'Mp$Content$ctl00$contentTextBox' => $content,
+            'Mp$Content$ctl00$Opslaan'        => 'Opslaan',
+        },
+        button => 'Mp$Content$ctl00$Opslaan'
+    );
+}
+
+sub storeTable {
+    my $name  = shift;
+    my $table = shift;
+
+    $tables{$name} = $table;
+    my $worksheet = $workbook->add_worksheet($name);
+    $worksheet->write_col( 0, 0, $table );
+
+    return $worksheet;
+}
 
 sub getPlayer {
     my $name   = shift;
