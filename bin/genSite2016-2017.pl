@@ -10,6 +10,7 @@ binmode STDERR, ":utf8";
 binmode STDIN,  ":encoding(UTF-8)";
 
 use Data::Printer;
+use DateTime;
 use Excel::Writer::XLSX;
 use File::Spec;
 use FindBin;
@@ -35,13 +36,14 @@ GetOptions(
 );
 
 die unless ( $options->{file} );
-p $options;
+
+my $now = DateTime->now(
+    time_zone => DateTime::TimeZone->new( name => 'local' ) );
+my $updatetime = $now->dmy . ' ' . $now->hms;
 
 my $config = LoadFile('/home/bas/.darts.yaml');
-p $config;
-
-my $file  = File::Spec->rel2abs( $options->{file} );
-my $excel = Spreadsheet::XLSX->new($file);
+my $file   = File::Spec->rel2abs( $options->{file} );
+my $excel  = Spreadsheet::XLSX->new($file);
 
 my $playerslookup = {};
 my @matches;
@@ -215,23 +217,35 @@ sub updatePage {
     my $aoa = $tables{$name};
 
     my $pages = {
-        stand =>
-            'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=412',
-        180 =>
-            'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=413',
-        finishes =>
-            'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=414',
-        lollies =>
-            'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=493',
+        stand => {
+            title => 'Competitiestand',
+            uri =>
+                'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=412',
+        },
+        180 => {
+            title => "Aantal 180's",
+            uri =>
+                'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=413',
+        },
+        finishes => {
+            title => 'Hoogste finishes',
+            uri =>
+                'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=414',
+        },
+        lollies => {
+            title => 'Aantal Lollies',
+            uri =>
+                'https://svausterlitz.voetbalassist.nl/cms/Index2.aspx?m=1&o=1&miid=493',
+        },
     };
 
     my $table = HTML::Table->new($aoa);
     $table->setBorder(1);
     my $t = $table->getTable;
 
-    my $content = $table . '<p>' . 'updated 2';
+    my $content = "<h1>$pages->{$name}->{title}</h1>". $table . '<p><hr>' . 'updated ' . $updatetime;
 
-    $mech->get( $pages->{$name} );
+    $mech->get( $pages->{$name}->{uri} );
     my $res = $mech->submit_form(
         form_name => 'aspnetForm',
         fields    => {
