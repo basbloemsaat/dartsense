@@ -87,8 +87,6 @@ foreach my $sheet ( @{ $excel->{Worksheet} } ) {
     }
 }
 
-# p @matches;
-
 foreach my $matchdata (@matches) {
     parsePlayer( 1, $matchdata );
     parsePlayer( 2, $matchdata );
@@ -198,9 +196,6 @@ if ( $options->{updatesite} ) {
     );
 
     if ( $res->is_success ) {
-
-        # my $c = $res->decoded_content;
-        # p $c;
         updatePage('stand');
         updatePage(180);
         updatePage('finishes');
@@ -243,7 +238,12 @@ sub updatePage {
     $table->setBorder(1);
     my $t = $table->getTable;
 
-    my $content = "<h1>$pages->{$name}->{title}</h1>". $table . '<p><hr>' . 'updated ' . $updatetime;
+    my $content
+        = "<h1>$pages->{$name}->{title}</h1>"
+        . $table
+        . '<p><hr>'
+        . 'updated '
+        . $updatetime;
 
     $mech->get( $pages->{$name}->{uri} );
     my $res = $mech->submit_form(
@@ -314,6 +314,8 @@ sub parsePlayer {
 
     for my $finish ( @{ $matchdata->{"finishes$own"} } ) {
         push @{ $player->{finishes} }, $finish;
+        @{ $player->{finishes} }
+            = sort { $b <=> $a } @{ $player->{finishes} };
 
         if ( $finish >= 100 && $finish <= 110 ) {
             $player->{score} += 1;
