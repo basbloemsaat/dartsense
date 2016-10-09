@@ -105,8 +105,16 @@ my @players_stand
         = ( [ 'Stand', 'Naam', 'Punten', 'Wedstrijden', 'Gemiddeld', ] );
     my $i = 1;
     foreach my $player (@players_stand) {
+        my $print_i = $i;
+        if ( $player->{score} eq $table[-1]->[2] ) {
+            $print_i = '';
+        }
+
         my @row = (
-            $i, $player->{name}, $player->{score}, $player->{matchcount},
+            $print_i,
+            $player->{name},
+            $player->{score},
+            $player->{matchcount},
             sprintf( "%0.2f", $player->{score} / $player->{matchcount} ),
         );
 
@@ -162,8 +170,13 @@ my @players_lollies = sort { $b->{lollies} <=> $a->{lollies} }
     );
     my $i = 1;
     foreach my $player (@players_stand) {
+        my $print_i = $i;
+        if ( $player->{score} eq $table[-1]->[2] ) {
+            $print_i = '';
+        }
+
         my @row = (
-            $i,
+            $print_i,
             $player->{name},
             $player->{score},
             $player->{matchcount},
