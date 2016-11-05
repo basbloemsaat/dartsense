@@ -18,6 +18,7 @@ use Getopt::Long;
 use HTML::Table;
 use Spreadsheet::XLSX;
 use Template;
+use Time::Piece;
 use WWW::Mechanize;
 use YAML 'LoadFile';
 
@@ -36,10 +37,6 @@ GetOptions(
 );
 
 die unless ( $options->{file} );
-
-my $now = DateTime->now(
-    time_zone => DateTime::TimeZone->new( name => 'local' ) );
-my $updatetime = $now->dmy . ' ' . $now->hms;
 
 my $config = LoadFile('/home/bas/.darts.yaml');
 my $file   = File::Spec->rel2abs( $options->{file} );
@@ -86,6 +83,11 @@ foreach my $sheet ( @{ $excel->{Worksheet} } ) {
         $lastdate = $date;
     }
 }
+
+my $now = DateTime->now(
+    time_zone => DateTime::TimeZone->new( name => 'local' ) );
+my $updatetime = $now->dmy . ' ' . $now->hms;
+my $updateuntil = Time::Piece->strptime( $lastdate, "%Y-%m-%d" )->dmy;
 
 foreach my $matchdata (@matches) {
     parsePlayer( 1, $matchdata );
@@ -253,6 +255,7 @@ sub updatePage {
 
     my $content
         = "<h1>$pages->{$name}->{title}</h1>"
+        . "<h3>Bijgewerkt t/m $updateuntil</h3>"
         . $table
         . '<p><hr>'
         . 'updated '
@@ -275,8 +278,12 @@ sub storeTable {
 
     $tables{$name} = $table;
     my $worksheet = $workbook->add_worksheet($name);
-    $worksheet->write_col( 0, 0, $table );
+    $worksheet->write_col( 1, 0, $table );
 
+    my $format
+        = $workbook->add_format( valign => 'vcenter', align => 'center', );
+    $worksheet->merge_range( 0, 0, 0, 7, "Bijgewerkt t/m $updateuntil",
+        $format );
     return $worksheet;
 }
 
