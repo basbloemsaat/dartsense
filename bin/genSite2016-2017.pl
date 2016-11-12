@@ -102,6 +102,53 @@ my %tables;
 my @players_stand
     = sort { $a->{matchcount} <=> $b->{matchcount} } @players;
 @players_stand = sort { $b->{score} <=> $a->{score} } @players_stand;
+
+
+{
+    my @table = (
+        [   'Stand',     'Naam', 'Punten',        'Wedstrijden',
+            'Gemiddeld', '180',  '100+ finishes', 'lollies'
+        ]
+    );
+    my $i = 1;
+    foreach my $player (@players_stand) {
+        my $print_i = $i;
+        if ( $player->{score} eq $table[-1]->[2] ) {
+            $print_i = ' ';
+        }
+
+        my @row = (
+            $print_i,
+            $player->{name},
+            $player->{score},
+            $player->{matchcount},
+            sprintf( "%0.2f", $player->{score} / $player->{matchcount} ),
+            $player->{max},
+            join( ', ', @{ $player->{finishes} } ) || ' ',
+            $player->{lollies},
+        );
+        push @table, \@row;
+        $i++;
+    }
+
+    my $worksheet = storeTable( 'alles', \@table );
+    my $format = $workbook->add_format( align => 'center', bottom => 1 );
+
+    $worksheet->set_column( 0, 0, undef, $format );
+    $worksheet->set_column( 1, 1, 12,    $format );
+    $worksheet->set_column( 2, 2, undef, $format );
+    $worksheet->set_column( 3, 3, 12, $format );
+    $worksheet->set_column( 4, 4, 12,    $format );
+    $worksheet->set_column( 5, 5, undef,    $format );
+    $worksheet->set_column( 6, 6, 30,    $format );
+    $worksheet->set_column( 7, 7, undef, $format );
+
+    $worksheet->set_paper(9);
+    $worksheet->set_margins(0.1);
+    $worksheet->center_horizontally();
+    $worksheet->set_landscape();
+}
+
 {
     my @table
         = ( [ 'Stand', 'Naam', 'Punten', 'Wedstrijden', 'Gemiddeld', ] );
@@ -164,36 +211,7 @@ my @players_lollies = sort { $b->{lollies} <=> $a->{lollies} }
     my $worksheet = storeTable( 'lollies', \@table );
 }
 
-{
-    my @table = (
-        [   'Stand',     'Naam', 'Punten',        'Wedstrijden',
-            'Gemiddeld', '180',  '100+ finishes', 'lollies'
-        ]
-    );
-    my $i = 1;
-    foreach my $player (@players_stand) {
-        my $print_i = $i;
-        if ( $player->{score} eq $table[-1]->[2] ) {
-            $print_i = '';
-        }
 
-        my @row = (
-            $print_i,
-            $player->{name},
-            $player->{score},
-            $player->{matchcount},
-            sprintf( "%0.2f", $player->{score} / $player->{matchcount} ),
-            $player->{max},
-            join( ', ', @{ $player->{finishes} } ),
-            $player->{lollies},
-        );
-        push @table, \@row;
-        $i++;
-    }
-
-    my $worksheet = storeTable( 'alles', \@table );
-
-}
 
 $workbook->close();
 
