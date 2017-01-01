@@ -48,40 +48,73 @@ my @players;
 
 my $lastdate;
 foreach my $sheet ( @{ $excel->{Worksheet} } ) {
-    my $date  = $sheet->{Name};
-    my $i     = 0;
-    my %names = map { $_->{Val} => $i++ } @{ $sheet->{Cells}->[0] };
-    foreach my $row ( 1 .. $sheet->{MaxRow} ) {
-        my $matchdata = {
-            date     => $date,
-            baan     => $sheet->{Cells}->[$row]->[ $names{Baan} ]->{Val},
-            ronde    => $sheet->{Cells}->[$row]->[ $names{Ronde} ]->{Val},
-            speler1  => $sheet->{Cells}->[$row]->[ $names{Speler1} ]->{Val},
-            speler2  => $sheet->{Cells}->[$row]->[ $names{Speler2} ]->{Val},
-            legs1    => $sheet->{Cells}->[$row]->[ $names{Legs1} ]->{Val},
-            legs2    => $sheet->{Cells}->[$row]->[ $names{Legs2} ]->{Val},
-            lollies1 => $sheet->{Cells}->[$row]->[ $names{Lollies1} ]->{Val}
-                // 0,
-            lollies2 => $sheet->{Cells}->[$row]->[ $names{Lollies2} ]->{Val}
-                // 0,
-            max1 => $sheet->{Cells}->[$row]->[ $names{Max1} ]->{Val} || 0,
-            max2 => $sheet->{Cells}->[$row]->[ $names{Max2} ]->{Val} || 0,
-            finishes1 => [
-                split ',',
-                $sheet->{Cells}->[$row]->[ $names{Finishes1} ]->{Val} // ''
-            ],
-            finishes2 => [
-                split ',',
-                $sheet->{Cells}->[$row]->[ $names{Finishes2} ]->{Val} // ''
-            ],
-        };
 
-        $matchdata->{player1} = getPlayer( $matchdata->{speler1} );
-        $matchdata->{player2} = getPlayer( $matchdata->{speler2} );
+    my $sheet_name = $sheet->{Name};
+    my $i          = 0;
+    my %names      = map { $_->{Val} => $i++ } @{ $sheet->{Cells}->[0] };
+    if ( $sheet_name =~ /^koppel/i ) {
+        #koppeltabel
+        my $date = $sheet->{Name} =~ s/^koppel.*\s+//ri;
 
-        push @matches, $matchdata;
+        # p $date;
+
+        foreach my $row ( 1 .. $sheet->{MaxRow} ) {
+            my $player = getPlayer(
+                $sheet->{Cells}->[$row]->[ $names{Speler} ]->{Val} );
+            $player->{score}
+                += $sheet->{Cells}->[$row]->[ $names{Points} ]->{Val} // 0;
+            $player->{matchcount}
+                += $sheet->{Cells}->[$row]->[ $names{Matches} ]->{Val} // 0;
+            $player->{lollies}
+                += $sheet->{Cells}->[$row]->[ $names{Lollies} ]->{Val} // 0;
+            $player->{max} += $sheet->{Cells}->[$row]->[ $names{Max} ]->{Val}
+                // 0;
+            push @{ $player->{finishes} }, split ',',
+                $sheet->{Cells}->[$row]->[ $names{Finishes} ]->{Val} // '';
+        }
+    }
+    else {
+
+        my $date = $sheet->{Name};
+        foreach my $row ( 1 .. $sheet->{MaxRow} ) {
+            my $matchdata = {
+                date  => $date,
+                baan  => $sheet->{Cells}->[$row]->[ $names{Baan} ]->{Val},
+                ronde => $sheet->{Cells}->[$row]->[ $names{Ronde} ]->{Val},
+                speler1 =>
+                    $sheet->{Cells}->[$row]->[ $names{Speler1} ]->{Val},
+                speler2 =>
+                    $sheet->{Cells}->[$row]->[ $names{Speler2} ]->{Val},
+                legs1 => $sheet->{Cells}->[$row]->[ $names{Legs1} ]->{Val},
+                legs2 => $sheet->{Cells}->[$row]->[ $names{Legs2} ]->{Val},
+                lollies1 =>
+                    $sheet->{Cells}->[$row]->[ $names{Lollies1} ]->{Val} // 0,
+                lollies2 =>
+                    $sheet->{Cells}->[$row]->[ $names{Lollies2} ]->{Val} // 0,
+                max1 => $sheet->{Cells}->[$row]->[ $names{Max1} ]->{Val} || 0,
+                max2 => $sheet->{Cells}->[$row]->[ $names{Max2} ]->{Val} || 0,
+                finishes1 => [
+                    split ',',
+                    $sheet->{Cells}->[$row]->[ $names{Finishes1} ]->{Val}
+                        // ''
+                ],
+                finishes2 => [
+                    split ',',
+                    $sheet->{Cells}->[$row]->[ $names{Finishes2} ]->{Val}
+                        // ''
+                ],
+            };
+
+            $matchdata->{player1} = getPlayer( $matchdata->{speler1} );
+            $matchdata->{player2} = getPlayer( $matchdata->{speler2} );
+
+            push @matches, $matchdata;
+
+        }
+
         $lastdate = $date;
     }
+
 }
 
 my $now = DateTime->now(
@@ -99,10 +132,11 @@ my $workbook = Excel::Writer::XLSX->new("/tmp/standen_$lastdate.xlsx");
 
 my %tables;
 
+# p @players;
+
 my @players_stand
     = sort { $a->{matchcount} <=> $b->{matchcount} } @players;
 @players_stand = sort { $b->{score} <=> $a->{score} } @players_stand;
-
 
 {
     my @table = (
@@ -122,7 +156,9 @@ my @players_stand
             $player->{name},
             $player->{score},
             $player->{matchcount},
-            sprintf( "%0.2f", $player->{score} / $player->{matchcount} ),
+            $player->{matchcount}
+            ? sprintf( "%0.2f", $player->{score} / $player->{matchcount} )
+            : 0,
             $player->{max},
             join( ', ', @{ $player->{finishes} } ) || ' ',
             $player->{lollies},
@@ -137,9 +173,9 @@ my @players_stand
     $worksheet->set_column( 0, 0, undef, $format );
     $worksheet->set_column( 1, 1, 12,    $format );
     $worksheet->set_column( 2, 2, undef, $format );
-    $worksheet->set_column( 3, 3, 12, $format );
+    $worksheet->set_column( 3, 3, 12,    $format );
     $worksheet->set_column( 4, 4, 12,    $format );
-    $worksheet->set_column( 5, 5, undef,    $format );
+    $worksheet->set_column( 5, 5, undef, $format );
     $worksheet->set_column( 6, 6, 30,    $format );
     $worksheet->set_column( 7, 7, undef, $format );
 
@@ -164,7 +200,9 @@ my @players_stand
             $player->{name},
             $player->{score},
             $player->{matchcount},
-            sprintf( "%0.2f", $player->{score} / $player->{matchcount} ),
+            $player->{matchcount}
+            ? sprintf( "%0.2f", $player->{score} / $player->{matchcount} )
+            : 0,
         );
 
         push @table, \@row;
@@ -210,8 +248,6 @@ my @players_lollies = sort { $b->{lollies} <=> $a->{lollies} }
 
     my $worksheet = storeTable( 'lollies', \@table );
 }
-
-
 
 $workbook->close();
 
