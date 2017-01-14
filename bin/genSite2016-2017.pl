@@ -253,7 +253,7 @@ $workbook->close();
 
 my $mech;
 if ( $options->{updatesite} ) {
-    $mech = WWW::Mechanize->new();
+    $mech = WWW::Mechanize->new(autocheck => 0, ssl_opts => { verify_hostname => 0 });
     $mech->get('https://svausterlitz.voetbalassist.nl/cms/index.aspx');
     my $res = $mech->submit_form(
         form_name => 'aspnetForm',
