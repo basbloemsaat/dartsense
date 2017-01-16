@@ -7,7 +7,6 @@ from dartsense.player import Player
 def test_player_init():
     player = Player()
 
-    assert player
     assert isinstance(player, Player)
 
     assert not player.name

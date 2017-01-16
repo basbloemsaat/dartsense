@@ -7,11 +7,30 @@ from dartsense.player import Player
 from dartsense.player import PlayerList
 
 
+player_list = None
+
 def test_player_list_init():
     player_list = PlayerList()
 
-    assert player_list
     assert isinstance(player_list, PlayerList)
+    assert len(player_list) == 0
 
-    a = len(player_list)
-    pprint(a)
+
+
+def test_player_list_add_player():
+    player_list = PlayerList()
+    assert len(player_list) == 0
+
+    player = Player(name = 'test player 1')
+    player_list.add_player(player)
+    assert len(player_list) == 1
+
+    player_list.add_player(Player(name = 'test player 2'))
+    assert len(player_list) == 2
+
+    pprint(player_list.list)
+
+
+@pytest.fixture
+def basic_list():
+    player_list = PlayerList()
