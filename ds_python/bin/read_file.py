@@ -37,8 +37,21 @@ def main(argv):
     # pprint(wb)
 
     for sheet in wb.worksheets:
-        pprint(sheet)
+        # pprint(sheet)
         print(sheet.title)
+
+        header = [cell.value for cell in sheet[1]]
+
+        # pprint(header)
+        iter_rows = sheet.rows
+        next(iter_rows)
+        for row in iter_rows:
+            values = {}
+            for key, cell in zip(header, row):
+                pass
+                values[key] = cell.value
+            pprint(values)
+
 
 
 def usage():
