@@ -23,3 +23,10 @@ class PlayerList:
 
     def add_player(self, player):
         self.list[player.id] = player
+        return player
+
+    def find(self, search):
+        players = [self.list[p] for p in self.list if self.list[p].name == search]
+        return players
+
+
