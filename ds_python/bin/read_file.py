@@ -1,23 +1,51 @@
 #!/usr/bin/env python3
 
-import argparse
-from openpyxl import load_workbook
+import getopt
+import inspect
+import os
+import sys
+import time
+
 from pprint import pprint
 
-parser = argparse.ArgumentParser()
+import openpyxl
 
 
-parser.add_argument("--file", help="filename")
-args = parser.parse_args()
-pprint(args.file)
+def main(argv):
+    parameters = {
+        'filename': '',
+    }
 
-wb = load_workbook(filename=args.file, read_only=True)
-pprint(wb)
+    try:
+        opts, args = getopt.getopt(
+            argv, "hsp:v:",
+            [
+                "help", "file="])
+    except getopt.GetoptError as err:
+        print(err)
+        usage()
 
-ws = wb.active
-# sheet_ranges = wb['range names']
+    for opt, arg in opts:
+        if opt in ('-h', '--help'):
+            usage()
+        elif opt in ("-f", "--file"):
+            parameters['filename'] = arg
 
-pprint(ws)
+    pprint(parameters)
 
-for sheet in wb.worksheets:
-    print (sheet.title)
+    wb = openpyxl.load_workbook(parameters['filename'], read_only=True)
+    # pprint(wb)
+
+    for sheet in wb.worksheets:
+        pprint(sheet)
+        print(sheet.title)
+
+
+def usage():
+    print('''read_file.py 
+        --file <filename>
+        ''')
+    sys.exit()
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
