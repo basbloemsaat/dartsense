@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 
+import os
 import pytest
-from pprint import pprint
+import sys
+
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
 from dartsense.player import Player
 from dartsense.player import PlayerList

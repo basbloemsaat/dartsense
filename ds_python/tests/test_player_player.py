@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 
 import pytest
+import os
+import sys
+
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
+
 from dartsense.player import Player
 
 
@@ -11,8 +17,7 @@ def test_player_init():
 
     assert not player.name
 
-    player = Player(name = 'test player 1')
+    player = Player(name='test player 1')
     assert isinstance(player, Player)
     assert player.name
     assert player.name == 'test player 1'
-

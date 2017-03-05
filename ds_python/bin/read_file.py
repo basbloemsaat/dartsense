@@ -10,6 +10,12 @@ from pprint import pprint
 
 import openpyxl
 
+sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
+
+
+print(os.path.dirname(__file__))
+
+import dartsense
 
 def main(argv):
     parameters = {
@@ -32,6 +38,9 @@ def main(argv):
             parameters['filename'] = arg
 
     pprint(parameters)
+
+    if not parameters['filename']:
+        usage()        
 
     wb = openpyxl.load_workbook(parameters['filename'], read_only=True)
     # pprint(wb)
