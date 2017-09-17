@@ -54,7 +54,7 @@ foreach my $sheet ( @{ $excel->{Worksheet} } ) {
     my %names      = map { $_->{Val} => $i++ } @{ $sheet->{Cells}->[0] };
     if ( $sheet_name =~ /^koppel/i ) {
         #koppeltabel
-        my $date = $sheet->{Name} =~ s/^koppel.*\s+//ri;
+        my $date = $sheet->{Name} =~ s/^koppel.*\s+//ri; #/
 
         # p $date;
 

@@ -18,7 +18,6 @@ nytprof.out
 *.o
 *.bs
 /_eumm/
-/var/www/*.html
 .~lock*
 
 # Byte-compiled / optimized / DLL files
@@ -42,7 +41,6 @@ eggs/
 lib64/
 parts/
 sdist/
-var/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -110,4 +108,11 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+
+*/node_modules/*
+
+
+
+data/~*
 
