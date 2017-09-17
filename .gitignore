@@ -112,3 +112,7 @@ ENV/
 
 */node_modules/*
 
+
+
+data/~*
+
