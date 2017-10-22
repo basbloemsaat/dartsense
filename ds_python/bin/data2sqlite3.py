@@ -18,6 +18,7 @@ def main(argv):
     data_dir = '/home/bas/src/dartsense/data'
 
     for file_name in data_files:
+        pprint(file_name)
         wb = openpyxl.load_workbook("%s/%s" % (data_dir, file_name), read_only=True)
 
 
