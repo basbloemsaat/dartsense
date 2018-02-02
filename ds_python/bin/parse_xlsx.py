@@ -9,6 +9,7 @@ import time
 from pprint import pprint
 
 import openpyxl
+import dateutil.parser
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
@@ -48,6 +49,9 @@ def main(argv):
     for sheet in wb.worksheets:
         # pprint(sheet)
         print(sheet.title)
+        date_avond = dateutil.parser.parse(sheet.title)
+        pprint(date_avond)
+        
 
         header = [cell.value for cell in sheet[1]]
 
