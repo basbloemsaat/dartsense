@@ -1,5 +1,6 @@
 class Event:
-    def __init__(self, date=None)
+    def __init__(self, date=None):
+        pass
 
 
 class Match(Event):
