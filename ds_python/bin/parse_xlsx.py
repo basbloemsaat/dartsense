@@ -55,9 +55,16 @@ def main(argv):
     for sheet in wb.worksheets:
         # pprint(sheet)
         # print(sheet.title)
-        date_avond = dateutil.parser.parse(sheet.title)
-        # pprint(date_avond)
+        title_list = sheet.title.split();
+        pprint(title_list)
 
+        date_avond = dateutil.parser.parse(title_list[-1])
+        if len(title_list) > 1:
+            type_avond = title_list[0].lower()
+        else:
+            type_avond = "regulier"
+
+        
         header = [cell.value for cell in sheet[1]]
 
         # pprint(header)
