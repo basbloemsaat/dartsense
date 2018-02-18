@@ -55,7 +55,7 @@ def main(argv):
     for sheet in wb.worksheets:
         # pprint(sheet)
         # print(sheet.title)
-        title_list = sheet.title.split();
+        title_list = sheet.title.split()
         pprint(title_list)
 
         date_avond = dateutil.parser.parse(title_list[-1])
@@ -64,7 +64,6 @@ def main(argv):
         else:
             type_avond = "regulier"
 
-        
         header = [cell.value for cell in sheet[1]]
 
         # pprint(header)
@@ -72,20 +71,22 @@ def main(argv):
         next(iter_rows)
         for row in iter_rows:
             values = {
-                "Date": date_avond.strftime('%Y-%m  -%d')
+                "Date": date_avond.strftime('%Y-%m  -%d'),
+                "Type": type_avond
             }
             for key, cell in zip(header, row):
                 values[key] = cell.value
                 sheet_data.append(values)
 
     if(sheet_data):
-        filename = re.sub(r'xlsx$',r'json', parameters['filename'])
+        filename = re.sub(r'xlsx$', r'json', parameters['filename'])
         if (filename != parameters['filename']):
             filename = 'var/www/' + filename
             pprint(filename)
             with open(filename, 'w') as outfile:
                 # pass
                 json.dump(sheet_data, outfile)
+
 
 def usage():
     print('''read_file.py 
