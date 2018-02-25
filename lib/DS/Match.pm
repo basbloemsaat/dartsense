@@ -1,4 +1,4 @@
-package DartSense::Match;
+package DS::Match;
 
 use v5.020;
 use strict;

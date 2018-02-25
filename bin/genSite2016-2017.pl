@@ -24,8 +24,8 @@ use YAML 'LoadFile';
 
 use lib "$FindBin::Bin/../lib";
 
-use DartSense::Match;
-use DartSense::Player;
+use DS::Match;
+use DS::Player;
 
 use experimental 'signatures';
 no warnings "experimental::signatures";
@@ -345,7 +345,7 @@ sub getPlayer {
     my $name   = shift;
     my $player = $playerslookup->{$name};
     if ( !$player ) {
-        $player = DartSense::Player->new( { name => $name } );
+        $player = DS::Player->new( { name => $name } );
         $playerslookup->{$name} = $player;
         push @players, $player;
     }

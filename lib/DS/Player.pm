@@ -1,4 +1,4 @@
-package DartSense::Player;
+package DS::Player;
 
 use v5.020;
 use strict;
