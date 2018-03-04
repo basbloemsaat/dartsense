@@ -1,26 +1,39 @@
-import os
-import sys
-from sqlalchemy import Column, ForeignKey, Integer, SmallInteger, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy import create_engine
-
-Base = declarative_base()
+from dartsense import config
+import MySQLdb
 
 
-class Match(Base):
-    __tablename__ = 'match'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100))
+connection = None
 
 
-class Player(Base):
-    __tablename__ = 'player'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100))
+def get_connection(force=False):
+    global connection
+    if force or not connection:
+        connection = MySQLdb.connect(
+            host=config.database['host'],
+            user=config.database['username'],
+            passwd=config.database['password'],
+            db=config.database['schema'],
+            charset='utf8',
+            use_unicode=True
+        )
+        connection.autocommit(True)
+
+    return connection
 
 
-class PlayerAlias(Base):
-    __tablename__ = 'player_alias'
-    id = Column(Integer, primary_key=True)
-    alias = Column(String(100))
+def get_cursor(force=False):
+    return get_connection(force).cursor()
+
+
+def exec_sql(sql, arguments=[]):
+    try:
+        cur = get_cursor()
+        cur.execute(sql, arguments)
+    except:
+        cur = get_cursor(True)
+        cur.execute(sql, arguments)
+
+    des = cur.description
+    names = [d[0] for d in cur.description]
+    rows = [dict(zip(names, row)) for row in cur.fetchall()]
+    return rows
