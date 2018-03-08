@@ -24,12 +24,11 @@ with open(os.path.join(os.path.dirname(__file__), "../../etc/oauth2.yaml"), 'r')
 remove_keys = []
 for key in oauth2:
     try:
-        oauth2[key]["id"] = os.environ['DARTSENSE_' + key.upper() + '_ID']
-        oauth2[key]["secret"] = os.environ['DARTSENSE_' + key.upper() + '_SECRET']
+        oauth2[key]["consumer_key"] = os.environ['DARTSENSE_' + key.upper() + '_ID']
+        oauth2[key]["consumer_secret"] = os.environ['DARTSENSE_' + key.upper() + '_SECRET']
     except KeyError as e:
         pprint('No oauth2 config for ' + key)
         remove_keys.append(key)
 
 for key in remove_keys:
     oauth2.pop(key)
-

@@ -1,6 +1,12 @@
 
 google:
-  attr1: "https://xyz.abc"
-  attr2: "some_public_thing"
- 
+  consumer_key: null
+  consumer_secret: null
+  request_token_params:
+    scope: "email"
+  base_url: "https://www.googleapis.com/oauth2/v1/"
+  request_token_url: null
+  access_token_method: "POST"
+  access_token_url: "https://accounts.google.com/o/oauth2/token"
+  authorize_url: 'https://accounts.google.com/o/oauth2/auth'
 
