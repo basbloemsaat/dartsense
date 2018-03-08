@@ -27,4 +27,9 @@ def user_index():
     session['test'] = 'bla2'
     session['test2'] = 'bla3'
 
-    return "user page works"
+    return render_template('user.j2html')
+
+@app.route('/user/login/<provider>')
+def login(provider):
+
+    return provider
