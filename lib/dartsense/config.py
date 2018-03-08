@@ -15,14 +15,21 @@ database = {
 }
 
 
-oauth2_file = os.path.join(os.path.dirname(__file__), "../../etc/oauth2.yaml")
-
-pprint(oauth2_file)
-
-with open(oauth2_file, 'r') as stream:
+with open(os.path.join(os.path.dirname(__file__), "../../etc/oauth2.yaml"), 'r') as stream:
     try:
-        pprint(yaml.load(stream))
+        oauth2 = yaml.load(stream)
     except yaml.YAMLError as exc:
         print(exc)
 
+remove_keys = []
+for key in oauth2:
+    try:
+        oauth2[key]["id"] = os.environ['DARTSENSE_' + key.upper() + '_ID']
+        oauth2[key]["secret"] = os.environ['DARTSENSE_' + key.upper() + '_SECRET']
+    except KeyError as e:
+        pprint('No oauth2 config for ' + key)
+        remove_keys.append(key)
+
+for key in remove_keys:
+    oauth2.pop(key)
 
