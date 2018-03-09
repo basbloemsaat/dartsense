@@ -29,7 +29,29 @@ def user_index():
 
     return render_template('user.j2html')
 
+
 @app.route('/user/login/<provider>')
 def login(provider):
 
-    return provider
+    # pprint(url_for('authorized', _external=True))
+    session['current_provider'] = provider
+    # return "" + url_for('authorized', _external=True, _scheme='https');
+    return oauth_apps[provider].authorize(callback=url_for('authorized', _external=True, _scheme='https'))
+
+
+@app.route('/user/auth')
+def authorized():
+    resp = oauth_apps[session['current_provider']].authorized_response()
+    pprint(session['current_provider'])
+    pprint(resp)
+    # resp = oauth_apps[session['current_provider']].authorized_response()
+    # if resp is None:
+    #     return 'Access denied: reason=%s error=%s' % (
+    #         request.args['error_reason'],
+    #         request.args['error_description']
+    #     )
+    # session['google_token'] = (resp['access_token'], '')
+
+    return ""
+    # me = oauth_apps[session['current_provider']].get('userinfo')
+    # return jsonify({"data": me.data})
