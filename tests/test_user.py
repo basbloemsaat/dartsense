@@ -14,4 +14,5 @@ def test_user_init():
     user = User()
 
     assert isinstance(user, User)
-
+    assert hasattr(user, 'id')
+    assert user.id == 0
