@@ -16,3 +16,13 @@ def test_user_init():
     assert isinstance(user, User)
     assert hasattr(user, 'id')
     assert user.id == 0
+
+    assert hasattr(user, 'get_permissions')
+    assert callable(user.get_permissions)
+
+    permissions = user.get_permissions()
+
+    assert isinstance(permissions, list)
+    assert len(permissions) == 0
+
+
