@@ -3,14 +3,8 @@ python:
   - "3.6"
 
 env:
-  - DARTSENSE_SESSION_SECRET=deadbeef
-  - DARTSENSE_HOST=localhost
-  - DARTSENSE_USERNAME=travis
-  - DARTSENSE_PASSWORD=""
-  - DARTSENSE_SCHEMA=dartsense_test
-  - DARTSENSE_GOOGLE_ID="deadbeef"
-  - DARTSENSE_GOOGLE_SECRET="deadbeef"
-
+  - DARTSENSE_SESSION_SECRET=deadbeef DARTSENSE_HOST=localhost DARTSENSE_USERNAME=travis DARTSENSE_PASSWORD=""DARTSENSE_SCHEMA=dartsense_test DARTSENSE_GOOGLE_ID="deadbeef"DARTSENSE_GOOGLE_SECRET="deadbeef"
+  
 install:
   - mysql -uroot -e 'create database dartsense_test'
   - mysql -uroot dartsense_test < share/db/db.sql
