@@ -1,4 +1,18 @@
 USE `dartsense_test`;
+DROP TABLE IF EXISTS `player_alias`;
+DROP TABLE IF EXISTS `group_permission`;
+DROP TABLE IF EXISTS `group_league`;
+DROP TABLE IF EXISTS `player`;
+DROP TABLE IF EXISTS `permission`;
+DROP TABLE IF EXISTS `user_group`;
+DROP TABLE IF EXISTS `usercredential`;
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `match`;
+DROP TABLE IF EXISTS `group`;
+DROP TABLE IF EXISTS `finish`;
+DROP TABLE IF EXISTS `event`;
+DROP TABLE IF EXISTS `league`;
+
 
 CREATE TABLE IF NOT EXISTS `league` (
   `league_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -8,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `league` (
 
 INSERT INTO `league` (`league_id`, `league_name`) VALUES
     (0, 'none');
+UPDATE `league` set league_id=0;
 
 CREATE TABLE IF NOT EXISTS `event` (
   `event_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -21,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `event` (
 
 INSERT INTO `event` (`event_id`, `league_id`, `event_type`, `event_name`) VALUES
     (0, 0, 'none', 'default');
+UPDATE `event` set event_id=0;
 
 CREATE TABLE IF NOT EXISTS `group` (
   `group_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -47,6 +63,14 @@ CREATE TABLE IF NOT EXISTS `group_league` (
   CONSTRAINT `fk_gl_group_id` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`),
   CONSTRAINT `fk_gl_league_id` FOREIGN KEY (`league_id`) REFERENCES `league` (`league_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `permission` (
+  `permission_id` int(11) NOT NULL AUTO_INCREMENT,
+  `permission_code` char(6) NOT NULL,
+  `permission_name` varchar(50) NOT NULL,
+  `permission_description` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`permission_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `group_permission` (
   `group_id` int(11) NOT NULL,
@@ -79,14 +103,6 @@ CREATE TABLE IF NOT EXISTS `match` (
   CONSTRAINT `fk_match_player_1_id` FOREIGN KEY (`player_1_id`) REFERENCES `player` (`player_id`),
   CONSTRAINT `fk_match_player_2_id` FOREIGN KEY (`player_2_id`) REFERENCES `player` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `permission` (
-  `permission_id` int(11) NOT NULL AUTO_INCREMENT,
-  `permission_code` char(6) NOT NULL,
-  `permission_name` varchar(50) NOT NULL,
-  `permission_description` varchar(500) DEFAULT NULL,
-  PRIMARY KEY (`permission_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 INSERT INTO `permission` (`permission_id`, `permission_code`, `permission_name`, `permission_description`) VALUES
     (1, 'ADDLEA', 'add league', NULL),
