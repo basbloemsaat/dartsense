@@ -2,6 +2,10 @@ language: python
 python:
   - "3.6"
 
+services:
+  - mysql
+  - redis-server
+
 env:
   - DARTSENSE_SESSION_SECRET=deadbeef DARTSENSE_HOST=localhost DARTSENSE_USERNAME=travis DARTSENSE_PASSWORD=""DARTSENSE_SCHEMA=dartsense_test DARTSENSE_GOOGLE_ID="deadbeef"DARTSENSE_GOOGLE_SECRET="deadbeef"
   
