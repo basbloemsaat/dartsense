@@ -7,6 +7,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../../lib/"))
 import pytest
 
 from dartsense.webapp import app as tl_app
+tl_app.config['DEBUG'] = True 
+tl_app.config['TESTING'] = True
 
 @pytest.fixture
 def app():
