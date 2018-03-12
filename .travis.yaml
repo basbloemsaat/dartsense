@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.6"
+
+install:
+  - mysql -uroot -e 'create database dartsense_test'
+  - mysql -uroot dartsense_test < share/db/db.sql
+  - pip install -r requirements.txt
+
+script: 
+  - pytest --cov=dartsense
+
+after_success:
+  - coveralls
+
