@@ -10,7 +10,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 from dartsense import db
 
 
-def test_db():
+def test_db(setup_db):
     pass
     # assert False
 

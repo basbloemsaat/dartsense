@@ -1,9 +1,7 @@
 from dartsense import config
 import MySQLdb
 
-
 connection = None
-
 
 def get_connection(force=False):
     global connection
