@@ -1,5 +1,14 @@
 USE `dartsense_test`;
 
+CREATE TABLE IF NOT EXISTS `league` (
+  `league_id` int(11) NOT NULL AUTO_INCREMENT,
+  `league_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`league_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+INSERT INTO `league` (`league_id`, `league_name`) VALUES
+    (0, 'none');
+
 CREATE TABLE IF NOT EXISTS `event` (
   `event_id` int(11) NOT NULL AUTO_INCREMENT,
   `league_id` int(11) NOT NULL DEFAULT '0',
@@ -13,16 +22,6 @@ CREATE TABLE IF NOT EXISTS `event` (
 INSERT INTO `event` (`event_id`, `league_id`, `event_type`, `event_name`) VALUES
     (0, 0, 'none', 'default');
 
-CREATE TABLE IF NOT EXISTS `finish` (
-  `match_id` int(11) NOT NULL,
-  `player_id` int(11) NOT NULL,
-  `finish_score` smallint(6) NOT NULL,
-  KEY `fk_finish_match_id` (`match_id`),
-  KEY `fk_finish_player_id` (`player_id`),
-  CONSTRAINT `fk_finish_match_id` FOREIGN KEY (`match_id`) REFERENCES `match` (`match_id`),
-  CONSTRAINT `fk_finish_player_id` FOREIGN KEY (`player_id`) REFERENCES `player` (`player_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE IF NOT EXISTS `group` (
   `group_id` int(11) NOT NULL AUTO_INCREMENT,
   `group_name` varchar(50) NOT NULL,
@@ -31,6 +30,14 @@ CREATE TABLE IF NOT EXISTS `group` (
 
 INSERT INTO `group` (`group_id`, `group_name`) VALUES
     (0, 'site admins');
+
+CREATE TABLE IF NOT EXISTS `player` (
+  `player_id` int(11) NOT NULL AUTO_INCREMENT,
+  `player_name` varchar(50) NOT NULL,
+  `player_nickname` varchar(50) DEFAULT NULL,
+  `player_callsigns` varchar(100) NOT NULL,
+  PRIMARY KEY (`player_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `group_league` (
   `group_id` int(11) NOT NULL,
@@ -49,15 +56,6 @@ CREATE TABLE IF NOT EXISTS `group_permission` (
   CONSTRAINT `fk_gp_group_id` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`),
   CONSTRAINT `fk_gp_permission_id` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `league` (
-  `league_id` int(11) NOT NULL AUTO_INCREMENT,
-  `league_name` varchar(50) NOT NULL,
-  PRIMARY KEY (`league_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
-INSERT INTO `league` (`league_id`, `league_name`) VALUES
-    (0, 'none');
 
 CREATE TABLE IF NOT EXISTS `match` (
   `match_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -94,14 +92,6 @@ INSERT INTO `permission` (`permission_id`, `permission_code`, `permission_name`,
     (1, 'ADDLEA', 'add league', NULL),
     (2, 'ADDEVE', 'add event', 'add event to league');
 
-CREATE TABLE IF NOT EXISTS `player` (
-  `player_id` int(11) NOT NULL AUTO_INCREMENT,
-  `player_name` varchar(50) NOT NULL,
-  `player_nickname` varchar(50) DEFAULT NULL,
-  `player_callsigns` varchar(100) NOT NULL,
-  PRIMARY KEY (`player_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
-
 CREATE TABLE IF NOT EXISTS `player_alias` (
   `player_id` int(11) NOT NULL,
   `alias` varchar(50) NOT NULL,
@@ -132,5 +122,15 @@ CREATE TABLE IF NOT EXISTS `user_group` (
   KEY `fk_ug_group_id` (`group_id`),
   CONSTRAINT `fk_ug_group_id` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`),
   CONSTRAINT `fk_ug_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `finish` (
+  `match_id` int(11) NOT NULL,
+  `player_id` int(11) NOT NULL,
+  `finish_score` smallint(6) NOT NULL,
+  KEY `fk_finish_match_id` (`match_id`),
+  KEY `fk_finish_player_id` (`player_id`),
+  CONSTRAINT `fk_finish_match_id` FOREIGN KEY (`match_id`) REFERENCES `match` (`match_id`),
+  CONSTRAINT `fk_finish_player_id` FOREIGN KEY (`player_id`) REFERENCES `player` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
