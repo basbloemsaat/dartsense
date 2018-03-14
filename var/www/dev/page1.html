@@ -1,9 +1,198 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title></title>
+    <link href="/static/bootstrap4/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style type="text/css">
+    .current thead {
+        font-size: 1.5rem;
+    }
+
+    .current tbody {
+        font-size: 2.5rem;
+    }
+
+    .finished thead {
+        font-size: 1.5rem;
+    }
+
+    .finished tbody {
+        font-size: 2rem;
+    }
+
+    td.s1 {
+        /*text-align: right;*/
+    }
+
+    table.finished th.s1 {
+        width: 35%;
+        text-align: right;
+    }
+
+    table.finished th.middle {
+        width: 20%;
+        text-align: center;
+    }
+
+    table.finished th.s2 {
+        width: 35%;
+        text-align: left;
+    }
+
+    table.finished td.s1 {
+        text-align: right;
+    }
+
+    table.finished td.s1_score {
+        text-align: right;
+    }
+
+    table.finished td.middle {
+        text-align: center;
+    }
+
+    table.finished td.s2_score {
+        text-align: left;
+    }
+
+    table.finished td.s2 {
+        text-align: left;
+    }
+    </style>
 </head>
+
 <body>
-bla bla bla
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-1">
+                <img src="/static/images/SVA_logo_vertical.png" alt="SVA logo" style="padding-top: 2rem; padding-left: 0.8rem">
+            </div>
+            <div class="col-11">
+                <div class="container-fluid">
+                    <h2>nu spelen:</h2>
+                    <table style="width: 100%" class="current table-striped table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>baan</th>
+                                <th>speler 1</th>
+                                <th>speler 2</th>
+                                <th>schrijver</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2</td>
+                                <td class="s1">Test speler 1</td>
+                                <td>Test speler 2</td>
+                                <td>Schrijver</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td class="s1">Test speler 1</td>
+                                <td>Test speler 2</td>
+                                <td>Schrijver</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td class="s1">Test speler 1</td>
+                                <td>Test speler 2</td>
+                                <td>Schrijver</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td class="s1">Test speler 1</td>
+                                <td>Test speler 2</td>
+                                <td>Schrijver</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h2>afgelopen wedstrijden:</h2>
+                    <table style="width: 100%" class="finished table-striped table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th class="s1">speler 1</th>
+                                <th class="middle" colspan="3"> score </th>
+                                <th class="s2">speler 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="s1">Test speler 1</td>
+                                <td class="s1_score">1</td>
+                                <td class="middle">-</td>
+                                <td class="s2_score">2</td>
+                                <td class="s2">Test speler 2</td>
+                            </tr>
+                            <tr>
+                                <td class="s1">Test speler 1</td>
+                                <td class="s1_score">2</td>
+                                <td class="middle">-</td>
+                                <td class="s2_score">0</td>
+                                <td class="s2">Test speler 2</td>
+                            </tr>
+                            <tr>
+                                <td class="s1">Test speler 1</td>
+                                <td class="s1_score">2</td>
+                                <td class="middle">-</td>
+                                <td class="s2_score">1</td>
+                                <td class="s2">Test speler 2</td>
+                            </tr>
+                            <tr>
+                                <td class="s1">Test speler 1</td>
+                                <td class="s1_score">0</td>
+                                <td class="middle">-</td>
+                                <td class="s2_score">2</td>
+                                <td class="s2">Test speler 2</td>
+                            </tr>
+                            <tr>
+                                <td class="s1">Test speler 1</td>
+                                <td class="s1_score">0</td>
+                                <td class="middle">-</td>
+                                <td class="s2_score">2</td>
+                                <td class="s2">Test speler 2</td>
+                            </tr>
+                            <tr>
+                                <td class="s1">Test speler 1</td>
+                                <td class="s1_score">0</td>
+                                <td class="middle">-</td>
+                                <td class="s2_score">2</td>
+                                <td class="s2">Test speler 2</td>
+                            </tr>
+                            <tr>
+                                <td class="s1">Test speler 1</td>
+                                <td class="s1_score">0</td>
+                                <td class="middle">-</td>
+                                <td class="s2_score">2</td>
+                                <td class="s2">Test speler 2</td>
+                            </tr>
+                            <tr>
+                                <td class="s1">Test speler 1</td>
+                                <td class="s1_score">0</td>
+                                <td class="middle">-</td>
+                                <td class="s2_score">2</td>
+                                <td class="s2">Test speler 2</td>
+                            </tr>
+                            <tr>
+                                <td class="s1">Test speler 1</td>
+                                <td class="s1_score">0</td>
+                                <td class="middle">-</td>
+                                <td class="s2_score">2</td>
+                                <td class="s2">Test speler 2</td>
+                            </tr>
+                            <tr>
+                                <td class="s1">Test speler 1</td>
+                                <td class="s1_score">0</td>
+                                <td class="middle">-</td>
+                                <td class="s2_score">2</td>
+                                <td class="s2">Test speler 2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
