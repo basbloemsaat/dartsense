@@ -1,7 +1,10 @@
-from dartsense.webapp import app
-from dartsense import config
 from flask import redirect, url_for, redirect, request, render_template, jsonify, g, session
 from flask_oauthlib.client import OAuth
+
+from dartsense.webapp import app
+from dartsense import config
+from dartsense.user import User
+
 
 from pprint import pprint
 
@@ -53,8 +56,6 @@ def login(provider):
 @app.route('/user/auth')
 def authorized():
     resp = oauth_apps[session['current_provider']].authorized_response()
-    pprint(session['current_provider'])
-    pprint(resp)
 
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
@@ -65,6 +66,9 @@ def authorized():
             '_token'] = (resp['access_token'], '')
 
     me = oauth_apps[session['current_provider']].get('userinfo')
-    session['user_id'] = 1
+
+    user = User()
+    user.login(session['current_provider'], me.data['email'])
+    session['user_id'] = user.id
     return redirect(url_for('user_index', _external=True, _scheme='https'), code=302)
     # return jsonify({"data": me.data})

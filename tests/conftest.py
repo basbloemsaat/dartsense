@@ -12,10 +12,22 @@ from dartsense import db
 @pytest.fixture(scope="session")
 def setup_db():
     # setup a basic state to run tests
+
+    pytest_setup_vars = {}
+
     empty_db()
     cur = db.get_cursor()
     cur.execute("INSERT INTO player (player_name,player_callsigns) VALUES ('test player 1','test player;test player 1')")
+    pytest_setup_vars['player1_id'] = cur.lastrowid
     cur.execute("INSERT INTO player (player_name,player_callsigns) VALUES ('test player 2','test player;test player 2')")
+    pytest_setup_vars['player2_id'] = cur.lastrowid
+
+    cur.execute("INSERT INTO user (user_name, user_email) VALUES ('test user', 'test@test.com')")
+    pytest_setup_vars['testuser_id'] = cur.lastrowid
+
+    cur.execute("INSERT INTO usercredential (user_id, usercred_provider, usercred_value) VALUES (%s, 'google','test@test.org')", [pytest_setup_vars['testuser_id']])
+
+    pytest.setup_vars = pytest_setup_vars
 
 
 def empty_db():

@@ -4,6 +4,8 @@ import pytest
 import os
 import sys
 
+from pprint import pprint
+
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
@@ -15,7 +17,7 @@ def test_user_init():
 
     assert isinstance(user, User)
     assert hasattr(user, 'id')
-    assert user.id == 0
+    assert user.id == None
 
     assert hasattr(user, 'get_permissions')
     assert callable(user.get_permissions)
@@ -26,3 +28,25 @@ def test_user_init():
     assert len(permissions) == 0
 
 
+def test_user_db(setup_db):
+    # pprint(pytest.setup_vars)
+    user = User(id=pytest.setup_vars['testuser_id'])
+    assert isinstance(user, User)
+    assert hasattr(user, 'name')
+    assert user.name == 'test user'
+
+    assert hasattr(user, 'email')
+    assert user.email == 'test@test.com'
+
+
+def test_user_login(setup_db):
+    user = User()
+    assert hasattr(user, 'login')
+    assert callable(user.login)
+
+    assert user.id == None
+    assert user.login('google', 'test@test.org')
+    assert user.id == pytest.setup_vars['testuser_id']
+
+    assert hasattr(user, 'name')
+    assert user.name == 'test user'
