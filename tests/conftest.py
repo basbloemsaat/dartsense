@@ -34,9 +34,18 @@ def setup_db():
     sql = "INSERT INTO usercredential (user_id, usercred_provider, usercred_value) VALUES (%s,%s,%s)"
     cur.execute(sql, [pytest_setup_vars['testuser_id'], 'google', 'test@test.org', ])
 
+    # league
     sql = "INSERT INTO league (league_name) VALUES (%s)"
     cur.execute(sql, ['test league 1'])
+    pytest_setup_vars['testleague1_id'] = cur.lastrowid
     cur.execute(sql, ['test league 2'])
+    pytest_setup_vars['testleague2_id'] = cur.lastrowid
+
+    # league players
+    sql = "INSERT INTO league_player (league_id, player_id) VALUES (%s, %s)"
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'] , pytest_setup_vars['player1_id'] ])
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'] , pytest_setup_vars['player2_id'] ])
+
 
     pytest.setup_vars = pytest_setup_vars
 
@@ -53,6 +62,7 @@ def empty_db():
     cur.execute("DELETE FROM `event` WHERE event_id>0")
     cur.execute("DELETE FROM `group` WHERE group_id>0")
     cur.execute("DELETE FROM `player_alias`")
+    cur.execute("DELETE FROM `league_player`")
     cur.execute("DELETE FROM `player`")
     cur.execute("DELETE FROM `usercredential`")
     cur.execute("DELETE FROM `user`")

@@ -16,5 +16,5 @@ def test_league_init():
     league_list = LeagueList()
 
     assert isinstance(league_list, LeagueList)
-    assert len(league_list) == 3
+    assert len(league_list) == 2
    

@@ -9,10 +9,12 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-1">
-                <img src="/static/images/SVA_logo_vertical.png" alt="SVA logo" style="padding-top: 2rem; padding-left: 0.8rem">
+            <div class="col-12">
+                <img src="/static/images/SVA_logo_bg_small.png" alt="SVA logo" style="padding-top: 0rem; padding-left: 0rem">
             </div>
-            <div class="col-11">
+        </div>
+        <div class="row">
+            <div class="col-12">
                 <div class="container-fluid">
                     {% block content %}{% endblock %}
                 </div>

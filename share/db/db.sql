@@ -150,3 +150,11 @@ CREATE TABLE IF NOT EXISTS `finish` (
   CONSTRAINT `fk_finish_player_id` FOREIGN KEY (`player_id`) REFERENCES `player` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `league_player` (
+  `league_id` INT(11) NOT NULL,
+  `player_id` INT(11) NOT NULL,
+  PRIMARY KEY (`league_id`, `player_id`),
+  INDEX `fk_league_player_player_id` (`player_id`),
+  CONSTRAINT `fk_league_player_league_id` FOREIGN KEY (`league_id`) REFERENCES `league` (`league_id`),
+  CONSTRAINT `fk_league_player_player_id` FOREIGN KEY (`player_id`) REFERENCES `player` (`player_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

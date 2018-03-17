@@ -1,11 +1,13 @@
 {% extends "layout.j2html" %}
 
 {% block content %}
-    league list template
+    Leagues
 
     <ul>
         {% for league in leagues %}
-            bla
+            <li>
+                <a href="/list/league/{{ league.id }}">{{ league.name }} ({{ league.id }})</a>
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}

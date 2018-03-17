@@ -1,32 +1,46 @@
 from pprint import pprint
 import hashlib
 
+from dartsense import db, List_C
 
 class Player:
 
-    def __init__(self, name='', id=0):
+    def __init__(self, id=0, name='', nickname='',):
         self.id = id
         self.name = name
+        self.nickname = nickname
         self.aliases = []
 
-        if self.id == 0:
-            self.id = hashlib.sha256(self.name.encode()).hexdigest()
-
-
-class PlayerList:
+class PlayerList(List_C):
 
     def __init__(self):
-        self.list = {}
+        List_C.__init__(self)
 
-    def __len__(self):
-        return 0+len(self.list)
+    def _search(self, force=False):
+        if force or self._elements == None:
+            self._elements = []
+
+            sql = '''
+                SELECT DISTINCT p.*
+                FROM player p
+            '''
+
+            res = db.exec_sql(sql)
+
+            for r in res:
+                self._elements.append(Player(
+                    id=r['player_id'],
+                    name=r['player_name'],
+                    nickname=r['player_nickname'],
+                ))
 
     def add_player(self, player):
-        self.list[player.id] = player
-        return player
-
-    def find(self, search):
-        players = [self.list[p] for p in self.list if self.list[p].name == search]
-        return players
+         self.self._elements[player.id] = player
+    #     return player
 
 
+    def _get_players(self):
+        return self.elements
+    players = property(_get_players)
+
+   

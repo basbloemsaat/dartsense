@@ -1,7 +1,5 @@
 
 
-
-
 class List_C():
 
     def __init__(

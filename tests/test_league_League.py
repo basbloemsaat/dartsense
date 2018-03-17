@@ -22,3 +22,19 @@ def test_league_init():
     assert isinstance(league, League)
     assert hasattr(league, 'name')
     assert league.name == 'test league 1'
+
+def test_league_by_id(setup_db):
+    league = League(id=pytest.setup_vars['testleague1_id'])
+    assert isinstance(league, League)
+    assert hasattr(league, 'id')
+    assert league.id == pytest.setup_vars['testleague1_id']
+    assert hasattr(league, 'name')
+    assert league.name == 'test league 1'
+
+def test_league_players():
+    league = League(id=pytest.setup_vars['testleague1_id'])
+    assert isinstance(league, League)
+    assert hasattr(league, 'players')
+
+    assert isinstance(league.players, list)
+    # assert len(league.players) == 2
