@@ -34,6 +34,10 @@ def setup_db():
     sql = "INSERT INTO usercredential (user_id, usercred_provider, usercred_value) VALUES (%s,%s,%s)"
     cur.execute(sql, [pytest_setup_vars['testuser_id'], 'google', 'test@test.org', ])
 
+    sql = "INSERT INTO league (league_name) VALUES (%s)"
+    cur.execute(sql, ['test league 1'])
+    cur.execute(sql, ['test league 2'])
+
     pytest.setup_vars = pytest_setup_vars
 
 

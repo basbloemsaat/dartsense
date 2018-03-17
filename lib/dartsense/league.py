@@ -1,5 +1,6 @@
 from pprint import pprint
 from dartsense import List_C
+from dartsense import db
 
 
 class League:
@@ -22,14 +23,12 @@ class LeagueList(List_C):
         if force or self._elements == None:
             self._elements = []
 
-    # def add_league(self, league):
-    #     self.list[league.id] = league
-    #     return league
+            sql = "SELECT league_id, league_name FROM league"
 
-    # def find(self, search):
-    #     leagues = [self.list[p]
-    #                for p in self.list if self.list[p].name == search]
-    #     return leagues
+            res = db.exec_sql(sql)
+
+            for r in res:
+                self._elements.append(League(id=r['league_id'], name=r['league_name']))
 
     def _get_leagues(self):
         return self.elements
