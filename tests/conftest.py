@@ -17,15 +17,22 @@ def setup_db():
 
     empty_db()
     cur = db.get_cursor()
-    cur.execute("INSERT INTO player (player_name,player_callsigns) VALUES ('test player 1','test player;test player 1')")
-    pytest_setup_vars['player1_id'] = cur.lastrowid
-    cur.execute("INSERT INTO player (player_name,player_callsigns) VALUES ('test player 2','test player;test player 2')")
+
+    # players
+    sql = "INSERT INTO player (player_name,player_callsigns) VALUES (%s,%s)"
+    cur.execute(sql, ['test player 1', 'test player;test player 1']) 
+    pytest_setup_vars['player1_id'] = cur.lastrowid 
+    cur.execute(sql, ['test player 2', 'test player;test player 2'])
     pytest_setup_vars['player2_id'] = cur.lastrowid
 
-    cur.execute("INSERT INTO user (user_name, user_email) VALUES ('test user', 'test@test.com')")
+    # users
+    sql = "INSERT INTO user (user_name, user_email) VALUES (%s, %s)"
+    cur.execute(sql, ['test user', 'test@test.com'])
     pytest_setup_vars['testuser_id'] = cur.lastrowid
 
-    cur.execute("INSERT INTO usercredential (user_id, usercred_provider, usercred_value) VALUES (%s, 'google','test@test.org')", [pytest_setup_vars['testuser_id']])
+    # usercredentials
+    sql = "INSERT INTO usercredential (user_id, usercred_provider, usercred_value) VALUES (%s,%s,%s)"
+    cur.execute(sql, [pytest_setup_vars['testuser_id'], 'google', 'test@test.org', ])
 
     pytest.setup_vars = pytest_setup_vars
 
