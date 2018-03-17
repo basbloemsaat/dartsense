@@ -13,4 +13,5 @@ def list_index():
 @app.route('/list/leagues/')
 @app.route('/list/leagues')
 def list_leagues():
-    return render_template('list/league.j2html')
+    leaguelist = LeagueList()
+    return render_template('list/league.j2html', leagues = leaguelist)
