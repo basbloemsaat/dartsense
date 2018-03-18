@@ -1,41 +1,42 @@
 USE `dartsense_test`;
-DROP TABLE IF EXISTS `player_alias`;
+DROP TABLE IF EXISTS `group_competition`;
 DROP TABLE IF EXISTS `group_permission`;
-DROP TABLE IF EXISTS `group_league`;
-DROP TABLE IF EXISTS `player`;
-DROP TABLE IF EXISTS `permission`;
 DROP TABLE IF EXISTS `user_group`;
+DROP TABLE IF EXISTS `finish`;
+DROP TABLE IF EXISTS `match`;
+DROP TABLE IF EXISTS `event`;
+DROP TABLE IF EXISTS `group`;
+DROP TABLE IF EXISTS `player_alias`;
+DROP TABLE IF EXISTS `competition_player`;
+DROP TABLE IF EXISTS `player`;
 DROP TABLE IF EXISTS `usercredential`;
 DROP TABLE IF EXISTS `user`;
-DROP TABLE IF EXISTS `match`;
-DROP TABLE IF EXISTS `group`;
-DROP TABLE IF EXISTS `finish`;
-DROP TABLE IF EXISTS `event`;
-DROP TABLE IF EXISTS `league`;
+DROP TABLE IF EXISTS `competition`;
+DROP TABLE IF EXISTS `permission`;
 
 
-CREATE TABLE IF NOT EXISTS `league` (
-  `league_id` int(11) NOT NULL AUTO_INCREMENT,
-  `league_name` varchar(50) NOT NULL,
-  `league_type` enum('league','tournament') NOT NULL DEFAULT 'league',
-  PRIMARY KEY (`league_id`)
+CREATE TABLE IF NOT EXISTS `competition` (
+  `competition_id` int(11) NOT NULL AUTO_INCREMENT,
+  `competition_name` varchar(50) NOT NULL,
+  `competition_type` enum('competition','tournament') NOT NULL DEFAULT 'competition',
+  PRIMARY KEY (`competition_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-INSERT INTO `league` (`league_id`, `league_name`) VALUES
+INSERT INTO `competition` (`competition_id`, `competition_name`) VALUES
     (0, 'none');
-UPDATE `league` set league_id=0;
+UPDATE `competition` set competition_id=0;
 
 CREATE TABLE IF NOT EXISTS `event` (
   `event_id` int(11) NOT NULL AUTO_INCREMENT,
-  `league_id` int(11) NOT NULL DEFAULT '0',
+  `competition_id` int(11) NOT NULL DEFAULT '0',
   `event_type` enum('none','league_round','league_adjust','poule','knockout') NOT NULL,
   `event_name` varchar(50) NOT NULL,
   PRIMARY KEY (`event_id`),
-  KEY `fk_event_league_id` (`league_id`),
-  CONSTRAINT `fk_event_league_id` FOREIGN KEY (`league_id`) REFERENCES `league` (`league_id`)
+  KEY `fk_event_competition_id` (`competition_id`),
+  CONSTRAINT `fk_event_competition_id` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `event` (`event_id`, `league_id`, `event_type`, `event_name`) VALUES
+INSERT INTO `event` (`event_id`, `competition_id`, `event_type`, `event_name`) VALUES
     (0, 0, 'none', 'default');
 UPDATE `event` set event_id=0;
 
@@ -56,13 +57,13 @@ CREATE TABLE IF NOT EXISTS `player` (
   PRIMARY KEY (`player_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `group_league` (
+CREATE TABLE IF NOT EXISTS `group_competition` (
   `group_id` int(11) NOT NULL,
-  `league_id` int(11) NOT NULL,
-  PRIMARY KEY (`group_id`,`league_id`),
-  KEY `fk_gl_league_id` (`league_id`),
+  `competition_id` int(11) NOT NULL,
+  PRIMARY KEY (`group_id`,`competition_id`),
+  KEY `fk_gl_competition_id` (`competition_id`),
   CONSTRAINT `fk_gl_group_id` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`),
-  CONSTRAINT `fk_gl_league_id` FOREIGN KEY (`league_id`) REFERENCES `league` (`league_id`)
+  CONSTRAINT `fk_gl_competition_id` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `permission` (
@@ -106,8 +107,8 @@ CREATE TABLE IF NOT EXISTS `match` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `permission` (`permission_id`, `permission_code`, `permission_name`, `permission_description`) VALUES
-    (1, 'ADDLEA', 'add league', NULL),
-    (2, 'ADDEVE', 'add event', 'add event to league');
+    (1, 'ADDLEA', 'add competition', NULL),
+    (2, 'ADDEVE', 'add event', 'add event to competition');
 
 CREATE TABLE IF NOT EXISTS `player_alias` (
   `player_id` int(11) NOT NULL,
@@ -151,11 +152,11 @@ CREATE TABLE IF NOT EXISTS `finish` (
   CONSTRAINT `fk_finish_player_id` FOREIGN KEY (`player_id`) REFERENCES `player` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `league_player` (
-  `league_id` INT(11) NOT NULL,
+CREATE TABLE `competition_player` (
+  `competition_id` INT(11) NOT NULL,
   `player_id` INT(11) NOT NULL,
-  PRIMARY KEY (`league_id`, `player_id`),
-  INDEX `fk_league_player_player_id` (`player_id`),
-  CONSTRAINT `fk_league_player_league_id` FOREIGN KEY (`league_id`) REFERENCES `league` (`league_id`),
-  CONSTRAINT `fk_league_player_player_id` FOREIGN KEY (`player_id`) REFERENCES `player` (`player_id`)
+  PRIMARY KEY (`competition_id`, `player_id`),
+  INDEX `fk_competition_player_player_id` (`player_id`),
+  CONSTRAINT `fk_competition_player_competition_id` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`competition_id`),
+  CONSTRAINT `fk_competition_player_player_id` FOREIGN KEY (`player_id`) REFERENCES `player` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
