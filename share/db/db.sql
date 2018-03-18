@@ -18,7 +18,7 @@ DROP TABLE IF EXISTS `permission`;
 CREATE TABLE IF NOT EXISTS `competition` (
   `competition_id` int(11) NOT NULL AUTO_INCREMENT,
   `competition_name` varchar(50) NOT NULL,
-  `competition_type` enum('league','tournament') NOT NULL DEFAULT 'competition',
+  `competition_type` enum('league','tournament') NOT NULL,
   PRIMARY KEY (`competition_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
