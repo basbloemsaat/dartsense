@@ -2,6 +2,8 @@ from pprint import pprint
 import hashlib
 
 from dartsense import db, List_C
+import dartsense.competition
+import dartsense.event
 
 
 
@@ -31,7 +33,7 @@ class Player:
 
 
     def _get_competitions(self):
-        competition_list = CompetitionList(filters={'player': self.id})
+        competition_list = dartsense.competition.CompetitionList(filters={'player': self.id})
         return competition_list
 
     competitions = property(_get_competitions)
@@ -47,7 +49,6 @@ class PlayerList(List_C):
     def _search(self, force=False):
         if force or self._elements == None:
             self._elements = []
-
             args = []
 
             sql = '''
@@ -78,5 +79,3 @@ class PlayerList(List_C):
         return self.elements
     players = property(_get_players)
 
-import dartsense.competition
-import dartsense.event

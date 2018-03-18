@@ -19,4 +19,10 @@ def test_competitionlist_init():
     assert len(competition_list) == 4
 
 
-   
+def test_competitionlist_filter():
+    competition_list = CompetitionList(filters={'player':pytest.setup_vars['player1_id']})
+
+    assert isinstance(competition_list, CompetitionList)
+    assert len(competition_list) == 1
+
+    

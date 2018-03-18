@@ -26,16 +26,29 @@ class Competition:
 
 class CompetitionList(List_C):
 
-    def __init__(self):
+    def __init__(self, filters={}):
         List_C.__init__(self)
+        self.filters = filters
 
     def _search(self, force=False):
         if force or self._elements == None:
             self._elements = []
+            args = []
 
-            sql = "SELECT competition_id, competition_name FROM competition where competition_id > 0"
+            sql = '''
+                SELECT c.competition_id, c.competition_name 
+                FROM 
+                    competition c
+                    JOIN competition_player cp ON cp.competition_id=c.competition_id
+                WHERE c.competition_id > 0
+            '''
 
-            res = db.exec_sql(sql)
+            if len(self.filters) > 0:
+                if 'player' in self.filters:
+                    sql += 'AND cp.player_id=%s '
+                    args.append(self.filters['player'])
+
+            res = db.exec_sql(sql,args)
 
             for r in res:
                 self._elements.append(
