@@ -1,30 +1,37 @@
+from dartsense import db, List_C
+
+
 class Event:
+
     def __init__(self, id=None, type=None):
         pass
 
 
-class Pool_Round(Event):
+class LeagueRound(Event):
 
-    def __init__(self, id=0, player1=None, player2=None, date=None, round=None,board=None, sets=1):
-        self.player1 = player1
-        self.player2 = player2
-        self.date = date
-        self.round = round
-        self.board = board
+    def __init__(self, id=None):
+        pass
+
+
+class LeagueAdjust(Event):
+
+    def __init__(self, id=None):
+        pass
+
+
+class Poule(Event):
+
+    def __init__(self, id=None):
+        pass
 
 
 class Knockout(Event):
 
-    def __init__(self, player=None, date=None, matches=0, points=0):
-        self.player = player
-        self.date = date
-        self.matches = matches
-        self.points = points
+    def __init__(self, id=None):
+        pass
 
 
-class EventList():
+class EventList(List_C):
+
     def __init(self):
-        self.list=[]
-
-    
-
+        self.list = []
