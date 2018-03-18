@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   `player_name` varchar(50) NOT NULL,
   `player_nickname` varchar(50) DEFAULT NULL,
   `player_callsigns` varchar(100) NOT NULL,
+  `player_id_merged` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`player_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
@@ -83,28 +84,33 @@ CREATE TABLE IF NOT EXISTS `group_permission` (
   CONSTRAINT `fk_gp_permission_id` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `match` (
-  `match_id` int(11) NOT NULL AUTO_INCREMENT,
-  `event_id` int(11) NOT NULL DEFAULT '0',
-  `match_date` date NOT NULL,
-  `match_date_round` varchar(10) DEFAULT NULL,
-  `match_type` varchar(10) DEFAULT NULL,
-  `player_1_id` int(11) NOT NULL,
-  `player_1_score` tinyint(4) NOT NULL,
-  `player_1_180s` tinyint(4) DEFAULT '0',
-  `player_1_lollies` tinyint(4) DEFAULT '0',
-  `player_2_id` int(11) NOT NULL,
-  `player_2_score` tinyint(4) NOT NULL,
-  `player_2_180s` tinyint(4) DEFAULT '0',
-  `player_2_lollies` tinyint(4) DEFAULT '0',
+CREATE TABLE `match` (
+  `match_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `event_id` INT(11) NOT NULL DEFAULT '0',
+  `match_date` DATE NOT NULL,
+  `match_date_round` VARCHAR(10) NULL DEFAULT NULL,
+  `match_type` VARCHAR(10) NULL DEFAULT NULL,
+  `player_1_id` INT(11) NOT NULL,
+  `player_1_id_orig` INT(11) NOT NULL,
+  `player_1_score` TINYINT(4) NOT NULL,
+  `player_1_180s` TINYINT(4) NULL DEFAULT '0',
+  `player_1_lollies` TINYINT(4) NULL DEFAULT '0',
+  `player_2_id` INT(11) NOT NULL,
+  `player_2_id_orig` INT(11) NOT NULL,
+  `player_2_score` TINYINT(4) NOT NULL,
+  `player_2_180s` TINYINT(4) NULL DEFAULT '0',
+  `player_2_lollies` TINYINT(4) NULL DEFAULT '0',
   PRIMARY KEY (`match_id`),
-  KEY `fk_match_player_1_id` (`player_1_id`),
-  KEY `fk_match_player_2_id` (`player_2_id`),
-  KEY `fk_match_event_id` (`event_id`),
+  INDEX `fk_match_player_1_id` (`player_1_id`),
+  INDEX `fk_match_player_2_id` (`player_2_id`),
+  INDEX `fk_match_event_id` (`event_id`),
   CONSTRAINT `fk_match_event_id` FOREIGN KEY (`event_id`) REFERENCES `event` (`event_id`),
   CONSTRAINT `fk_match_player_1_id` FOREIGN KEY (`player_1_id`) REFERENCES `player` (`player_id`),
   CONSTRAINT `fk_match_player_2_id` FOREIGN KEY (`player_2_id`) REFERENCES `player` (`player_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
 
 INSERT INTO `permission` (`permission_id`, `permission_code`, `permission_name`, `permission_description`) VALUES
     (1, 'ADDLEA', 'add competition', NULL),
