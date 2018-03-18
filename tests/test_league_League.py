@@ -10,6 +10,7 @@ from pprint import pprint
 sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
 from dartsense.league import League
+from dartsense.player import PlayerList
 
 
 def test_league_init():
@@ -36,5 +37,5 @@ def test_league_players():
     assert isinstance(league, League)
     assert hasattr(league, 'players')
 
-    assert isinstance(league.players, list)
-    # assert len(league.players) == 2
+    assert isinstance(league.players, PlayerList)
+    assert len(league.players) == 2

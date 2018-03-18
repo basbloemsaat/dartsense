@@ -1,0 +1,4 @@
+{% extends "layout.j2html" %} {% block content %}
+<h1> {{ player.name }} ({{ player.id }}) </h1>
+
+{% endblock %}

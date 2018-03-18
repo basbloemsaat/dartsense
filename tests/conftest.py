@@ -20,10 +20,14 @@ def setup_db():
 
     # players
     sql = "INSERT INTO player (player_name,player_callsigns) VALUES (%s,%s)"
-    cur.execute(sql, ['test player 1', 'test player;test player 1']) 
-    pytest_setup_vars['player1_id'] = cur.lastrowid 
+    cur.execute(sql, ['test player 1', 'test player;test player 1'])
+    pytest_setup_vars['player1_id'] = cur.lastrowid
     cur.execute(sql, ['test player 2', 'test player;test player 2'])
     pytest_setup_vars['player2_id'] = cur.lastrowid
+    cur.execute(sql, ['test player 3', 'test player;test player 3'])
+    pytest_setup_vars['player3_id'] = cur.lastrowid
+    cur.execute(sql, ['test player 4', 'test player;test player 4'])
+    pytest_setup_vars['player4_id'] = cur.lastrowid
 
     # users
     sql = "INSERT INTO user (user_name, user_email) VALUES (%s, %s)"
@@ -32,7 +36,8 @@ def setup_db():
 
     # usercredentials
     sql = "INSERT INTO usercredential (user_id, usercred_provider, usercred_value) VALUES (%s,%s,%s)"
-    cur.execute(sql, [pytest_setup_vars['testuser_id'], 'google', 'test@test.org', ])
+    cur.execute(sql, [pytest_setup_vars['testuser_id'],
+                      'google', 'test@test.org', ])
 
     # league
     sql = "INSERT INTO league (league_name) VALUES (%s)"
@@ -43,9 +48,14 @@ def setup_db():
 
     # league players
     sql = "INSERT INTO league_player (league_id, player_id) VALUES (%s, %s)"
-    cur.execute(sql, [pytest_setup_vars['testleague1_id'] , pytest_setup_vars['player1_id'] ])
-    cur.execute(sql, [pytest_setup_vars['testleague1_id'] , pytest_setup_vars['player2_id'] ])
-
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+                      pytest_setup_vars['player1_id']])
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+                      pytest_setup_vars['player2_id']])
+    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+                      pytest_setup_vars['player3_id']])
+    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+                      pytest_setup_vars['player4_id']])
 
     pytest.setup_vars = pytest_setup_vars
 

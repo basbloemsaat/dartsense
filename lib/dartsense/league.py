@@ -1,11 +1,12 @@
 from pprint import pprint
 from dartsense import List_C
 from dartsense import db
+from dartsense.player import PlayerList
 
 
 class League:
 
-    def __init__(self, name='', id=0):
+    def __init__(self, id=0, name='',):
         self.id = id
         self.name = name
 
@@ -17,7 +18,8 @@ class League:
                 self.name = res[0]['league_name']
 
     def _get_players(self):
-        return []
+        player_list = PlayerList(filters={'league': self.id})
+        return player_list
 
     players = property(_get_players)
 
