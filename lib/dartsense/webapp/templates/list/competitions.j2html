@@ -1,0 +1,13 @@
+{% extends "layout.j2html" %}
+
+{% block content %}
+    Competitions
+
+    <ul>
+        {% for competition in competitions %}
+            <li>
+                <a href="/list/competition/{{ competition.id }}">{{ competition.name }} ({{ competition.id }})</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

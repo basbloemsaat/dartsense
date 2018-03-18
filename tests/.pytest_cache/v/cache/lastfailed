@@ -1,0 +1,7 @@
+{
+  "test_competition_Competition.py": true,
+  "test_competition_CompetitionList.py": true,
+  "test_player_Player.py": true,
+  "test_player_PlayerList.py": true,
+  "webapp/test_test.py": true
+}

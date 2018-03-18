@@ -1,8 +1,8 @@
 {% extends "layout.j2html" %} {% block content %}
-<h1> {{ league.name }} ({{ league.id }}) </h1>
+<h1> {{ competition.name }} ({{ competition.id }}) </h1>
 <h2> players </h2>
 <ul>
-    {% for player in league.players %}
+    {% for player in competition.players %}
     <li> <a href="/list/player/{{ player.id }}"> {{ player.name }} ({{ player.id }}) </a> </li>
     {% endfor %}
 </ul>

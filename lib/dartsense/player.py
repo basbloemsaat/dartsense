@@ -30,11 +30,11 @@ class Player:
                 self.callsigns = res[0]['player_callsigns'].split(';')
 
 
-    def _get_leagues(self):
-        league_list = LeagueList(filters={'player': self.id})
-        return league_list
+    def _get_competitions(self):
+        competition_list = CompetitionList(filters={'player': self.id})
+        return competition_list
 
-    leagues = property(_get_leagues)
+    competitions = property(_get_competitions)
 
 
 
@@ -53,14 +53,14 @@ class PlayerList(List_C):
             sql = '''
                 SELECT DISTINCT p.*
                 FROM player p
-                    JOIN league_player lp ON lp.player_id=p.player_id
+                    JOIN competition_player lp ON lp.player_id=p.player_id
                 WHERE 1=1
             '''
 
             if len(self.filters) > 0:
-                if 'league' in self.filters:
-                    sql += 'AND lp.league_id=%s '
-                    args.append(self.filters['league'])
+                if 'competition' in self.filters:
+                    sql += 'AND lp.competition_id=%s '
+                    args.append(self.filters['competition'])
 
             res = db.exec_sql(sql, args)
 
@@ -78,5 +78,5 @@ class PlayerList(List_C):
         return self.elements
     players = property(_get_players)
 
-import dartsense.league
+import dartsense.competition
 import dartsense.event

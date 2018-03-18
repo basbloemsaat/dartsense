@@ -1,8 +1,8 @@
 from flask import render_template, jsonify, g
 
 from dartsense.webapp import app
-from dartsense.league import League
-from dartsense.league import LeagueList
+from dartsense.competition import Competition
+from dartsense.competition import CompetitionList
 from dartsense.player import Player
 
 
@@ -16,18 +16,18 @@ def list_index():
     return "list page"
 
 
-@app.route('/list/leagues/')
-@app.route('/list/leagues')
-def list_leagues():
-    league_list = LeagueList()
-    return render_template('list/leagues.j2html', leagues=league_list)
+@app.route('/list/competitions/')
+@app.route('/list/competitions')
+def list_competitions():
+    competition_list = CompetitionList()
+    return render_template('list/competitions.j2html', competitions=competition_list)
 
 
-@app.route('/list/league/<int:league_id>')
-def list_league(league_id):
-    league = League(id=league_id)
+@app.route('/list/competition/<int:competition_id>')
+def list_competition(competition_id):
+    competition = Competition(id=competition_id)
 
-    return render_template('list/league.j2html', league=league)
+    return render_template('list/competition.j2html', competition=competition)
 
 @app.route('/list/player/<int:player_id>')
 def list_player(player_id):
