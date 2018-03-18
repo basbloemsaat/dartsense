@@ -40,43 +40,49 @@ def setup_db():
                       'google', 'test@test.org', ])
 
     # competition
-    sql = "INSERT INTO competition (competition_name) VALUES (%s)"
-    cur.execute(sql, ['test competition 1'])
-    pytest_setup_vars['testcompetition1_id'] = cur.lastrowid
-    cur.execute(sql, ['test competition 2'])
-    pytest_setup_vars['testcompetition2_id'] = cur.lastrowid
+    sql = "INSERT INTO competition (competition_name, competition_type) VALUES (%s,%s)"
+    cur.execute(sql, ['test league 1','league'])
+    pytest_setup_vars['testleague1_id'] = cur.lastrowid
+    cur.execute(sql, ['test league 2','league'])
+    pytest_setup_vars['testleague2_id'] = cur.lastrowid
+
+    cur.execute(sql, ['test tournament 1','tournament'])
+    pytest_setup_vars['testtournament1_id'] = cur.lastrowid
+    cur.execute(sql, ['test tournament 2','tournament'])
+    pytest_setup_vars['testtournament2_id'] = cur.lastrowid
 
     # competition players
     sql = "INSERT INTO competition_player (competition_id, player_id) VALUES (%s,%s)"
-    cur.execute(sql, [pytest_setup_vars['testcompetition1_id'],
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
                       pytest_setup_vars['player1_id']])
-    cur.execute(sql, [pytest_setup_vars['testcompetition1_id'],
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
                       pytest_setup_vars['player2_id']])
-    cur.execute(sql, [pytest_setup_vars['testcompetition2_id'],
+    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
                       pytest_setup_vars['player3_id']])
-    cur.execute(sql, [pytest_setup_vars['testcompetition2_id'],
+    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
                       pytest_setup_vars['player4_id']])
 
     # events
     sql = "INSERT INTO event (competition_id, event_type, event_name) VALUES (%s,%s,%s)"
-    cur.execute(sql, [pytest_setup_vars['testcompetition1_id'],
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
                       'league_round', 'test competition 1 round 1'])
     pytest_setup_vars['testcompetition1_round1_id'] = cur.lastrowid
-    cur.execute(sql, [pytest_setup_vars['testcompetition1_id'],
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
                       'league_round', 'test competition 1 round 2'])
     pytest_setup_vars['testcompetition1_round2_id'] = cur.lastrowid
-    cur.execute(sql, [pytest_setup_vars['testcompetition2_id'],
+    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
                       'league_round', 'test competition 2 round 1'])
     pytest_setup_vars['testcompetition2_round1_id'] = cur.lastrowid
-    cur.execute(sql, [pytest_setup_vars['testcompetition2_id'],
+    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
                       'league_round', 'test competition 2 round 2'])
     pytest_setup_vars['testcompetition2_round2_id'] = cur.lastrowid
-    cur.execute(sql, [pytest_setup_vars['testcompetition2_id'],
+    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
                       'league_round', 'test competition 2 round 3'])
     pytest_setup_vars['testcompetition2_round3_id'] = cur.lastrowid
-    cur.execute(sql, [0, 'poule', 'test poule 1'])
+
+    cur.execute(sql, [pytest_setup_vars['testtournament1_id'], 'poule', 'test poule 1'])
     pytest_setup_vars['testpoule1_id'] = cur.lastrowid
-    cur.execute(sql, [0, 'poule', 'test poule 2'])
+    cur.execute(sql, [pytest_setup_vars['testtournament1_id'], 'knockout', 'test knockout 2'])
     pytest_setup_vars['testpoule2_id'] = cur.lastrowid
 
     pytest.setup_vars = pytest_setup_vars

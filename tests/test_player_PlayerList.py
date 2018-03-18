@@ -24,6 +24,6 @@ def test_player_list_init(setup_db):
         assert isinstance(player, Player)
 
 def test_player_list_filter(setup_db):
-    player_list = PlayerList(filters={'competition':pytest.setup_vars['testcompetition1_id']})
+    player_list = PlayerList(filters={'competition':pytest.setup_vars['testleague1_id']})
     assert len(player_list) == 2
 

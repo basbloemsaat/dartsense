@@ -19,21 +19,21 @@ def test_competition_init():
     assert isinstance(competition, Competition)
     assert not competition.name
 
-    competition = Competition(name='test competition 1')
+    competition = Competition(name='test league 1')
     assert isinstance(competition, Competition)
     assert hasattr(competition, 'name')
-    assert competition.name == 'test competition 1'
+    assert competition.name == 'test league 1'
 
 def test_competition_by_id(setup_db):
-    competition = Competition(id=pytest.setup_vars['testcompetition1_id'])
+    competition = Competition(id=pytest.setup_vars['testleague1_id'])
     assert isinstance(competition, Competition)
     assert hasattr(competition, 'id')
-    assert competition.id == pytest.setup_vars['testcompetition1_id']
+    assert competition.id == pytest.setup_vars['testleague1_id']
     assert hasattr(competition, 'name')
-    assert competition.name == 'test competition 1'
+    assert competition.name == 'test league 1'
 
 def test_competition_players():
-    competition = Competition(id=pytest.setup_vars['testcompetition1_id'])
+    competition = Competition(id=pytest.setup_vars['testleague1_id'])
     assert isinstance(competition, Competition)
     assert hasattr(competition, 'players')
 

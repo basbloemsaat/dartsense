@@ -12,9 +12,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 from dartsense.competition import CompetitionList
 
 
-def test_competition_init():
+def test_competitionlist_init():
     competition_list = CompetitionList()
 
     assert isinstance(competition_list, CompetitionList)
-    assert len(competition_list) == 2
+    assert len(competition_list) == 4
+
+
    
