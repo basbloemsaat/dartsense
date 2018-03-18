@@ -36,10 +36,10 @@ class CompetitionList(List_C):
             args = []
 
             sql = '''
-                SELECT c.competition_id, c.competition_name 
+                SELECT DISTINCT c.competition_id, c.competition_name 
                 FROM 
                     competition c
-                    JOIN competition_player cp ON cp.competition_id=c.competition_id
+                    LEFT JOIN competition_player cp ON cp.competition_id=c.competition_id
                 WHERE c.competition_id > 0
             '''
 

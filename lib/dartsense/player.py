@@ -54,7 +54,7 @@ class PlayerList(List_C):
             sql = '''
                 SELECT DISTINCT p.*
                 FROM player p
-                    JOIN competition_player lp ON lp.player_id=p.player_id
+                    LEFT JOIN competition_player lp ON lp.player_id=p.player_id
                 WHERE 1=1
             '''
 
