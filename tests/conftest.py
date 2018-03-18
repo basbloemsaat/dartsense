@@ -47,7 +47,7 @@ def setup_db():
     pytest_setup_vars['testleague2_id'] = cur.lastrowid
 
     # league players
-    sql = "INSERT INTO league_player (league_id, player_id) VALUES (%s, %s)"
+    sql = "INSERT INTO league_player (league_id, player_id) VALUES (%s,%s)"
     cur.execute(sql, [pytest_setup_vars['testleague1_id'],
                       pytest_setup_vars['player1_id']])
     cur.execute(sql, [pytest_setup_vars['testleague1_id'],
@@ -56,6 +56,28 @@ def setup_db():
                       pytest_setup_vars['player3_id']])
     cur.execute(sql, [pytest_setup_vars['testleague2_id'],
                       pytest_setup_vars['player4_id']])
+
+    # events
+    sql = "INSERT INTO event (league_id, event_type, event_name) VALUES (%s,%s,%s)"
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+                      'league_round', 'test league 1 round 1'])
+    pytest_setup_vars['testleague1_round1_id'] = cur.lastrowid
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+                      'league_round', 'test league 1 round 2'])
+    pytest_setup_vars['testleague1_round2_id'] = cur.lastrowid
+    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+                      'league_round', 'test league 2 round 1'])
+    pytest_setup_vars['testleague2_round1_id'] = cur.lastrowid
+    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+                      'league_round', 'test league 2 round 2'])
+    pytest_setup_vars['testleague2_round2_id'] = cur.lastrowid
+    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+                      'league_round', 'test league 2 round 3'])
+    pytest_setup_vars['testleague2_round3_id'] = cur.lastrowid
+    cur.execute(sql, [0, 'poule', 'test poule 1'])
+    pytest_setup_vars['testpoule1_id'] = cur.lastrowid
+    cur.execute(sql, [0, 'poule', 'test poule 2'])
+    pytest_setup_vars['testpoule2_id'] = cur.lastrowid
 
     pytest.setup_vars = pytest_setup_vars
 

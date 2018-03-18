@@ -1,9 +1,9 @@
 class Event:
-    def __init__(self, date=None):
+    def __init__(self, id=None, type=None):
         pass
 
 
-class Match(Event):
+class Pool_Round(Event):
 
     def __init__(self, id=0, player1=None, player2=None, date=None, round=None,board=None, sets=1):
         self.player1 = player1
@@ -13,7 +13,7 @@ class Match(Event):
         self.board = board
 
 
-class Tournament(Event):
+class Knockout(Event):
 
     def __init__(self, player=None, date=None, matches=0, points=0):
         self.player = player

@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS `league`;
 CREATE TABLE IF NOT EXISTS `league` (
   `league_id` int(11) NOT NULL AUTO_INCREMENT,
   `league_name` varchar(50) NOT NULL,
+  `league_type` enum('league','tournament') NOT NULL DEFAULT 'league',
   PRIMARY KEY (`league_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -27,7 +28,7 @@ UPDATE `league` set league_id=0;
 CREATE TABLE IF NOT EXISTS `event` (
   `event_id` int(11) NOT NULL AUTO_INCREMENT,
   `league_id` int(11) NOT NULL DEFAULT '0',
-  `event_type` enum('tournament','league','none') NOT NULL,
+  `event_type` enum('none','league_round','league_adjust','poule','knockout') NOT NULL,
   `event_name` varchar(50) NOT NULL,
   PRIMARY KEY (`event_id`),
   KEY `fk_event_league_id` (`league_id`),
