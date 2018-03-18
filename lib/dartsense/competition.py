@@ -4,7 +4,7 @@ from dartsense import db
 from dartsense.player import PlayerList
 
 
-class Competion:
+class Competition:
 
     def __init__(self, id=0, name='',):
         self.id = id
