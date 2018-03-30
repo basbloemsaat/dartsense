@@ -6,7 +6,6 @@ import dartsense.competition
 import dartsense.event
 
 
-
 class Player:
 
     def __init__(self, id=0, name='', nickname='',):
@@ -31,7 +30,6 @@ class Player:
                 self.nickname = res[0]['player_nickname']
                 self.callsigns = res[0]['player_callsigns'].split(';')
 
-
     def _get_competitions(self):
         competition_list = dartsense.competition.CompetitionList(filters={'player': self.id})
         return competition_list
@@ -39,12 +37,12 @@ class Player:
     competitions = property(_get_competitions)
 
 
-
 class PlayerList(List_C):
 
-    def __init__(self, filters={}):
+    def __init__(self, filters={}, search=""):
         List_C.__init__(self)
-        self.filters = filters
+        self._filters = filters
+        self._searchstr = search
 
     def _search(self, force=False):
         if force or self._elements == None:
@@ -58,10 +56,14 @@ class PlayerList(List_C):
                 WHERE 1=1
             '''
 
-            if len(self.filters) > 0:
-                if 'competition' in self.filters:
+            if len(self._filters) > 0:
+                if 'competition' in self._filters:
                     sql += 'AND lp.competition_id=%s '
-                    args.append(self.filters['competition'])
+                    args.append(self._filters['competition'])
+
+            if self._searchstr:
+                sql += 'AND p.player_name LIKE %s'
+                args.append('%' + self._searchstr + '%')
 
             res = db.exec_sql(sql, args)
 
@@ -78,4 +80,3 @@ class PlayerList(List_C):
     def _get_players(self):
         return self.elements
     players = property(_get_players)
-

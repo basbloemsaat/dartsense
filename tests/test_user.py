@@ -9,13 +9,13 @@ from pprint import pprint
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
-from dartsense.user import User
+import dartsense.user
 
 
 def test_user_init():
-    user = User()
+    user = dartsense.user.User()
 
-    assert isinstance(user, User)
+    assert isinstance(user, dartsense.user.User)
     assert hasattr(user, 'id')
     assert user.id == None
 
@@ -30,8 +30,8 @@ def test_user_init():
 
 def test_user_db(setup_db):
     # pprint(pytest.setup_vars)
-    user = User(id=pytest.setup_vars['testuser_id'])
-    assert isinstance(user, User)
+    user = dartsense.user.User(id=pytest.setup_vars['testuser_id'])
+    assert isinstance(user, dartsense.user.User)
     assert hasattr(user, 'name')
     assert user.name == 'test user'
 
@@ -40,7 +40,7 @@ def test_user_db(setup_db):
 
 
 def test_user_login(setup_db):
-    user = User()
+    user = dartsense.user.User()
     assert hasattr(user, 'login')
     assert callable(user.login)
 
@@ -50,3 +50,4 @@ def test_user_login(setup_db):
 
     assert hasattr(user, 'name')
     assert user.name == 'test user'
+
