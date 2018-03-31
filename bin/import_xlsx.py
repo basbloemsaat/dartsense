@@ -17,16 +17,17 @@ print(os.path.dirname(__file__))
 
 import dartsense
 
+
 def main(argv):
     parameters = {
         'filename': '',
+        'competition_id': 0,
     }
 
     try:
         opts, args = getopt.getopt(
             argv, "hsp:v:",
-            [
-                "help", "file="])
+            ["help", "file=", "competition="])
     except getopt.GetoptError as err:
         print(err)
         usage()
@@ -36,11 +37,13 @@ def main(argv):
             usage()
         elif opt in ("-f", "--file"):
             parameters['filename'] = arg
+        elif opt in ("-c", "--competition"):
+            parameters['competition_id'] = arg
 
     pprint(parameters)
 
-    if not parameters['filename']:
-        usage()        
+    if not parameters['filename'] or not parameters['competition_id']:
+        usage()
 
     wb = openpyxl.load_workbook(parameters['filename'], read_only=True)
     # pprint(wb)
@@ -59,8 +62,7 @@ def main(argv):
             for key, cell in zip(header, row):
                 pass
                 values[key] = cell.value
-            pprint(values)
-
+            # pprint(values)
 
 
 def usage():
