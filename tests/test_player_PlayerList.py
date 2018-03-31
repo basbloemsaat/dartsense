@@ -24,10 +24,20 @@ def test_player_list_init(setup_db):
 
 
 def test_player_list_filter(setup_db):
-    player_list = dartsense.player.PlayerList(filters={'competition': pytest.setup_vars['testleague1_id']})
+    player_list = dartsense.player.PlayerList(
+        filters={'competition': pytest.setup_vars['testleague1_id']}
+    )
     assert len(player_list) == 2
 
-def test_player_list_search(setup_db):
-    player_list = dartsense.player.PlayerList(search='player 3')
 
+def test_player_list_search(setup_db):
+    player_list = dartsense.player.PlayerList(
+        search='player 3'
+    )
+    assert len(player_list) == 1
+
+    player_list = dartsense.player.PlayerList(
+        filters={'competition': pytest.setup_vars['testleague2_id']},
+        search='player 3'
+    )
     assert len(player_list) == 1

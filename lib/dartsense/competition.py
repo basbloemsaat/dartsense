@@ -1,7 +1,7 @@
 from pprint import pprint
 from dartsense import List_C
 from dartsense import db
-from dartsense.player import PlayerList
+import dartsense.player
 
 
 class Competition:
@@ -18,7 +18,7 @@ class Competition:
                 self.name = res[0]['competition_name']
 
     def _get_players(self):
-        player_list = PlayerList(filters={'competition': self.id})
+        player_list = dartsense.player.PlayerList(filters={'competition': self.id})
         return player_list
 
     players = property(_get_players)

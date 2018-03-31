@@ -9,20 +9,20 @@ from pprint import pprint
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
-from dartsense.competition import CompetitionList
+import dartsense.competition 
 
 
 def test_competitionlist_init():
-    competition_list = CompetitionList()
+    competition_list = dartsense.competition.CompetitionList()
 
-    assert isinstance(competition_list, CompetitionList)
+    assert isinstance(competition_list, dartsense.competition.CompetitionList)
     assert len(competition_list) == 4
 
 
 def test_competitionlist_filter():
-    competition_list = CompetitionList(filters={'player':pytest.setup_vars['player1_id']})
+    competition_list = dartsense.competition.CompetitionList(filters={'player':pytest.setup_vars['player1_id']})
 
-    assert isinstance(competition_list, CompetitionList)
+    assert isinstance(competition_list, dartsense.competition.CompetitionList)
     assert len(competition_list) == 1
 
     

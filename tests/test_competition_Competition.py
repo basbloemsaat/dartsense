@@ -9,32 +9,34 @@ from pprint import pprint
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
-from dartsense.competition import Competition
+import dartsense.competition
 from dartsense.player import PlayerList
 
 
 def test_competition_init():
-    competition = Competition()
+    competition = dartsense.competition.Competition()
 
-    assert isinstance(competition, Competition)
+    assert isinstance(competition, dartsense.competition.Competition)
     assert not competition.name
 
-    competition = Competition(name='test league 1')
-    assert isinstance(competition, Competition)
+    competition = dartsense.competition.Competition(name='test league 1')
+    assert isinstance(competition, dartsense.competition.Competition)
     assert hasattr(competition, 'name')
     assert competition.name == 'test league 1'
 
+
 def test_competition_by_id(setup_db):
-    competition = Competition(id=pytest.setup_vars['testleague1_id'])
-    assert isinstance(competition, Competition)
+    competition = dartsense.competition.Competition(id=pytest.setup_vars['testleague1_id'])
+    assert isinstance(competition, dartsense.competition.Competition)
     assert hasattr(competition, 'id')
     assert competition.id == pytest.setup_vars['testleague1_id']
     assert hasattr(competition, 'name')
     assert competition.name == 'test league 1'
 
+
 def test_competition_players():
-    competition = Competition(id=pytest.setup_vars['testleague1_id'])
-    assert isinstance(competition, Competition)
+    competition = dartsense.competition.Competition(id=pytest.setup_vars['testleague1_id'])
+    assert isinstance(competition, dartsense.competition.Competition)
     assert hasattr(competition, 'players')
 
     assert isinstance(competition.players, PlayerList)
