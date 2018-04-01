@@ -2,12 +2,13 @@ from dartsense import db, List_C
 
 
 class Event:
-    def __init__(self, id=None, name='', type=None):
+
+    def __init__(self, id=None, name=None, type=None):
         self._id = id
         self._type = type
         self.name = None
 
-        if id and not name:
+        if self._id and not self._type:
             sql = '''
                 SELECT 
                     e.event_id, e.competition_id, e.event_type, e.event_name
@@ -22,17 +23,16 @@ class Event:
             if(len(res) > 0):
                 r = res[0]
                 self.name = r['event_name']
-                # if r['event_type'] == 'league_round':
-                #     self=LeagueRound()
-                # elif r['event_type'] == 'league_adjust':
-                #     self=LeagueAdjust()
-                # elif r['event_type'] == 'poule':
-                #     self=Poule()
-                # elif r['event_type'] == 'knockout':
-                #     self=Knockout()
+                self._type = r['event_type']
 
-
-        self._id = id
+            if self._type == 'league_round':
+                self.__class__ = LeagueRound
+            elif self._type == 'league_adjust':
+                self.__class__ = LeagueAdjust
+            elif self._type == 'poule':
+                self.__class__ = Poule
+            elif self._type == 'knockout':
+                self.__class__ = Knockout
 
     def _get_id(self):
         return self._id
@@ -46,42 +46,26 @@ class Event:
 
 class LeagueRound(Event):
 
-    def __init__(self, id=None, name=''):
-        if (id):
-            super(LeagueRound, self).__init__(name=name)
-            if self._type != 'league_round':
-                raise RuntimeError("id is not a LeagueRound")
-        else: self._type = 'league_round'
+    def __init__(self, id=None, name=None):
+        super(LeagueRound, self).__init__(name=name, type='league_round')
 
 
 class LeagueAdjust(Event):
 
-    def __init__(self, id=None):
-        if (id):
-            super(LeagueAdjust, self).__init__(name=name)
-            if self._type != 'league_adjust':
-                raise RuntimeError("id is not a LeagueAdjust")
-        else: self._type = 'league_adjust'
+    def __init__(self, id=None, name=None):
+        super(LeagueAdjust, self).__init__(name=name, type='league_adjust')
 
 
 class Poule(Event):
 
-    def __init__(self, id=None):
-        if (id):
-            super(Poule, self).__init__(name=name)
-            if self._type != 'poule':
-                raise RuntimeError("id is not a Poule")
-        else: self._type = 'poule'
+    def __init__(self, id=None, name=None):
+        super(Poule, self).__init__(name=name, type='poule')
 
 
 class Knockout(Event):
 
-    def __init__(self, id=None):
-        if (id):
-            super(Knockout, self).__init__(name=name)
-            if self._type != 'knockout':
-                raise RuntimeError("id is not a Knockout")
-        else: self._type = 'knockout'
+    def __init__(self, id=None, name=None):
+        super(Knockout, self).__init__(name=name, type='knockout')
 
 
 class EventList(List_C):

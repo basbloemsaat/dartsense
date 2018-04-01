@@ -23,12 +23,6 @@ def test_event_Event_init(setup_db):
     assert hasattr(event, 'name')
     assert event.name == None
 
-    event = dartsense.event.Event(id=pytest.setup_vars['testcompetition1_round1_id'])
-    assert event.id != None
-    assert event.id == pytest.setup_vars['testcompetition1_round1_id']
-    assert event.name == 'test competition 1 round 1'
-    # assert event.type != None
-
 
 def test_event_LeagueRound_init(setup_db):
     event = dartsense.event.LeagueRound()
@@ -37,6 +31,15 @@ def test_event_LeagueRound_init(setup_db):
 
     assert hasattr(event, 'type')
     assert event.type == 'league_round'
+    assert event.name == None
+
+    event = dartsense.event.Event(id=pytest.setup_vars['testcompetition1_round1_id'])
+    assert event.id != None
+    assert event.id == pytest.setup_vars['testcompetition1_round1_id']
+    assert event.name == 'test competition 1 round 1'
+    assert event.type == 'league_round'
+    assert isinstance(event, dartsense.event.Event)
+    assert isinstance(event, dartsense.event.LeagueRound)
 
 
 def test_event_LeagueAdjust_init(setup_db):
@@ -46,6 +49,15 @@ def test_event_LeagueAdjust_init(setup_db):
 
     assert hasattr(event, 'type')
     assert event.type == 'league_adjust'
+    assert event.name == None
+
+    event = dartsense.event.Event(id=pytest.setup_vars['testcompetition2_adjustment_id'])
+    assert event.id != None
+    assert event.id == pytest.setup_vars['testcompetition2_adjustment_id']
+    assert event.name == 'test competition 2 adjustment'
+    assert event.type == 'league_adjust'
+    assert isinstance(event, dartsense.event.Event)
+    assert isinstance(event, dartsense.event.LeagueAdjust)
 
 
 def test_event_Poule_init(setup_db):
@@ -55,6 +67,15 @@ def test_event_Poule_init(setup_db):
 
     assert hasattr(event, 'type')
     assert event.type == 'poule'
+    assert event.name == None
+
+    event = dartsense.event.Event(id=pytest.setup_vars['testpoule1_id'])
+    assert event.id != None
+    assert event.id == pytest.setup_vars['testpoule1_id']
+    assert event.name == 'test poule 1'
+    assert event.type == 'poule'
+    assert isinstance(event, dartsense.event.Event)
+    assert isinstance(event, dartsense.event.Poule)
 
 
 def test_event_Knockout_init(setup_db):
@@ -64,16 +85,13 @@ def test_event_Knockout_init(setup_db):
 
     assert hasattr(event, 'type')
     assert event.type == 'knockout'
+    assert event.name == None
 
-    # assert not event.name
+    event = dartsense.event.Event(id=pytest.setup_vars['testknockout1_id'])
+    assert event.id != None
+    assert event.id == pytest.setup_vars['testknockout1_id']
+    assert event.name == 'test knockout 1'
+    assert event.type == 'knockout'
+    assert isinstance(event, dartsense.event.Event)
+    assert isinstance(event, dartsense.event.Knockout)
 
-#     event = Event(name='test event 1')
-#     assert isinstance(event, Event)
-#     assert event.name
-#     assert event.name == 'test event 1'
-
-
-# def test_event_load():
-#     event = Event(id=pytest.setup_vars['event1_id'])
-#     assert isinstance(event, Event)
-#     assert event.name == 'test event 1'

@@ -29,7 +29,7 @@ UPDATE `competition` set competition_id=0;
 CREATE TABLE IF NOT EXISTS `event` (
   `event_id` int(11) NOT NULL AUTO_INCREMENT,
   `competition_id` int(11) NOT NULL DEFAULT '0',
-  `event_type` enum('none','league_round','league_adjust','poule','knockout') NOT NULL,
+  `event_type` enum('league_round','league_adjust','poule','knockout') NULL,
   `event_name` varchar(50) NOT NULL,
   PRIMARY KEY (`event_id`),
   KEY `fk_event_competition_id` (`competition_id`),

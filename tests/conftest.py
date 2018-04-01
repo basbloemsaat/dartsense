@@ -80,10 +80,14 @@ def setup_db():
                       'league_round', 'test competition 2 round 3'])
     pytest_setup_vars['testcompetition2_round3_id'] = cur.lastrowid
 
+    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+                      'league_adjust', 'test competition 2 adjustment'])
+    pytest_setup_vars['testcompetition2_adjustment_id'] = cur.lastrowid
+
     cur.execute(sql, [pytest_setup_vars['testtournament1_id'], 'poule', 'test poule 1'])
     pytest_setup_vars['testpoule1_id'] = cur.lastrowid
-    cur.execute(sql, [pytest_setup_vars['testtournament1_id'], 'knockout', 'test knockout 2'])
-    pytest_setup_vars['testpoule2_id'] = cur.lastrowid
+    cur.execute(sql, [pytest_setup_vars['testtournament1_id'], 'knockout', 'test knockout 1'])
+    pytest_setup_vars['testknockout1_id'] = cur.lastrowid
 
     pytest.setup_vars = pytest_setup_vars
 
