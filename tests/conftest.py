@@ -28,6 +28,8 @@ def setup_db():
     pytest_setup_vars['player3_id'] = cur.lastrowid
     cur.execute(sql, ['test player 4', 'test player;test player 4'])
     pytest_setup_vars['player4_id'] = cur.lastrowid
+    cur.execute(sql, ['test player 5', 'test player;test player 5'])
+    pytest_setup_vars['player5_id'] = cur.lastrowid
 
     # users
     sql = "INSERT INTO user (user_name, user_email) VALUES (%s, %s)"
@@ -57,6 +59,11 @@ def setup_db():
                       pytest_setup_vars['player1_id']])
     cur.execute(sql, [pytest_setup_vars['testleague1_id'],
                       pytest_setup_vars['player2_id']])
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+                      pytest_setup_vars['player3_id']])
+    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+                      pytest_setup_vars['player4_id']])
+
     cur.execute(sql, [pytest_setup_vars['testleague2_id'],
                       pytest_setup_vars['player3_id']])
     cur.execute(sql, [pytest_setup_vars['testleague2_id'],
@@ -88,6 +95,60 @@ def setup_db():
     pytest_setup_vars['testpoule1_id'] = cur.lastrowid
     cur.execute(sql, [pytest_setup_vars['testtournament1_id'], 'knockout', 'test knockout 1'])
     pytest_setup_vars['testknockout1_id'] = cur.lastrowid
+
+
+    # matches
+    sql = '''
+        INSERT INTO `match` (
+            `event_id`, `match_date`, `match_date_round`, `match_type`,
+            `player_1_id`, `player_1_id_orig`,
+            `player_1_score`, `player_1_180s`, `player_1_lollies`,
+            `player_2_id`, `player_2_id_orig`,
+            `player_2_score`, `player_2_180s`, `player_2_lollies`
+        )
+        VALUES (
+            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+        )
+    '''
+
+    cur.execute(sql, [
+        pytest_setup_vars['testcompetition1_round1_id'],
+        '2010-01-01', '1', 'bo3games',
+        pytest_setup_vars['player1_id'], 
+        pytest_setup_vars['player1_id'], 
+        2, None ,None,      
+        pytest_setup_vars['player2_id'], 
+        pytest_setup_vars['player2_id'], 
+        2, None ,None
+        ]
+    )
+    pytest_setup_vars['match1_id'] = cur.lastrowid
+
+    cur.execute(sql, [
+        pytest_setup_vars['testcompetition1_round1_id'],
+        '2010-01-01', '1', 'bo3games',
+        pytest_setup_vars['player2_id'], 
+        pytest_setup_vars['player2_id'], 
+        2, None ,None,      
+        pytest_setup_vars['player3_id'], 
+        pytest_setup_vars['player3_id'], 
+        2, None ,None
+        ]
+    )
+    pytest_setup_vars['match2_id'] = cur.lastrowid
+
+    cur.execute(sql, [
+        pytest_setup_vars['testcompetition1_round1_id'],
+        '2010-01-01', '1', 'bo3games',
+        pytest_setup_vars['player3_id'], 
+        pytest_setup_vars['player3_id'], 
+        2, None ,None,      
+        pytest_setup_vars['player1_id'], 
+        pytest_setup_vars['player1_id'], 
+        2, None ,None
+        ]
+    )
+    pytest_setup_vars['match3_id'] = cur.lastrowid
 
     pytest.setup_vars = pytest_setup_vars
 

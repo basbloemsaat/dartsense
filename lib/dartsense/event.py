@@ -36,11 +36,12 @@ class Event:
 
     def _get_id(self):
         return self._id
+        
+    id = property(_get_id)
 
     def _get_type(self):
         return self._type
 
-    id = property(_get_id)
     type = property(_get_type)
 
 

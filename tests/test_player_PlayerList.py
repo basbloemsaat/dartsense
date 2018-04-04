@@ -17,7 +17,7 @@ def test_player_list_init(setup_db):
     player_list = dartsense.player.PlayerList()
 
     assert isinstance(player_list, dartsense.player.PlayerList)
-    assert len(player_list) == 4
+    assert len(player_list) == 5
 
     for player in player_list:
         assert isinstance(player, dartsense.player.Player)
@@ -27,7 +27,7 @@ def test_player_list_filter(setup_db):
     player_list = dartsense.player.PlayerList(
         filters={'competition': pytest.setup_vars['testleague1_id']}
     )
-    assert len(player_list) == 2
+    assert len(player_list) == 4
 
 
 def test_player_list_search(setup_db):

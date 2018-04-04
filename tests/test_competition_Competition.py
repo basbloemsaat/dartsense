@@ -40,4 +40,4 @@ def test_competition_players():
     assert hasattr(competition, 'players')
 
     assert isinstance(competition.players, PlayerList)
-    assert len(competition.players) == 2
+    assert len(competition.players) == 4
