@@ -16,6 +16,8 @@ class Match:
         self._id = id
         self._player1_id = None
         self._player2_id = None
+        self._player1 = None
+        self._player2 = None
 
         if id and not (player1 or player2):
             sql = '''
@@ -51,7 +53,12 @@ class Match:
         return self._get_player(2)
 
     def _get_player(self, nr):
-        return getattr(self, '_player' + str(nr) + '_id')
+        player = getattr(self, '_player' + str(nr))
+        player_id = getattr(self, '_player' + str(nr) + '_id')
+        if not player and player_id:
+            player = dartsense.player.Player()
+        return player
+        # return getattr(self, '_player' + str(nr) + '_id')
 
     player_1 = property(_get_player_1)
     player_2 = property(_get_player_2)
