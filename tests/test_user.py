@@ -19,6 +19,9 @@ def test_user_init():
     assert hasattr(user, 'id')
     assert user.id == None
 
+    assert hasattr(user, 'name')
+    assert user.name == None
+
     assert hasattr(user, 'get_permissions')
     assert callable(user.get_permissions)
 
@@ -30,6 +33,14 @@ def test_user_init():
 
 def test_user_db(setup_db):
     # pprint(pytest.setup_vars)
+    user = dartsense.user.User(id=-1)
+    assert isinstance(user, dartsense.user.User)
+    assert hasattr(user, 'id')
+    assert user.id == -1
+
+    assert hasattr(user, 'name')
+    assert user.name == None
+
     user = dartsense.user.User(id=pytest.setup_vars['testuser_id'])
     assert isinstance(user, dartsense.user.User)
     assert hasattr(user, 'name')
@@ -37,6 +48,9 @@ def test_user_db(setup_db):
 
     assert hasattr(user, 'email')
     assert user.email == 'test@test.com'
+
+
+
 
 
 def test_user_login(setup_db):
