@@ -50,9 +50,6 @@ def test_user_db(setup_db):
     assert user.email == 'test@test.com'
 
 
-
-
-
 def test_user_login(setup_db):
     user = dartsense.user.User()
     assert hasattr(user, 'login')
@@ -65,3 +62,10 @@ def test_user_login(setup_db):
     assert hasattr(user, 'name')
     assert user.name == 'test user'
 
+    # test second login on initialized user
+    assert not user.login('google', 'test@test.org')
+    assert user.id == pytest.setup_vars['testuser_id']
+
+    user = dartsense.user.User()
+    assert not user.login('google', 'test_illegal@test.org')
+    assert user.id == None

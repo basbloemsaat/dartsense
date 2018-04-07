@@ -53,7 +53,7 @@ class User:
             self.__init__(res['user_id'])
 
         except (IndexError) as e:
-            pass
+            return False
 
         return True
 
