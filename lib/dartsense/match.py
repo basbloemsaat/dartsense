@@ -56,7 +56,7 @@ class Match:
         player = getattr(self, '_player' + str(nr))
         player_id = getattr(self, '_player' + str(nr) + '_id')
         if not player and player_id:
-            player = dartsense.player.Player()
+            player = dartsense.player.Player(id=player_id)
         return player
         # return getattr(self, '_player' + str(nr) + '_id')
 
