@@ -63,7 +63,6 @@ class Match:
                 self.player_2_score = r['player_2_score']
                 self.player_2_180s = r['player_2_180s']
                 self.player_2_lollies = r['player_2_lollies']
-              
 
     def save(self):
         if self._id:
@@ -110,6 +109,12 @@ class Match:
     def _get_player_2(self):
         return self._get_player(2)
 
+    def _set_player_1(self, player):
+        return self._set_player(1, player)
+
+    def _set_player_2(self, player):
+        return self._set_player(2, player)
+
     def _get_event(self):
         if not self._event and self._event_id:
             return dartsense.event.Event(id=self._event_id)
@@ -123,6 +128,12 @@ class Match:
             player = dartsense.player.Player(id=player_id)
         return player
 
-    player_1 = property(_get_player_1)
-    player_2 = property(_get_player_2)
+    def _set_player(self, nr, player):
+        if isinstance(player, dartsense.player.Player):
+            setattr(self, '_player' + str(nr), player)
+        elif isinstance(player, int) and player > 0:
+            setattr(self, '_player' + str(nr), dartsense.player.Player(id=player))
+
+    player_1 = property(_get_player_1, _set_player_1)
+    player_2 = property(_get_player_2, _set_player_2)
     event = property(_get_event)
