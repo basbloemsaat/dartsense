@@ -18,6 +18,11 @@ def test_competitionlist_init():
     assert isinstance(competition_list, dartsense.competition.CompetitionList)
     assert len(competition_list) == 4
 
+    competitions = competition_list.competitions
+    assert isinstance(competitions, list)
+    assert len(competitions) == 4
+    assert isinstance(competitions[0] , dartsense.competition.Competition)
+
 
 def test_competitionlist_filter():
     competition_list = dartsense.competition.CompetitionList(filters={'player':pytest.setup_vars['player1_id']})
@@ -25,4 +30,7 @@ def test_competitionlist_filter():
     assert isinstance(competition_list, dartsense.competition.CompetitionList)
     assert len(competition_list) == 1
 
-    
+    competitions = competition_list.competitions
+    assert isinstance(competitions, list)
+    assert len(competitions) == 1
+    assert isinstance(competitions[0] , dartsense.competition.Competition)
