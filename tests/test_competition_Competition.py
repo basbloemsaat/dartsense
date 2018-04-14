@@ -10,7 +10,8 @@ from pprint import pprint
 sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
 import dartsense.competition
-from dartsense.player import PlayerList
+import dartsense.event
+import dartsense.player
 
 
 def test_competition_init():
@@ -34,10 +35,21 @@ def test_competition_by_id(setup_db):
     assert competition.name == 'test league 1'
 
 
-def test_competition_players():
+def test_competition_players(setup_db):
     competition = dartsense.competition.Competition(id=pytest.setup_vars['testleague1_id'])
-    assert isinstance(competition, dartsense.competition.Competition)
     assert hasattr(competition, 'players')
 
-    assert isinstance(competition.players, PlayerList)
+    assert isinstance(competition.players, dartsense.player.PlayerList)
     assert len(competition.players) == 4
+
+
+def test_competition_events(setup_db):
+    competition = dartsense.competition.Competition(id=pytest.setup_vars['testleague1_id'])
+
+    assert hasattr(competition, 'events')
+    assert isinstance(competition.events, dartsense.event.EventList)
+    # assert len(competition.events) == 2
+
+
+
+#

@@ -36,7 +36,7 @@ class Event:
 
     def _get_id(self):
         return self._id
-        
+
     id = property(_get_id)
 
     def _get_type(self):
@@ -71,5 +71,11 @@ class Knockout(Event):
 
 class EventList(List_C):
 
-    def __init(self):
-        self.list = []
+    def __init__(self, filters={}):
+        List_C.__init__(self)
+        self.filters = filters
+
+    
+
+
+#

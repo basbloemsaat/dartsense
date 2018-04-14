@@ -1,6 +1,8 @@
 from pprint import pprint
 from dartsense import List_C
 from dartsense import db
+
+import dartsense.event
 import dartsense.player
 
 
@@ -22,6 +24,13 @@ class Competition:
         return player_list
 
     players = property(_get_players)
+
+    def _get_events(self):
+        event_list = dartsense.event.EventList()
+        return event_list
+
+
+    events = property(_get_events)
 
 
 class CompetitionList(List_C):
@@ -48,7 +57,7 @@ class CompetitionList(List_C):
                     sql += 'AND cp.player_id=%s '
                     args.append(self.filters['player'])
 
-            res = db.exec_select(sql,args)
+            res = db.exec_select(sql, args)
 
             for r in res:
                 self._elements.append(
@@ -58,3 +67,6 @@ class CompetitionList(List_C):
         return self.elements
 
     competitions = property(_get_competitions)
+
+
+#
