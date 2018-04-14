@@ -85,12 +85,10 @@ class Match:
                     , `match_date_round` = %s
                     , `match_type` = %s
                     , `player_1_id` = %s
-                    , `player_1_id_orig` = %s
                     , `player_1_score` = %s
                     , `player_1_180s` = %s
                     , `player_1_lollies` = %s
                     , `player_2_id` = %s
-                    , `player_2_id_orig` = %s
                     , `player_2_score` = %s
                     , `player_2_180s` = %s
                     , `player_2_lollies` = %s
@@ -104,11 +102,9 @@ class Match:
                 self.round,
                 self.type,
                 self._player_1_id,
-                self._player_1_id,
                 self.player_1_score,
                 self.player_1_180s,
                 self.player_1_lollies,
-                self._player_2_id,
                 self._player_2_id,
                 self.player_2_score,
                 self.player_2_180s,

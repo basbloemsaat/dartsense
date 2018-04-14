@@ -116,10 +116,10 @@ def setup_db():
         '2010-01-01', '1', 'bo3games',
         pytest_setup_vars['player1_id'], 
         pytest_setup_vars['player1_id'], 
-        2, None ,None,      
+        1, 3 ,5,      
         pytest_setup_vars['player2_id'], 
         pytest_setup_vars['player2_id'], 
-        2, None ,None
+        2, 4 ,6
         ]
     )
     pytest_setup_vars['match1_id'] = cur.lastrowid
