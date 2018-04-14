@@ -1,6 +1,6 @@
 from pprint import pprint
 import hashlib
-from datetime import date
+import datetime
 
 from dartsense import db, List_C
 import dartsense.event
@@ -12,20 +12,25 @@ class Match:
     def __init__(
         self,
         id=None,
-        player1=None,
-        player2=None,
+        player_1=None,
+        player_2=None,
+        event=None,
+        date=datetime.date.today()
     ):
         self._id = id
         self._player_1_id = None
         self._player_2_id = None
         self._player_1 = None
         self._player_2 = None
+        self.player_1 = player_1
+        self.player_2 = player_2
 
         self._event_id = None
         self._event = None
+        self.event = event
 
-        self._date = date.today()
-        self._round = 0
+        self._date = date
+        self.round = 0
         self.type = None
 
         self.player_1_score = 0
@@ -38,7 +43,7 @@ class Match:
         self.player_2_lollies = 0
         self.player_2_finishes = []
 
-        if id and not (player1 or player2):
+        if id and not (player_1 or player_2 or event):
             sql = '''
                 SELECT 
                     `match_id`, `event_id`, `match_date`, 
@@ -72,7 +77,44 @@ class Match:
     def save(self):
         if self._id:
             # update
-            pass
+            sql = '''
+                UPDATE `match`
+                SET
+                      `event_id` = %s
+                    , `match_date` = %s
+                    , `match_date_round` = %s
+                    , `match_type` = %s
+                    , `player_1_id` = %s
+                    , `player_1_id_orig` = %s
+                    , `player_1_score` = %s
+                    , `player_1_180s` = %s
+                    , `player_1_lollies` = %s
+                    , `player_2_id` = %s
+                    , `player_2_id_orig` = %s
+                    , `player_2_score` = %s
+                    , `player_2_180s` = %s
+                    , `player_2_lollies` = %s
+                WHERE
+                    match_id = %s
+            '''
+
+            db.exec_sql(sql, [
+                self._event_id,
+                self._date,
+                self.round,
+                self.type,
+                self._player_1_id,
+                self._player_1_id,
+                self.player_1_score,
+                self.player_1_180s,
+                self.player_1_lollies,
+                self._player_2_id,
+                self._player_2_id,
+                self.player_2_score,
+                self.player_2_180s,
+                self.player_2_lollies,
+                self._id
+            ])
         else:
             if not (
                 self._player_1_id and
@@ -107,8 +149,8 @@ class Match:
                 [
                     self._event_id,
                     self._date,
-                    self._round,
-                    None,
+                    self.round,
+                    self.type,
                     self._player_1_id,
                     self._player_1_id,
                     self.player_1_score,

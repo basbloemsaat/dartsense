@@ -70,7 +70,7 @@ def test_match_Match_load(setup_db):
     assert match.event.id == pytest.setup_vars['testcompetition1_round1_id']
 
 
-def test_match_Match_new(setup_db):
+def test_match_Match_new_empty(setup_db):
     match = dartsense.match.Match()
     assert match.id == None
 
@@ -121,3 +121,66 @@ def test_match_Match_new(setup_db):
 
     new_id = match.save()
     assert isinstance(new_id, int)
+    assert new_id > 0
+
+
+def test_match_Match_new_construct(setup_db):
+    player1 = dartsense.player.Player(id=pytest.setup_vars['player1_id'])
+    player2 = dartsense.player.Player(id=pytest.setup_vars['player2_id'])
+    event = dartsense.event.Event(id=pytest.setup_vars['testcompetition1_round2_id'])
+
+    match = dartsense.match.Match(
+        player_1=player1,
+        player_2=player2,
+        event=event,
+    )
+
+    assert isinstance(match.player_1, dartsense.player.Player)
+    assert match.player_1.id == pytest.setup_vars['player1_id']
+    assert isinstance(match.player_2, dartsense.player.Player)
+    assert match.player_2.id == pytest.setup_vars['player2_id']
+
+    assert isinstance(match.event, dartsense.event.Event)
+    assert match.event.id == pytest.setup_vars['testcompetition1_round2_id']
+
+    new_id = match.save()
+    assert isinstance(new_id, int)
+    assert new_id > 0
+
+
+def test_match_Match_update(setup_db):
+    event = dartsense.event.Event(id=pytest.setup_vars['testcompetition1_round2_id'])
+
+    match_init = dartsense.match.Match(
+        player_1=pytest.setup_vars['player1_id'],
+        player_2=pytest.setup_vars['player2_id'],
+        event=pytest.setup_vars['testcompetition1_round2_id'],
+    )
+
+    match_id = match_init.save()
+
+    match_update = dartsense.match.Match(id=match_id)
+
+    assert match_update.player_1.id == pytest.setup_vars['player1_id']
+    assert match_update.player_2.id == pytest.setup_vars['player2_id']
+    assert match_update.event.id == pytest.setup_vars['testcompetition1_round2_id']
+
+    match_update.player_2 = pytest.setup_vars['player3_id']
+    assert match_update.player_2.id == pytest.setup_vars['player3_id']
+
+    match_id_update = match_update.save()
+    assert match_id_update == match_id
+    assert match_update.player_2.id == pytest.setup_vars['player3_id']
+
+    match_load = dartsense.match.Match(id=match_id)
+    assert match_load.player_2.id == pytest.setup_vars['player3_id']
+
+
+
+    
+
+
+
+
+
+#
