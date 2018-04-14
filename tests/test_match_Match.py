@@ -69,6 +69,9 @@ def test_match_Match_load(setup_db):
     assert isinstance(match.event, dartsense.event.Event)
     assert match.event.id == pytest.setup_vars['testcompetition1_round1_id']
 
+    assert hasattr(match, 'round')
+    assert match.round == '1'
+    
     assert hasattr(match, 'player_1_score')
     assert match.player_1_score == 1
     assert hasattr(match, 'player_2_score')
@@ -171,16 +174,78 @@ def test_match_Match_new_construct(setup_db):
 
 def test_match_Match_update(setup_db):
     match = dartsense.match.Match(id=pytest.setup_vars['match1_id'])
+
+    # check before update
+    assert match.player_1.id == pytest.setup_vars['player1_id']
+    assert match.player_2.id == pytest.setup_vars['player2_id']
+    assert match.event.id == pytest.setup_vars['testcompetition1_round1_id']
+    assert match.round == '1'
+    assert match.type == 'bo3games'
+    assert match.player_1_score == 1
+    assert match.player_1_180s == 3
+    assert match.player_1_lollies == 5
+    assert match.player_2_score == 2
+    assert match.player_2_180s == 4
+    assert match.player_2_lollies == 6
+    
+    # update
+    match.player_1 = pytest.setup_vars['player4_id']
     match.player_2 = pytest.setup_vars['player3_id']
+    match.event = pytest.setup_vars['testcompetition1_round2_id']
+    match.round = '2'
+    match.type = 'bo5games'
+    match.player_1_score = 8
+    match.player_1_180s = 9
+    match.player_1_lollies = 10
+    match.player_2_score = 11
+    match.player_2_180s = 12
+    match.player_2_lollies = 13
+
+    # check before save
+    assert match.player_1.id == pytest.setup_vars['player4_id']
     assert match.player_2.id == pytest.setup_vars['player3_id']
+    assert match.event.id == pytest.setup_vars['testcompetition1_round2_id']
+    assert match.round == '2'
+    assert match.type == 'bo5games'
+    assert match.player_1_score == 8
+    assert match.player_1_180s == 9
+    assert match.player_1_lollies == 10
+    assert match.player_2_score == 11
+    assert match.player_2_180s == 12
+    assert match.player_2_lollies == 13
 
     assert match.save() == pytest.setup_vars['match1_id']
-    assert match.player_2.id == pytest.setup_vars['player3_id']
 
-    match_load = dartsense.match.Match(
+    # check before save
+    assert match.player_1.id == pytest.setup_vars['player4_id']
+    assert match.player_2.id == pytest.setup_vars['player3_id']
+    assert match.event.id == pytest.setup_vars['testcompetition1_round2_id']
+    assert match.round == '2'
+    assert match.type == 'bo5games'
+    assert match.player_1_score == 8
+    assert match.player_1_180s == 9
+    assert match.player_1_lollies == 10
+    assert match.player_2_score == 11
+    assert match.player_2_180s == 12
+    assert match.player_2_lollies == 13
+
+    match = None
+    match = dartsense.match.Match(
         id=pytest.setup_vars['match1_id']
     )
-    assert match_load.player_2.id == pytest.setup_vars['player3_id']
+
+    # check after reload
+    assert match.player_1.id == pytest.setup_vars['player4_id']
+    assert match.player_2.id == pytest.setup_vars['player3_id']
+    assert match.event.id == pytest.setup_vars['testcompetition1_round2_id']
+    assert match.round == '2'
+    assert match.type == 'bo5games'
+    assert match.player_1_score == 8
+    assert match.player_1_180s == 9
+    assert match.player_1_lollies == 10
+    assert match.player_2_score == 11
+    assert match.player_2_180s == 12
+    assert match.player_2_lollies == 13
 
 
 #

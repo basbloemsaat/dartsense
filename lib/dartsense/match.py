@@ -66,6 +66,9 @@ class Match:
                 self._player_2_id = r['player_2_id']
                 self._event_id = r['event_id']
 
+                self.round = r['match_date_round']
+                self.type = r['match_type']
+
                 self.player_1_score = r['player_1_score']
                 self.player_1_180s = r['player_1_180s']
                 self.player_1_lollies = r['player_1_lollies']
@@ -193,7 +196,9 @@ class Match:
             setattr(self, '_player_' + str(nr), player)
             setattr(self, '_player_' + str(nr) + '_id', player.id)
         elif isinstance(player, int) and player > 0:
+            setattr(self, '_player_' + str(nr), None)
             setattr(self, '_player_' + str(nr) + '_id', player)
+
 
     def _get_event(self):
         if not self._event and self._event_id:
@@ -205,6 +210,7 @@ class Match:
             self._event = event
             self._event_id = event.id
         elif isinstance(event, int) and event > 0:
+            self._event = None
             self._event_id = event
 
     player_1 = property(_get_player_1, _set_player_1)
