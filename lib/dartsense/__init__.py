@@ -7,7 +7,7 @@ class List_C():
             size=0,
     ):
         self.size = size
-        self._elements = None
+        self._elements = []
 
     def __iter__(self):
         self._pos = -1
@@ -27,8 +27,6 @@ class List_C():
 
     def _get_length(self):
         self._search()
-        if self._elements == None:
-            return 0
         return len(self._elements)
 
     def _get_elements(self):

@@ -45,12 +45,15 @@ class PlayerList(List_C):
         self._searchstr = search
 
     def _search(self, force=False):
-        if force or self._elements == None:
+        if force or self._elements == []:
             self._elements = []
             args = []
 
             sql = '''
-                SELECT DISTINCT p.*
+                SELECT DISTINCT 
+                    p.player_id
+                    , player_name
+                    , player_nickname
                 FROM player p
                     LEFT JOIN competition_player lp ON lp.player_id=p.player_id
                 WHERE 1=1

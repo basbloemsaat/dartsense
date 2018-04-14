@@ -40,7 +40,7 @@ class CompetitionList(List_C):
         self.filters = filters
 
     def _search(self, force=False):
-        if force or self._elements == None:
+        if force or self._elements == []:
             self._elements = []
             args = []
 
