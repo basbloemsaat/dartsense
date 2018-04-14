@@ -75,7 +75,7 @@ def test_match_Match_new(setup_db):
     assert match.id == None
 
     assert hasattr(match, 'save')
-    assert match.save() == False
+    assert match.save() == None
     assert match.id == None
 
     assert match.player_1 == None
@@ -102,7 +102,7 @@ def test_match_Match_new(setup_db):
     assert match.id == None
 
     assert hasattr(match, 'save')
-    assert match.save() == False
+    assert match.save() == None
     assert match.id == None
 
     assert match.player_1 == None
@@ -119,8 +119,5 @@ def test_match_Match_new(setup_db):
     assert isinstance(match.event, dartsense.event.Event)
     assert match.event.id == pytest.setup_vars['testcompetition1_round2_id']
 
-
-
-
-
-
+    new_id = match.save()
+    assert isinstance(new_id, int)

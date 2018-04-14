@@ -12,7 +12,7 @@ class Competition:
 
         if id and not name:
             sql = "SELECT competition_id, competition_name FROM competition where competition_id=%s LIMIT 1"
-            res = db.exec_sql(sql, [id])
+            res = db.exec_select(sql, [id])
 
             if(len(res) > 0):
                 self.name = res[0]['competition_name']
@@ -48,7 +48,7 @@ class CompetitionList(List_C):
                     sql += 'AND cp.player_id=%s '
                     args.append(self.filters['player'])
 
-            res = db.exec_sql(sql,args)
+            res = db.exec_select(sql,args)
 
             for r in res:
                 self._elements.append(

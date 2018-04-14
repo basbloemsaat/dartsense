@@ -18,7 +18,7 @@ class Event:
                 LIMIT 1
             '''
 
-            res = db.exec_sql(sql, [id])
+            res = db.exec_select(sql, [id])
 
             if(len(res) > 0):
                 r = res[0]

@@ -23,7 +23,7 @@ class Player:
                 LIMIT 1
             '''
 
-            res = db.exec_sql(sql, [id])
+            res = db.exec_select(sql, [id])
 
             if(len(res) > 0):
                 self.name = res[0]['player_name']
@@ -65,7 +65,7 @@ class PlayerList(List_C):
                 sql += 'AND p.player_name LIKE %s'
                 args.append('%' + self._searchstr + '%')
 
-            res = db.exec_sql(sql, args)
+            res = db.exec_select(sql, args)
 
             for r in res:
                 self._elements.append(Player(

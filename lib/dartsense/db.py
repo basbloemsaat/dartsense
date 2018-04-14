@@ -3,6 +3,7 @@ import MySQLdb
 
 connection = None
 
+
 def get_connection(force=False):
     global connection
     if force or not connection:
@@ -30,8 +31,17 @@ def exec_sql(sql, arguments=[]):
     except:
         cur = get_cursor(True)
         cur.execute(sql, arguments)
+    return cur
 
+
+def exec_select(sql, arguments=[]):
+    cur = exec_sql(sql, arguments)
     des = cur.description
     names = [d[0] for d in cur.description]
     rows = [dict(zip(names, row)) for row in cur.fetchall()]
     return rows
+
+
+def exec_insert(sql, arguments=[]):
+    cur = exec_sql(sql, arguments)
+    return cur.lastrowid

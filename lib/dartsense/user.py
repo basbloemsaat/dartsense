@@ -20,7 +20,7 @@ class User:
                 LIMIT 1 
                 '''
             try:
-                res = db.exec_sql(sql, [
+                res = db.exec_select(sql, [
                     self.id,
                 ])[0]
 
@@ -46,7 +46,7 @@ class User:
             '''
 
         try:
-            res = db.exec_sql(sql, [
+            res = db.exec_select(sql, [
                 provider, credential
             ])[0]
 
