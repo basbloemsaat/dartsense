@@ -80,6 +80,7 @@ def test_match_Match_new(setup_db):
 
     assert match.player_1 == None
     assert match.player_2 == None
+    assert match.event == None
 
     player1 = dartsense.player.Player(id=pytest.setup_vars['player1_id'])
     player2 = dartsense.player.Player(id=pytest.setup_vars['player2_id'])
@@ -88,8 +89,14 @@ def test_match_Match_new(setup_db):
     match.player_1 = player1
     match.player_2 = player2
 
+    assert isinstance(match.player_1, dartsense.player.Player)
     assert match.player_1.id == pytest.setup_vars['player1_id']
+    assert isinstance(match.player_2, dartsense.player.Player)
     assert match.player_2.id == pytest.setup_vars['player2_id']
+
+    match.event = event
+    assert isinstance(match.event, dartsense.event.Event)
+    assert match.event.id == pytest.setup_vars['testcompetition1_round2_id']
 
     match = dartsense.match.Match()
     assert match.id == None
@@ -100,12 +107,20 @@ def test_match_Match_new(setup_db):
 
     assert match.player_1 == None
     assert match.player_2 == None
+    assert match.event == None
 
     match.player_1 = pytest.setup_vars['player1_id']
     match.player_2 = pytest.setup_vars['player2_id']
 
     assert match.player_1.id == pytest.setup_vars['player1_id']
     assert match.player_2.id == pytest.setup_vars['player2_id']
+
+    match.event = pytest.setup_vars['testcompetition1_round2_id']
+    assert isinstance(match.event, dartsense.event.Event)
+    assert match.event.id == pytest.setup_vars['testcompetition1_round2_id']
+
+
+
 
 
 

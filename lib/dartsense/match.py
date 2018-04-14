@@ -115,12 +115,6 @@ class Match:
     def _set_player_2(self, player):
         return self._set_player(2, player)
 
-    def _get_event(self):
-        if not self._event and self._event_id:
-            return dartsense.event.Event(id=self._event_id)
-
-        return None
-
     def _get_player(self, nr):
         player = getattr(self, '_player' + str(nr))
         player_id = getattr(self, '_player' + str(nr) + '_id')
@@ -134,6 +128,17 @@ class Match:
         elif isinstance(player, int) and player > 0:
             setattr(self, '_player' + str(nr), dartsense.player.Player(id=player))
 
+    def _get_event(self):
+        if not self._event and self._event_id:
+            self._event = dartsense.event.Event(id=self._event_id)
+        return self._event
+
+    def _set_event(self, event):
+        if isinstance(event, dartsense.event.Event):
+            self._event = event
+        elif isinstance(event, int) and event > 0:
+            self._event = dartsense.event.Event(id = event)
+
     player_1 = property(_get_player_1, _set_player_1)
     player_2 = property(_get_player_2, _set_player_2)
-    event = property(_get_event)
+    event = property(_get_event, _set_event)
