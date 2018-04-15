@@ -82,9 +82,12 @@ def test_event_LeagueRound_update(setup_db):
 
 def test_event_LeagueRound_save_new(setup_db):
     event = dartsense.event.LeagueRound(
-        name='testround', competition=pytest.setup_vars['testleague2_id'])
+        competition=pytest.setup_vars['testleague2_id'])
 
     assert event.id == None
+    assert event.save() == None
+
+    event.name = 'testround'
     assert event.name == 'testround'
     new_id = event.save()
 
