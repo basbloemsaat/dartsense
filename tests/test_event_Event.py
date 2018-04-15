@@ -7,6 +7,7 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
+import dartsense.competition
 import dartsense.event
 
 
@@ -23,6 +24,9 @@ def test_event_Event_init(setup_db):
     assert hasattr(event, 'name')
     assert event.name == None
 
+    assert hasattr(event, 'competition')
+    assert event.competition == None
+
 
 def test_event_LeagueRound_init(setup_db):
     event = dartsense.event.LeagueRound()
@@ -33,13 +37,17 @@ def test_event_LeagueRound_init(setup_db):
     assert event.type == 'league_round'
     assert event.name == None
 
-    event = dartsense.event.Event(id=pytest.setup_vars['testcompetition1_round1_id'])
+    event = dartsense.event.Event(
+        id=pytest.setup_vars['testcompetition1_round1_id'])
     assert event.id != None
     assert event.id == pytest.setup_vars['testcompetition1_round1_id']
     assert event.name == 'test competition 1 round 1'
     assert event.type == 'league_round'
     assert isinstance(event, dartsense.event.Event)
     assert isinstance(event, dartsense.event.LeagueRound)
+
+    assert isinstance(event.competition, dartsense.competition.Competition)
+    assert event.competition.id == pytest.setup_vars['testleague1_id']
 
 
 def test_event_LeagueAdjust_init(setup_db):
@@ -51,7 +59,8 @@ def test_event_LeagueAdjust_init(setup_db):
     assert event.type == 'league_adjust'
     assert event.name == None
 
-    event = dartsense.event.Event(id=pytest.setup_vars['testcompetition2_adjustment_id'])
+    event = dartsense.event.Event(
+        id=pytest.setup_vars['testcompetition2_adjustment_id'])
     assert event.id != None
     assert event.id == pytest.setup_vars['testcompetition2_adjustment_id']
     assert event.name == 'test competition 2 adjustment'
@@ -95,3 +104,5 @@ def test_event_Knockout_init(setup_db):
     assert isinstance(event, dartsense.event.Event)
     assert isinstance(event, dartsense.event.Knockout)
 
+
+#

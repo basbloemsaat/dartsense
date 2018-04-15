@@ -1,5 +1,6 @@
 {% extends "layout.j2html" %} {% block content %}
 <h1> {{ player.name }} ({{ player.id }}) </h1>
+<hr>
 <h2> competitions </h2>
 <ul>
     {% for competition in player.competitions %}
@@ -10,6 +11,8 @@
     </li>
     {% endfor %}
 </ul>
-
+<hr>
+<h2> events </h2>
+<hr>
 <h2> matches </h2>
-{% endblock %}
+<hr> {% endblock %}

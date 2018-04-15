@@ -31,11 +31,11 @@ def test_player_load(setup_db):
 def test_player_Competitions(setup_db):
     player = dartsense.player.Player(id=pytest.setup_vars['player1_id'])
     assert hasattr(player, 'competitions')
-    competitions = player.competitions
+    competitions_list = player.competitions
 
-    assert isinstance(competitions, dartsense.competition.CompetitionList)
-    assert len(competitions) == 1
-    assert isinstance(competitions[0],  dartsense.competition.Competition)
-    assert competitions[0].name == 'test league 1'
+    assert isinstance(competitions_list, dartsense.competition.CompetitionList)
+    assert len(competitions_list) == 1
+    assert isinstance(competitions_list[0],  dartsense.competition.Competition)
+    assert competitions_list[0].name == 'test league 1'
 
 

@@ -1,13 +1,18 @@
 from dartsense import db, List_C
 
 import dartsense.competition
-#TODO: link back to competition
+# TODO: link back to competition
+
 
 class Event:
 
-    def __init__(self, id=None, name=None, type=None):
+    def __init__(self, id=None, name=None, type=None, competition=None):
         self._id = id
         self._type = type
+
+        self._competition_id = None
+        self._competition = None
+
         self.name = None
 
         if self._id and not self._type:
@@ -26,6 +31,7 @@ class Event:
                 r = res[0]
                 self.name = r['event_name']
                 self._type = r['event_type']
+                self._competition_id = r['competition_id']
 
             if self._type == 'league_round':
                 self.__class__ = LeagueRound
@@ -36,6 +42,9 @@ class Event:
             elif self._type == 'knockout':
                 self.__class__ = Knockout
 
+        self.competition = competition
+
+
     def _get_id(self):
         return self._id
 
@@ -45,6 +54,21 @@ class Event:
         return self._type
 
     type = property(_get_type)
+
+    def _get_competition(self):
+        if self._competition_id and not self._competition:
+            self._competition=dartsense.competition.Competition(id=self._competition_id)
+        return self._competition
+
+    def _set_competition(self, competition):
+        if isinstance(competition, dartsense.competition.Competition):
+            self._competition = competition
+            self._competition_id = competition.id
+        elif isinstance(competition, int) and competition > 0:
+            self._competition = None
+            self._competition_id = competition
+
+    competition = property(_get_competition, _set_competition)
 
 
 class LeagueRound(Event):
@@ -88,7 +112,9 @@ class EventList(List_C):
                     , e.competition_id
                     , e.event_type
                     , e.event_name
-                FROM event e
+                FROM 
+                    event e
+                    LEFT JOIN `match` m ON m.event_id=e.event_id
                 WHERE 1=1
             '''
 
@@ -97,6 +123,10 @@ class EventList(List_C):
                     sql += ' AND e.competition_id=%s '
                     args.append(self._filters['competition'])
 
+                if 'player' in self._filters:
+                    sql += ' AND ( m.player_1_id = %s OR player_1_id = %s ) '
+                    args.append(self._filters['player'])
+                    args.append(self._filters['player'])
 
             res = db.exec_select(sql, args)
 

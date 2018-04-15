@@ -27,3 +27,11 @@ def test_event_list_filter_competition(setup_db):
 
     assert len(event_list) == 2
 
+def test_event_list_filter_player(setup_db):
+    event_list = dartsense.event.EventList(
+        filters={'player': pytest.setup_vars['player1_id']}
+    )
+
+    assert len(event_list) == 1
+    
+
