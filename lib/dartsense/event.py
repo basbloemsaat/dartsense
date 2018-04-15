@@ -9,11 +9,11 @@ class Event:
     def __init__(self, id=None, name=None, type=None, competition=None):
         self._id = id
         self._type = type
+        self.name = name
 
         self._competition_id = None
         self._competition = None
 
-        self.name = None
 
         if self._id and not self._type:
             sql = '''
@@ -44,6 +44,54 @@ class Event:
 
         self.competition = competition
 
+    def save(self):
+        if self._id:
+            sql = """
+                UPDATE `event`
+                SET 
+                    competition_id = %s
+                    , event_type = %s
+                    , event_name = %s
+                WHERE event_id = %s
+            """
+
+            db.exec_sql(sql, [
+                self._competition_id,
+                self._type,
+                self.name,
+                self._id
+            ])
+        else:
+            if not (
+                self._type and
+                self._competition_id and
+                self.name
+            ):
+                return None
+
+            sql = """
+                INSERT INTO `event` 
+                (
+                    competition_id
+                    , event_type
+                    , event_name
+                ) VALUES (
+                    %s, %s, %s
+                )
+            """
+
+            new_id = db.exec_insert(
+                sql,
+                [
+                    self._competition_id,
+                    self._type,
+                    self.name
+                ]
+            )
+
+            self._id = new_id
+            
+        return self._id
 
     def _get_id(self):
         return self._id
@@ -57,7 +105,8 @@ class Event:
 
     def _get_competition(self):
         if self._competition_id and not self._competition:
-            self._competition=dartsense.competition.Competition(id=self._competition_id)
+            self._competition = dartsense.competition.Competition(
+                id=self._competition_id)
         return self._competition
 
     def _set_competition(self, competition):
@@ -73,26 +122,30 @@ class Event:
 
 class LeagueRound(Event):
 
-    def __init__(self, id=None, name=None):
-        super(LeagueRound, self).__init__(name=name, type='league_round')
+    def __init__(self, id=None, name=None, competition=None):
+        super(LeagueRound, self).__init__(
+            name=name, type='league_round', competition=competition)
 
 
 class LeagueAdjust(Event):
 
-    def __init__(self, id=None, name=None):
-        super(LeagueAdjust, self).__init__(name=name, type='league_adjust')
+    def __init__(self, id=None, name=None, competition=None):
+        super(LeagueAdjust, self).__init__(
+            name=name, type='league_adjust', competition=competition)
 
 
 class Poule(Event):
 
-    def __init__(self, id=None, name=None):
-        super(Poule, self).__init__(name=name, type='poule')
+    def __init__(self, id=None, name=None, competition=None):
+        super(Poule, self).__init__(
+            name=name, type='poule', competition=competition)
 
 
 class Knockout(Event):
 
-    def __init__(self, id=None, name=None):
-        super(Knockout, self).__init__(name=name, type='knockout')
+    def __init__(self, id=None, name=None, competition=None):
+        super(Knockout, self).__init__(
+            name=name, type='knockout', competition=competition)
 
 
 class EventList(List_C):

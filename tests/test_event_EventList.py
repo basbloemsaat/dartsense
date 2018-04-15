@@ -14,7 +14,7 @@ def test_event_EventList_init():
     event_list = dartsense.event.EventList()
     assert isinstance(event_list, dartsense.event.EventList)
 
-    assert len(event_list) == 9
+    assert len(event_list) > 6
 
     for event in event_list:
         assert isinstance(event, dartsense.event.Event)
