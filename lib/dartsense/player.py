@@ -56,7 +56,8 @@ class PlayerList(List_C):
                     , player_nickname
                 FROM player p
                     LEFT JOIN competition_player lp ON lp.player_id=p.player_id
-                WHERE 1=1
+                WHERE 
+                    p.player_id > 0
             '''
 
             if len(self._filters) > 0:

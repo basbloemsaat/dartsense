@@ -168,7 +168,8 @@ class EventList(List_C):
                 FROM 
                     event e
                     LEFT JOIN `match` m ON m.event_id=e.event_id
-                WHERE 1=1
+                WHERE 
+                    e.event_id > 0
             '''
 
             if len(self._filters) > 0:

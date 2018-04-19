@@ -216,3 +216,10 @@ class Match:
     player_1 = property(_get_player_1, _set_player_1)
     player_2 = property(_get_player_2, _set_player_2)
     event = property(_get_event, _set_event)
+
+
+class MatchList(List_C):
+
+    def __init__(self, filters={}, search=""):
+        pass
+

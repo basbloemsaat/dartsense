@@ -4,9 +4,19 @@
 <h2> players </h2>
 <ul>
     {% for player in competition.players %}
-    <li> <a href="/list/player/{{ player.id }}"> {{ player.name }} ({{ player.id }}) </a> </li>
+    <li> <a href="/list/player/{{ player.id }}"> 
+        {{ player.name }} ({{ player.id }}) </a> 
+    </li>
     {% endfor %}
 </ul>
 <hr>
 <h2> events </h2>
+
+    {% for event in competition.events %}
+    <li> <a href="/list/event/{{ event.id }}"> 
+        {{ event.name }} ({{ event.id }}) </a> 
+    </li>
+    {% endfor %}
 <hr> {% endblock %}
+
+
