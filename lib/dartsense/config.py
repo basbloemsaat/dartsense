@@ -30,5 +30,6 @@ for key in oauth2:
         pprint('No oauth2 config for ' + key)
         remove_keys.append(key)
 
+
 for key in remove_keys:
     oauth2.pop(key)
