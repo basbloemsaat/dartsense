@@ -23,8 +23,10 @@ print(os.path.dirname(__file__))
 import dartsense
 import dartsense.player
 import dartsense.event
+import dartsense.match
 
 players = {}
+
 
 def find_player(player_name, competition_id):
     speler = None
@@ -40,6 +42,13 @@ def find_player(player_name, competition_id):
 
         if len(player_list) == 1:
             speler = players[player_name] = player_list[0]
+        elif(len(player_list) > 1):
+            for player in player_list:
+                # pprint('0',player.name)
+                # pprint('1',player_name)
+                if player.name == player_name:
+                    speler = player
+                    break
     return speler
 
 
@@ -79,7 +88,6 @@ def main(argv):
         # print(sheet.title)
         title_list = sheet.title.split()
 
-
         date_avond = dateutil.parser.parse(title_list[-1])
         if len(title_list) > 1:
             type_avond = title_list[0].lower()
@@ -88,7 +96,10 @@ def main(argv):
             type_avond = "regulier"
             event = dartsense.event.LeagueRound()
 
-        # print(date_avond, type_avond)
+        event.name = date_avond.strftime('%Y-%m-%d')
+        event.competition = competition_id
+        event.save()
+        # print(date_avond.strftime('%Y-%m-%d'))
         # print(type_avond)
 
         header = [cell.value for cell in sheet[1]]
@@ -101,9 +112,35 @@ def main(argv):
             for key, cell in zip(header, row):
                 # pass
                 values[key] = cell.value
-            # pprint(values)
+            pprint(values)
             speler1 = find_player(values['Speler1'], competition_id)
             speler2 = find_player(values['Speler2'], competition_id)
+
+            # pprint(speler1.name)
+            # pprint(speler2.name)
+
+            if speler1 == None:
+                print(values['Speler1'])
+
+            if speler2 == None:
+                print(values['Speler2'])
+
+            match = dartsense.match.Match()
+            match.event = event
+            match.player_1 = speler1
+            match.player_1_score = values['Legs1']
+            match.player_1_180s = values['Max1']
+            match.player_1_lollies = values['Lollies1']
+            match.player_1_finishes = str(values['Finishes1']).split(',') if values['Finishes1'] else []
+
+            match.player_2 = speler2
+            match.player_2_score = values['Legs2']
+            match.player_2_180s = values['Max2']
+            match.player_2_lollies = values['Lollies2']
+            match.player_2_finishes = str(values['Finishes2']).split(',') if values['Finishes2'] else []
+
+            match.date = date_avond
+            match.save()
 
 
 
