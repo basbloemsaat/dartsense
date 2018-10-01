@@ -1,4 +1,4 @@
-USE `dartsense_test`;
+-- USE `dartsense_test`;
 DROP TABLE IF EXISTS `group_competition`;
 DROP TABLE IF EXISTS `group_permission`;
 DROP TABLE IF EXISTS `user_group`;
