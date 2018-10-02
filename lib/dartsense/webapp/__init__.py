@@ -1,10 +1,13 @@
 from werkzeug.contrib.fixers import ProxyFix
 from flask import Flask
 from flask_session import Session
-
 from dartsense import config
+import os
 
-app = Flask(__name__)
+static_folder = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), "../var/www/static"))
+
+app = Flask(__name__, static_folder=static_folder)
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
 SESSION_TYPE = 'redis'
@@ -13,4 +16,3 @@ app.config.from_object(__name__)
 Session(app)
 
 from dartsense.webapp import views
-
