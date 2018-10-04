@@ -28,7 +28,7 @@ def get_google_oauth_token():
 @app.route('/user/')
 @app.route('/user')
 def user_index():
-    if app.config['DEBUG'] == True:
+    if 'DEV_SERVER' in app.config and app.config['DEV_SERVER']:
         # make sure there is no user with id=0 in prod!
         session['user_id'] = 0
 

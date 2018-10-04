@@ -9,6 +9,7 @@ from dartsense.webapp import app
 
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['DEBUG'] = True
+app.config['DEV_SERVER'] = True
 app.jinja_env.cache = {}
 app.jinja_env.auto_reload = True
 
