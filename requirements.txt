@@ -16,3 +16,4 @@ redis >= 2.10.5
 requests >= 2.10.0
 sqlalchemy >= 1.0.14
 xlrd >= 1.0.0
+pyopenssl >= 18.0.0
