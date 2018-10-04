@@ -3,9 +3,8 @@ from flask import Flask
 from flask_session import Session
 from dartsense import config
 import os
-
 static_folder = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), "../var/www/static"))
+    os.path.dirname(__file__), "../../../var/www/static"))
 
 app = Flask(__name__, static_folder=static_folder)
 app.wsgi_app = ProxyFix(app.wsgi_app)
