@@ -2,22 +2,39 @@
 <html>
 
 <head>
-    <title></title>
+    <title>{{ page_title }}</title>
     <link href="/static/bootstrap4/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style type="text/css">
+    body {
+    }
+
+    div#leftcol {
+        min-height: 300px;
+        background-image: url(/static/images/SVA_logo_vertical.png);
+        background-repeat: no-repeat;
+        background-size: 100%;
+    }
+
+    @media only screen and (max-width: 767px) {
+        div#pageheader {
+            background-image: url(/static/images/SVA_logo_bg_small.png);
+            background-size: 10%;
+            background-repeat: no-repeat;
+        }
+    }
+
+    </style>
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
-                <img src="/static/images/SVA_logo_bg_small.png" alt="SVA logo" style="padding-top: 0rem; padding-left: 0rem">
+            <div class="col-md-1 d-none d-md-block" id="leftcol">
+                &nbsp;
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="container-fluid">
-                    {% block content %}{% endblock %}
-                </div>
+            <div class="col-md-11">
+                <div style="text-align: center" id="pageheader">&nbsp; {% block page_header %}{% endblock %} &nbsp;</div>
+                {% block content %}{% endblock %}
             </div>
         </div>
     </div>
