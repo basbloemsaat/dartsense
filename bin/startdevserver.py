@@ -17,4 +17,4 @@ try:
 except (IndexError, ValueError):
     port = 5897
 
-app.run('0.0.0.0', port=port, debug=True, ssl_context='adhoc',)
+app.run('0.0.0.0', port=port, debug=True, ssl_context=('etc/dev/cert.pem', 'etc/dev/key.pem'),)

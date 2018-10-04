@@ -28,7 +28,11 @@ def get_google_oauth_token():
 @app.route('/user/')
 @app.route('/user')
 def user_index():
-    if (not 'user_id' in session or session['user_id'] == 0):
+    if app.config['DEBUG'] == True:
+        # make sure there is no user with id=0 in prod!
+        session['user_id'] = 0
+
+    if (not 'user_id' in session or session['user_id'] == -1):
         return redirect(url_for('user_login', _external=True, _scheme='https'), code=302)
     else:
         return render_template('user.j2html')
@@ -43,7 +47,7 @@ def user_login():
 @app.route('/user/logout/')
 @app.route('/user/logout')
 def user_logout():
-    session['user_id'] = 0
+    session['user_id'] = -1
     return redirect(url_for('user_login', _external=True, _scheme='https'), code=302)
 
 
