@@ -9,6 +9,7 @@ from dartsense.webapp import app
 
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['DEBUG'] = True
+app.config['DEV_SERVER'] = True
 app.jinja_env.cache = {}
 app.jinja_env.auto_reload = True
 
@@ -17,4 +18,4 @@ try:
 except (IndexError, ValueError):
     port = 5897
 
-app.run('0.0.0.0', port=port, debug=True,)
+app.run('0.0.0.0', port=port, debug=True, ssl_context=('etc/dev/cert.pem', 'etc/dev/key.pem'),)

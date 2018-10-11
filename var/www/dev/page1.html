@@ -65,17 +65,27 @@
         background-repeat: no-repeat;
         background-size: 100%;
     }
+
+    @media only screen and (max-width: 767px) {
+        div#pageheader {
+            background-image: url(/static/images/SVA_logo_bg_small.png);
+            background-size: 10%;
+            background-repeat: no-repeat;
+        }
+    }
     </style>
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-1" id="leftcol">
-                <!-- <img src="/static/images/SVA_logo_vertical_smaller.png" alt="SVA logo" > -->
+            <div class="col-md-1" id="leftcol">
+                &nbsp;
             </div>
-            <div class="col-11">
-                <div class="container-fluid">
+            <div class="col-md-11">
+                <!-- <div class="container-fluid"> -->
+                    <div style="text-align: center" id="pageheader"> <h1>Vanavond schrijft de WINNAAR</h1> </div>
+                    <hr>
                     <table style="width: 100%" class="current table-striped table">
                         <thead class="thead-dark">
                             <tr>
@@ -204,7 +214,7 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
+                <!-- </div> -->
             </div>
         </div>
     </div>
