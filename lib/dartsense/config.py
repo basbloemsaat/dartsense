@@ -57,7 +57,7 @@ removed_keys = {}
 for key in remove_keys:
     removed_keys[key] = oauth2.pop(key)
 
-if not 'google' in oauth2 and os.environ['DARTSENSE_ENV'] == 'DEV' or os.environ['DARTSENSE_ENV'] == 'TEST':
+if not 'google' in oauth2 and (os.environ['DARTSENSE_ENV'] == 'DEV' or os.environ['DARTSENSE_ENV'] == 'TEST'):
     oauth2['google'] = removed_keys['google']
     oauth2['google']['consumer_key']= 'test'
     oauth2['google']['consumer_secret']= '12378127349734597012497'
