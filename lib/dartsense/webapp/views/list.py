@@ -17,7 +17,9 @@ def list_index():
 
 
 @app.route('/list/competitions/')
+@app.route('/list/competition/')
 @app.route('/list/competitions')
+@app.route('/list/competition')
 def list_competitions():
     competition_list = CompetitionList()
     return render_template('list/competitions.j2html', competitions=competition_list)

@@ -56,6 +56,9 @@ class CompetitionList(List_C):
                 if 'player' in self.filters:
                     sql += 'AND cp.player_id=%s '
                     args.append(self.filters['player'])
+                if 'organisation' in self.filters:
+                    sql += 'AND c.organisation_id=%s '
+                    args.append(self.filters['organisation'])
 
             res = db.exec_select(sql, args)
 

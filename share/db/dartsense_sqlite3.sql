@@ -1,17 +1,39 @@
 PRAGMA synchronous = OFF;
 PRAGMA journal_mode = MEMORY;
-BEGIN TRANSACTION;
+
+DROP TABLE IF EXISTS `group_competition`;
+DROP TABLE IF EXISTS `group_permission`;
+DROP TABLE IF EXISTS `user_group`;
+DROP TABLE IF EXISTS `finish`;
+DROP TABLE IF EXISTS `match`;
+DROP TABLE IF EXISTS `event`;
+DROP TABLE IF EXISTS `group`;
+DROP TABLE IF EXISTS `player_alias`;
+DROP TABLE IF EXISTS `competition_player`;
+DROP TABLE IF EXISTS `player`;
+DROP TABLE IF EXISTS `usercredential`;
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `competition`;
+DROP TABLE IF EXISTS `organisation`;
+DROP TABLE IF EXISTS `permission`;
+
+CREATE TABLE IF NOT EXISTS `organisation` (
+   `organisation_id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
+,  `organisation_name` varchar(50) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS `competition` (
    `competition_id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
 ,  `competition_name` varchar(50) NOT NULL
-,  `competition_type` text  NOT NULL
+,  `competition_type` varchar(10) NOT NULL
+,  `competition_organisation` int(11) NOT NULL DEFAULT '0'
 );
 INSERT INTO `competition` (`competition_id`, `competition_name`, `competition_type`) VALUES
     (0, 'none', '');
 CREATE TABLE IF NOT EXISTS `event` (
   `event_id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
 ,  `competition_id` integer NOT NULL DEFAULT '0'
-,  `event_type` text  NULL
+,  `event_type` varchar(15)  NULL
 ,  `event_name` varchar(50) NOT NULL
 ,  CONSTRAINT `fk_event_competition_id` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`competition_id`)
 );
@@ -30,6 +52,7 @@ CREATE TABLE IF NOT EXISTS `player` (
 ,  `player_callsigns` varchar(100) NOT NULL
 ,  `player_id_merged` integer NULL DEFAULT NULL
 );
+
 CREATE TABLE IF NOT EXISTS `group_competition` (
   `group_id` integer NOT NULL
 ,  `competition_id` integer NOT NULL
@@ -37,6 +60,7 @@ CREATE TABLE IF NOT EXISTS `group_competition` (
 ,  CONSTRAINT `fk_gl_group_id` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`)
 ,  CONSTRAINT `fk_gl_competition_id` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`competition_id`)
 );
+
 CREATE TABLE IF NOT EXISTS `permission` (
   `permission_id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
 ,  `permission_code` char(6) NOT NULL
@@ -85,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 );
 CREATE TABLE IF NOT EXISTS `usercredential` (
   `user_id` integer NOT NULL
-,  `usercred_provider` text  NOT NULL
+,  `usercred_provider` varchar(10)  NOT NULL
 ,  `usercred_value` varchar(255) DEFAULT NULL
 ,  PRIMARY KEY (`user_id`,`usercred_provider`)
 ,  CONSTRAINT `fk_uc_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
@@ -118,4 +142,3 @@ CREATE INDEX "idx_user_group_fk_ug_group_id" ON "user_group" (`group_id`);
 CREATE INDEX "idx_usercredential_FK_cred_userid" ON "usercredential" (`user_id`);
 CREATE INDEX "idx_event_fk_event_competition_id" ON "event" (`competition_id`);
 CREATE INDEX "idx_group_competition_fk_gl_competition_id" ON "group_competition" (`competition_id`);
-END TRANSACTION;

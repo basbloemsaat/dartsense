@@ -12,13 +12,20 @@ DROP TABLE IF EXISTS `player`;
 DROP TABLE IF EXISTS `usercredential`;
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `competition`;
+DROP TABLE IF EXISTS `organisation`;
 DROP TABLE IF EXISTS `permission`;
 
+CREATE TABLE IF NOT EXISTS `organisation` (
+  `organisation_id` int(11) NOT NULL AUTO_INCREMENT,
+  `organisation_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`organisation_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `competition` (
   `competition_id` int(11) NOT NULL AUTO_INCREMENT,
   `competition_name` varchar(50) NOT NULL,
-  `competition_type` enum('league','tournament') NOT NULL,
+  `competition_type` varchar(10) NOT NULL, 
+  `organisation_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`competition_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 

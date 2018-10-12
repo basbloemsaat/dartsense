@@ -19,7 +19,6 @@ for key in config.oauth2:
 
 google = oauth_apps['google']
 
-
 @google.tokengetter
 def get_google_oauth_token():
     return session.get('google_token')
