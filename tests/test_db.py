@@ -16,7 +16,6 @@ def test_db_select():
     assert isinstance(rows, list)
     assert len(rows) > 0
     assert isinstance(rows[0], dict)
-    assert 'Tables_in_dartsense_test' in rows[0]
 
     db.connection = True
     rows = db.exec_select('show tables')

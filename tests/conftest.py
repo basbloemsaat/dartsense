@@ -8,7 +8,6 @@ os.environ["DARTSENSE_SCHEMA"] = "dartsense_test"
 import pytest
 from dartsense import db
 
-
 @pytest.fixture(scope="session")
 def setup_db():
     # setup a basic state to run tests
@@ -16,84 +15,83 @@ def setup_db():
     pytest_setup_vars = {}
 
     empty_db()
-    cur = db.get_cursor()
 
     # players
     sql = "INSERT INTO player (player_name,player_callsigns) VALUES (%s,%s)"
-    cur.execute(sql, ['test player 1', 'test player;test player 1'])
+    cur=db.exec_sql(sql, ['test player 1', 'test player;test player 1'])
     pytest_setup_vars['player1_id'] = cur.lastrowid
-    cur.execute(sql, ['test player 2', 'test player;test player 2'])
+    cur=db.exec_sql(sql, ['test player 2', 'test player;test player 2'])
     pytest_setup_vars['player2_id'] = cur.lastrowid
-    cur.execute(sql, ['test player 3', 'test player;test player 3'])
+    cur=db.exec_sql(sql, ['test player 3', 'test player;test player 3'])
     pytest_setup_vars['player3_id'] = cur.lastrowid
-    cur.execute(sql, ['test player 4', 'test player;test player 4'])
+    cur=db.exec_sql(sql, ['test player 4', 'test player;test player 4'])
     pytest_setup_vars['player4_id'] = cur.lastrowid
-    cur.execute(sql, ['test player 5', 'test player;test player 5'])
+    cur=db.exec_sql(sql, ['test player 5', 'test player;test player 5'])
     pytest_setup_vars['player5_id'] = cur.lastrowid
 
     # users
     sql = "INSERT INTO user (user_name, user_email) VALUES (%s, %s)"
-    cur.execute(sql, ['test user', 'test@test.com'])
+    cur=db.exec_sql(sql, ['test user', 'test@test.com'])
     pytest_setup_vars['testuser_id'] = cur.lastrowid
 
     # usercredentials
     sql = "INSERT INTO usercredential (user_id, usercred_provider, usercred_value) VALUES (%s,%s,%s)"
-    cur.execute(sql, [pytest_setup_vars['testuser_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testuser_id'],
                       'google', 'test@test.org', ])
 
     # competition
     sql = "INSERT INTO competition (competition_name, competition_type) VALUES (%s,%s)"
-    cur.execute(sql, ['test league 1','league'])
+    cur=db.exec_sql(sql, ['test league 1','league'])
     pytest_setup_vars['testleague1_id'] = cur.lastrowid
-    cur.execute(sql, ['test league 2','league'])
+    cur=db.exec_sql(sql, ['test league 2','league'])
     pytest_setup_vars['testleague2_id'] = cur.lastrowid
 
-    cur.execute(sql, ['test tournament 1','tournament'])
+    cur=db.exec_sql(sql, ['test tournament 1','tournament'])
     pytest_setup_vars['testtournament1_id'] = cur.lastrowid
-    cur.execute(sql, ['test tournament 2','tournament'])
+    cur=db.exec_sql(sql, ['test tournament 2','tournament'])
     pytest_setup_vars['testtournament2_id'] = cur.lastrowid
 
     # competition players
     sql = "INSERT INTO competition_player (competition_id, player_id) VALUES (%s,%s)"
-    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague1_id'],
                       pytest_setup_vars['player1_id']])
-    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague1_id'],
                       pytest_setup_vars['player2_id']])
-    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague1_id'],
                       pytest_setup_vars['player3_id']])
-    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague1_id'],
                       pytest_setup_vars['player4_id']])
 
-    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague2_id'],
                       pytest_setup_vars['player3_id']])
-    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague2_id'],
                       pytest_setup_vars['player4_id']])
 
     # events
     sql = "INSERT INTO event (competition_id, event_type, event_name) VALUES (%s,%s,%s)"
-    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague1_id'],
                       'league_round', 'test competition 1 round 1'])
     pytest_setup_vars['testcompetition1_round1_id'] = cur.lastrowid
-    cur.execute(sql, [pytest_setup_vars['testleague1_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague1_id'],
                       'league_round', 'test competition 1 round 2'])
     pytest_setup_vars['testcompetition1_round2_id'] = cur.lastrowid
-    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague2_id'],
                       'league_round', 'test competition 2 round 1'])
     pytest_setup_vars['testcompetition2_round1_id'] = cur.lastrowid
-    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague2_id'],
                       'league_round', 'test competition 2 round 2'])
     pytest_setup_vars['testcompetition2_round2_id'] = cur.lastrowid
-    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague2_id'],
                       'league_round', 'test competition 2 round 3'])
     pytest_setup_vars['testcompetition2_round3_id'] = cur.lastrowid
 
-    cur.execute(sql, [pytest_setup_vars['testleague2_id'],
+    cur=db.exec_sql(sql, [pytest_setup_vars['testleague2_id'],
                       'league_adjust', 'test competition 2 adjustment'])
     pytest_setup_vars['testcompetition2_adjustment_id'] = cur.lastrowid
 
-    cur.execute(sql, [pytest_setup_vars['testtournament1_id'], 'poule', 'test poule 1'])
+    cur=db.exec_sql(sql, [pytest_setup_vars['testtournament1_id'], 'poule', 'test poule 1'])
     pytest_setup_vars['testpoule1_id'] = cur.lastrowid
-    cur.execute(sql, [pytest_setup_vars['testtournament1_id'], 'knockout', 'test knockout 1'])
+    cur=db.exec_sql(sql, [pytest_setup_vars['testtournament1_id'], 'knockout', 'test knockout 1'])
     pytest_setup_vars['testknockout1_id'] = cur.lastrowid
 
 
@@ -111,7 +109,7 @@ def setup_db():
         )
     '''
 
-    cur.execute(sql, [
+    cur=db.exec_sql(sql, [
         pytest_setup_vars['testcompetition1_round1_id'],
         '2010-01-01', '1', 'bo3games',
         pytest_setup_vars['player1_id'], 
@@ -124,7 +122,7 @@ def setup_db():
     )
     pytest_setup_vars['match1_id'] = cur.lastrowid
 
-    cur.execute(sql, [
+    cur=db.exec_sql(sql, [
         pytest_setup_vars['testcompetition1_round1_id'],
         '2010-01-01', '1', 'bo3games',
         pytest_setup_vars['player2_id'], 
@@ -137,7 +135,7 @@ def setup_db():
     )
     pytest_setup_vars['match2_id'] = cur.lastrowid
 
-    cur.execute(sql, [
+    cur=db.exec_sql(sql, [
         pytest_setup_vars['testcompetition1_round1_id'],
         '2010-01-01', '1', 'bo3games',
         pytest_setup_vars['player3_id'], 
@@ -157,16 +155,16 @@ def empty_db():
     # clear the database for tests
     cur = db.get_cursor()
 
-    cur.execute("DELETE FROM `group_competition`")
-    cur.execute("DELETE FROM `group_permission`")
-    cur.execute("DELETE FROM `user_group`")
-    cur.execute("DELETE FROM `finish`")
-    cur.execute("DELETE FROM `match`")
-    cur.execute("DELETE FROM `event` WHERE event_id>0")
-    cur.execute("DELETE FROM `group` WHERE group_id>0")
-    cur.execute("DELETE FROM `player_alias`")
-    cur.execute("DELETE FROM `competition_player`")
-    cur.execute("DELETE FROM `player`")
-    cur.execute("DELETE FROM `usercredential`")
-    cur.execute("DELETE FROM `user`")
-    cur.execute("DELETE FROM `competition` WHERE competition_id>0")
+    db.exec_sql("DELETE FROM `group_competition`")
+    db.exec_sql("DELETE FROM `group_permission`")
+    db.exec_sql("DELETE FROM `user_group`")
+    db.exec_sql("DELETE FROM `finish`")
+    db.exec_sql("DELETE FROM `match`")
+    db.exec_sql("DELETE FROM `event` WHERE event_id>0")
+    db.exec_sql("DELETE FROM `group` WHERE group_id>0")
+    db.exec_sql("DELETE FROM `player_alias`")
+    db.exec_sql("DELETE FROM `competition_player`")
+    db.exec_sql("DELETE FROM `player`")
+    db.exec_sql("DELETE FROM `usercredential`")
+    db.exec_sql("DELETE FROM `user`")
+    db.exec_sql("DELETE FROM `competition` WHERE competition_id>0")

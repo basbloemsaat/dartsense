@@ -9,7 +9,11 @@ static_folder = os.path.abspath(os.path.join(
 app = Flask(__name__, static_folder=static_folder)
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
-SESSION_TYPE = 'redis'
+if config.session_type == 'dev':
+    SESSION_TYPE = 'none'
+else:
+    SESSION_TYPE = 'redis'
+
 SESSION_COOKIE_NAME = 'dartsense_session'
 app.config.from_object(__name__)
 Session(app)
