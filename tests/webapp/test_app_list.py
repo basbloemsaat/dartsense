@@ -46,3 +46,8 @@ def test_list_player(client):
     assert res.status_code == 200
     res = client.get('/list/player/999999999')
     assert res.status_code == 404
+
+
+def test_list_organisations(client):
+    res = client.get('/list/organisations')
+    assert res.status_code == 200

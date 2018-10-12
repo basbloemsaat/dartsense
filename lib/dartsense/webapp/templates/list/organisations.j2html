@@ -1,0 +1,13 @@
+{% extends "layout.j2html" %}
+
+{% block content %}
+    Organisations
+
+    <ul>
+        {% for organisation in organisations %}
+            <li>
+                <a href="/list/organisation/{{ organisation.id }}">{{ organisation.name }} ({{ organisation.id }})</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
