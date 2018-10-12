@@ -31,18 +31,16 @@ def test_user_login(client):
     res = client.get('/user/login/')
     assert res.status_code == 200
 
-# TEMPORARY DISABLED
-# def test_user_login_provider(client):
-#     res = client.get('/user/login/google')
-#     assert res.status_code == 302
+def test_user_login_provider(client):
+    res = client.get('/user/login/google')
+    assert res.status_code == 302
 
-# TEMPORARY DISABLED
-# def test_user_logout(client):
-#     res = client.get('/user/logout')
-#     assert res.status_code == 302
+def test_user_logout(client):
+    res = client.get('/user/logout')
+    assert res.status_code == 302
 
-#     res = client.get('/user/logout/')
-#     assert res.status_code == 302
+    res = client.get('/user/logout/')
+    assert res.status_code == 302
 
 def test_user_auth(client):
     # no test for now at least

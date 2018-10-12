@@ -10,7 +10,7 @@ app = Flask(__name__, static_folder=static_folder)
 app.wsgi_app = ProxyFix(app.wsgi_app)
 
 if config.session_type == 'dev':
-    SESSION_TYPE = 'none'
+    SESSION_TYPE = 'filesystem'
 else:
     SESSION_TYPE = 'redis'
 

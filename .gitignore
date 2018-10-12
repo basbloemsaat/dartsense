@@ -117,3 +117,4 @@ etc/dartsense_config.py
 data/~*
 .pytest_cache/*
 /dev/
+/flask_session/
