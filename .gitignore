@@ -116,3 +116,4 @@ ENV/
 etc/dartsense_config.py
 data/~*
 .pytest_cache/*
+/dev/
