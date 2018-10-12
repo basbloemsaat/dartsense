@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `competition` (
    `competition_id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
 ,  `competition_name` varchar(50) NOT NULL
 ,  `competition_type` varchar(10) NOT NULL
-,  `competition_organisation` int(11) NOT NULL DEFAULT '0'
+,  `organisation_id` int(11) NOT NULL DEFAULT '0'
 );
 INSERT INTO `competition` (`competition_id`, `competition_name`, `competition_type`) VALUES
     (0, 'none', '');

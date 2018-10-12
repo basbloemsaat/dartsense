@@ -30,8 +30,15 @@ class Player:
                 self.nickname = res[0]['player_nickname']
                 self.callsigns = res[0]['player_callsigns'].split(';')
 
+            else:
+                self.id = -1
+
+    def __bool__(self):
+        return self.id > 0
+
     def _get_competitions(self):
-        competition_list = dartsense.competition.CompetitionList(filters={'player': self.id})
+        competition_list = dartsense.competition.CompetitionList(
+            filters={'player': self.id})
         return competition_list
 
     competitions = property(_get_competitions)

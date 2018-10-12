@@ -18,9 +18,16 @@ class Competition:
 
             if(len(res) > 0):
                 self.name = res[0]['competition_name']
+            else:
+                # id not found? get outta here!
+                self.id = -1
+
+    def __bool__(self):
+        return self.id > 0 
 
     def _get_players(self):
-        player_list = dartsense.player.PlayerList(filters={'competition': self.id})
+        player_list = dartsense.player.PlayerList(
+            filters={'competition': self.id})
         return player_list
 
     players = property(_get_players)
@@ -28,7 +35,6 @@ class Competition:
     def _get_events(self):
         event_list = dartsense.event.EventList()
         return event_list
-
 
     events = property(_get_events)
 

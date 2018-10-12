@@ -28,10 +28,10 @@ def list_competitions():
 @app.route('/list/competition/<int:competition_id>')
 def list_competition(competition_id):
     competition = Competition(id=competition_id)
+    return render_template('list/competition.j2html', competition=competition), 200 if competition else 404
 
-    return render_template('list/competition.j2html', competition=competition)
 
 @app.route('/list/player/<int:player_id>')
 def list_player(player_id):
     player = Player(id=player_id)
-    return render_template('list/player.j2html', player=player)
+    return render_template('list/player.j2html', player=player), 200 if player else 404
