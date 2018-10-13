@@ -51,3 +51,8 @@ def test_list_player(client):
 def test_list_organisations(client):
     res = client.get('/list/organisations')
     assert res.status_code == 200
+
+def test_list_organisation(client):
+    res = client.get('/list/organisation/' + str(pytest.setup_vars['organisation1_id']))
+
+

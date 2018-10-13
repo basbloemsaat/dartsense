@@ -3,6 +3,7 @@ from flask import render_template, jsonify, g
 from dartsense.webapp import app
 from dartsense.competition import Competition
 from dartsense.competition import CompetitionList
+from dartsense.organisation import Organisation
 from dartsense.organisation import OrganisationList
 from dartsense.player import Player
 
@@ -48,4 +49,8 @@ def list_organisations():
 
     return render_template('list/organisations.j2html', organisations=organisation_list)
 
+@app.route('/list/organisation/<int:organisation_id>')
+def list_organisation(organisation_id):
+    organisation = Organisation(id=organisation_id)
+    return render_template('list/organisation.j2html', organisation=organisation), 200 if organisation else 404
 
