@@ -44,6 +44,8 @@ def list_player(player_id):
 @app.route('/list/organisation')
 def list_organisations():
     organisation_list = OrganisationList()
+    print(len(organisation_list))
+
     return render_template('list/organisations.j2html', organisations=organisation_list)
 
 

@@ -1,8 +1,8 @@
-from pprint import pprint
 import hashlib
 
 from dartsense import db, List_C
 import dartsense.competition
+
 
 class Organisation:
 
@@ -29,12 +29,36 @@ class Organisation:
 
     competitions = property(_get_competitions)
 
+
 class OrganisationList(List_C):
 
     def __init__(self, filters={}, search=""):
         List_C.__init__(self)
         self._filters = filters
-        self._searchstr = search
 
     def _search(self, force=False):
-        pass
+        if force or self._elements == []:
+            self._elements = []
+            args = []
+
+            sql = '''
+                SELECT
+                    o.organisation_id
+                    , o.organisation_name
+                FROM
+                    organisation o
+                WHERE 
+                    o.organisation_id > 0
+            '''
+
+            res = db.exec_select(sql, args)
+
+            for r in res:
+                self._elements.append(Organisation(
+                    id=r['organisation_id'],
+                    name=r['organisation_name'],
+                ))
+
+    def _get_organisations(self):
+        return self.elements
+    organisations = property(_get_organisations)
