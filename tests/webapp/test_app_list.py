@@ -55,4 +55,7 @@ def test_list_organisations(client):
 def test_list_organisation(client):
     res = client.get('/list/organisation/' + str(pytest.setup_vars['organisation1_id']))
 
+def test_list_event(client):
+    res = client.get('/list/event/' + str(pytest.setup_vars['testcompetition1_round1_id']))
+    assert res.status_code == 200
 

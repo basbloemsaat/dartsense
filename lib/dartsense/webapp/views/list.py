@@ -6,6 +6,7 @@ from dartsense.competition import CompetitionList
 from dartsense.organisation import Organisation
 from dartsense.organisation import OrganisationList
 from dartsense.player import Player
+from dartsense.event import Event
 
 
 from pprint import pprint
@@ -45,7 +46,6 @@ def list_player(player_id):
 @app.route('/list/organisation')
 def list_organisations():
     organisation_list = OrganisationList()
-    print(len(organisation_list))
 
     return render_template('list/organisations.j2html', organisations=organisation_list)
 
@@ -54,3 +54,7 @@ def list_organisation(organisation_id):
     organisation = Organisation(id=organisation_id)
     return render_template('list/organisation.j2html', organisation=organisation), 200 if organisation else 404
 
+@app.route('/list/event/<int:event_id>')
+def list_event(event_id):
+    event = Event(id=event_id)
+    return render_template('list/event.j2html', event=event), 200 if event else 404
