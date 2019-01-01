@@ -13,39 +13,8 @@ rootdir = '~/src/dartsense/docs/data/'
 
 
 def main(argv):
-    # parameters = {
-    #     'filename': '',
-    # }
-
-    # try:
-    #     opts, args = getopt.getopt(
-    #         argv, "hsp:v:",
-    #         [
-    #             "help", "file="])
-    # except getopt.GetoptError as err:
-    #     print(err)
-    #     usage()
-
-    # for opt, arg in opts:
-    #     if opt in ('-h', '--help'):
-    #         usage()
-    #     elif opt in ("-f", "--file"):
-    #         parameters['filename'] = arg
-
-    # if not parameters['filename']:
-    #     usage()
-
-    # pprint(parameters)
-    # data = sva.load_xlsx(parameters['filename'])
-
-    # # pprint(data)
-    # json_filename = re.sub(r'xlsx$', r'json', parameters['filename'])
-    # json_filename = re.sub(r'[^/]+/',r'', json_filename)
-
-    # sva.save_data_to_json(data, json_filename)
 
     # per seizoen
-
     data = {}
 
     competitions = sva.exec_select_query('''
@@ -53,6 +22,7 @@ def main(argv):
         FROM game
         ORDER BY comp
     ''')
+    competitions = [c['comp'] for c in competitions]
     for competition in competitions:
         pprint(competition)
 
@@ -60,13 +30,13 @@ def main(argv):
             SELECT *
             FROM game
             WHERE comp=?
-        ''', [competition['comp']])
+        ''', [competition])
 
         data['adjustments'] = sva.exec_select_query('''
             SELECT * 
             FROM adjustments a
             where comp=?
-        ''', [competition['comp']])
+        ''', [competition])
 
         data['standings'] = sva.exec_select_query('''
             SELECT DISTINCT
@@ -105,15 +75,38 @@ def main(argv):
             ) as x
             ORDER BY speler_punten DESC
 
-        ''', [competition['comp'], competition['comp']])
+        ''', [competition, competition])
 
-        filename = rootdir +'/perseason/'+ competition['comp'] + '.json';
+        filename = rootdir + '/perseason/' + competition + '.json'
         pprint(filename)
 
         # pprint(data)
         sva.save_data_to_json(data, filename)
 
     # per speler
+    data = {}
+    spelers = sva.exec_select_query('''
+        SELECT speler_naam
+        FROM speler
+        ORDER BY speler_naam
+    ''')
+    spelers = [s['speler_naam'] for s in spelers]
+    for speler in spelers:
+        pprint(speler)
+
+        #TODO
+
+    # overzicht
+    data = {}
+
+    data['spelers'] = spelers
+    data['competitions'] = competitions
+
+    pprint(data)
+
+    sva.save_data_to_json(data, rootdir + '/index.json')
+
+
 
 
 def usage():
