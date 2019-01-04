@@ -12,7 +12,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 import dartsense.competition 
 
 
-def test_competitionlist_init():
+def test_competitionlist_init(setup_db):
     competition_list = dartsense.competition.CompetitionList()
 
     assert isinstance(competition_list, dartsense.competition.CompetitionList)

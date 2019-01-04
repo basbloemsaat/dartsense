@@ -22,8 +22,34 @@ class Competition:
                 # id not found? get outta here!
                 self.id = -1
 
+    def save(self):
+        if self.id:
+            # update
+            pass
+        elif not self.id and self.name:
+            # insert new
+            sql = '''
+                INSERT INTO `competition` ( `competition_name`, `competition_type` )
+                VALUES ( %s, 'todo' )
+            '''
+
+            new_id = db.exec_insert(sql, [self.name])
+            self.id = new_id
+
+        return self.id
+
+    def delete(self):
+        if self.id:
+            #delete from db
+            sql = " DELETE FROM `competition` WHERE `competition_id` = %s "
+            db.exec_sql(sql, [self.id])
+
+        self.id = 0
+        self.name = ''
+
+
     def __bool__(self):
-        return self.id > 0 
+        return self.id > 0
 
     def _get_players(self):
         player_list = dartsense.player.PlayerList(

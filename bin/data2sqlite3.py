@@ -10,6 +10,13 @@ from pprint import pprint
 from dumper import dump
 import openpyxl
 
+sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
+import dartsense
+import dartsense.player
+import dartsense.event
+import dartsense.match
+import dartsense.competition
+
 
 def main(argv):
 
@@ -26,26 +33,30 @@ def main(argv):
         wb = openpyxl.load_workbook(
             "%s/%s" % (data_dir, file_name), read_only=True)
 
-        sheetnames = wb.sheetnames
+        # every sheet is a competition, add a new competition, name is the filename
+        comp = dartsense.competition.Competition(name = file_name)
+        comp.save()
 
-        for sheetname in wb.sheetnames:
-            colnames = []
+        exit()
+
+        for ws in wb.worksheets:
             rowdata = []
-            ws = wb[sheetname]
-            for col in range(1, 20):
-                cell = ws.cell(column=col, row=1)
-                if cell.value:
-                    colnames.append(cell.value)
+            header = [cell.value for cell in ws[1]]
+            # print(header)
 
-            # print(colnames)
+            iter_rows = ws.rows
+            next(iter_rows)
 
-            for row in range(2, 50):
-                values = []
-                for col in range(1,len(colnames)+1):
-                    cell = ws.cell(column=col, row=row)
-                    values.append(cell.value if cell.value else '')
+            for row in iter_rows:
+                # values = []
+                # for col in range(1,len(colnames)+1):
+                #     cell = ws.cell(column=col, row=row)
+                #     values.append(cell.value if cell.value else '')
 
-                rowdict = dict(zip(colnames, values))
+                rowdict = dict(zip(header, map(lambda x: x.value, row)))
+
+                # print(rowdict)
+
                 if 'Speler' in rowdict and not rowdict['Speler']:
                     continue
                 if 'Speler1' in rowdict and not rowdict['Speler1']:
@@ -56,7 +67,6 @@ def main(argv):
                 rowdata.append(rowdict)
 
             # print(rowdata)
-
 
 
 def usage():
