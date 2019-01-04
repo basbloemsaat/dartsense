@@ -30,7 +30,7 @@ class Competition:
             # insert new
             sql = '''
                 INSERT INTO `competition` ( `competition_name`, `competition_type` )
-                VALUES ( %s, 'todo' )
+                VALUES ( %s, 'league' )
             '''
 
             new_id = db.exec_insert(sql, [self.name])

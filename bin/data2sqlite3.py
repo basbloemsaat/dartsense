@@ -51,6 +51,8 @@ def find_player(player_name, competition_id):
         speler = dartsense.player.Player(name=player_name)
         speler.save()
 
+        players[player_name] = speler
+
     return speler
 
 
@@ -58,6 +60,9 @@ def main(argv):
 
     dartsense.db.exec_sql('DELETE FROM event WHERE event_id > 0')
     dartsense.db.exec_sql('DELETE FROM match WHERE match_id > 0')
+    dartsense.db.exec_sql('DELETE FROM player WHERE player_id > 0')
+    dartsense.db.exec_sql('DELETE FROM match WHERE match_id > 0')
+
 
     data_files = [
         'Austerlitz_seizoen_2016-2017.xlsx',
