@@ -58,10 +58,11 @@ def find_player(player_name, competition_id):
 
 def main(argv):
 
-    dartsense.db.exec_sql('DELETE FROM event WHERE event_id > 0')
-    dartsense.db.exec_sql('DELETE FROM match WHERE match_id > 0')
-    dartsense.db.exec_sql('DELETE FROM player WHERE player_id > 0')
-    dartsense.db.exec_sql('DELETE FROM match WHERE match_id > 0')
+    dartsense.db.exec_sql('DELETE FROM `match` WHERE match_id > 0')
+    dartsense.db.exec_sql('DELETE FROM `event` WHERE event_id > 0')
+    dartsense.db.exec_sql('DELETE FROM `player_alias` WHERE player_id > 0')
+    dartsense.db.exec_sql('DELETE FROM `competition_player` WHERE player_id > 0')
+    dartsense.db.exec_sql('DELETE FROM `player` WHERE player_id > 0')
 
 
     data_files = [
