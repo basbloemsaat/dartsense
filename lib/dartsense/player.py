@@ -31,10 +31,32 @@ class Player:
                 self.callsigns = res[0]['player_callsigns'].split(';')
 
             else:
-                self.id = -1
+                self.id = 0
 
     def __bool__(self):
         return self.id > 0
+
+    def save(self):
+        if self.id:
+            #update
+            pass
+        elif self.name:
+            sql = """
+                INSERT INTO player (player_name, player_callsigns)
+                VALUES (%s, %s)
+            """
+            self.id = db.exec_insert(sql, [self.name, self.name])
+
+        return self.id
+
+    def delete(self):
+        if self.id:
+            # delete from db
+            sql = " DELETE FROM `player` WHERE `player_id` = %s "
+            db.exec_sql(sql, [self.id])
+
+        self.id = 0
+
 
     def _get_competitions(self):
         competition_list = dartsense.competition.CompetitionList(

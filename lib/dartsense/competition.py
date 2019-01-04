@@ -40,13 +40,12 @@ class Competition:
 
     def delete(self):
         if self.id:
-            #delete from db
+            # delete from db
             sql = " DELETE FROM `competition` WHERE `competition_id` = %s "
             db.exec_sql(sql, [self.id])
 
         self.id = 0
         self.name = ''
-
 
     def __bool__(self):
         return self.id > 0
