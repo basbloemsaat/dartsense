@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `group_permission` (
 CREATE TABLE `match` (
   `match_id` INT(11) NOT NULL AUTO_INCREMENT,
   `event_id` INT(11) NOT NULL DEFAULT '0',
-  `match_date` DATE NOT NULL,
+  `match_date` DATETIME NOT NULL,
   `match_date_round` VARCHAR(10) NULL DEFAULT NULL,
   `match_type` VARCHAR(10) NULL DEFAULT NULL,
   `player_1_id` INT(11) NOT NULL,

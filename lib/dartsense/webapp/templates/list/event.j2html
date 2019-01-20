@@ -1,5 +1,10 @@
-{% extends "layout.j2html" %} {% block content %}
+{% extends "layout.j2html" %}
+{% block content %}
 <h1> {{ event.name }} ({{ event.id }}) </h1>
 <hr>
-
-<hr> {% endblock %}
+{#
+{% for match in event %}
+{% endfor %}
+#}
+<hr>
+{% endblock %}
