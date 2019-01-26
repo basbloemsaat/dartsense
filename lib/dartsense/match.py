@@ -220,6 +220,42 @@ class Match:
 
 class MatchList(List_C):
 
-    def __init__(self, filters={}, search=""):
-        pass
+    def __init__(self, filters={}):
+        List_C.__init__(self)
+        self._filters = filters
+
+    def _search(self, force=False):
+        if force or self._elements == []:
+            self._elements = []
+
+            args = []
+
+            sql = """
+                SELECT DISTINCT
+                    m.match_id
+                FROM
+                    `match` m
+                    LEFT JOIN event e ON e.event_id = m.event_id
+                WHERE
+                    e.event_id > 0
+
+            """
+
+            if len(self._filters) > 0:
+                if 'event' in self._filters:
+                    sql += ' AND e.event_id = %s'
+                    args.append(self._filters['event'])
+
+            else:
+                # a matchlist with no filters would be huge: don't list
+                return
+
+            res = db.exec_select(sql, args)
+            for r in res:
+                self._elements.append(Match(
+                    id=r['match_id'],
+                ))
+
+
+
 

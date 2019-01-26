@@ -1,7 +1,7 @@
 from dartsense import db, List_C
 
 import dartsense.competition
-# TODO: link back to competition
+import dartsense.match
 
 
 class Event:
@@ -13,7 +13,6 @@ class Event:
 
         self._competition_id = None
         self._competition = None
-
 
         if self._id and not self._type:
             sql = '''
@@ -90,7 +89,7 @@ class Event:
             )
 
             self._id = new_id
-            
+
         return self._id
 
     def _get_id(self):
@@ -118,6 +117,11 @@ class Event:
             self._competition_id = competition
 
     competition = property(_get_competition, _set_competition)
+
+    def _get_matches(self):
+        return dartsense.match.MatchList(filters={'event': self._id})
+
+    matches = property(_get_matches)
 
 
 class LeagueRound(Event):

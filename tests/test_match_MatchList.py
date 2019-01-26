@@ -18,5 +18,13 @@ def test_match_MatchList_init():
     match_list = dartsense.match.MatchList()
     assert isinstance(match_list, dartsense.match.MatchList)
 
+    # matchlists without filters are empty
+    assert len(match_list) == 0
 
-#
+
+def test_match_list_filter_competition(setup_db):
+    match_list = dartsense.match.MatchList(
+        filters={'event': pytest.setup_vars['testcompetition1_round1_id']}
+    )
+
+    assert len(match_list) == 2

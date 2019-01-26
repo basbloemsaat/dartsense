@@ -49,6 +49,12 @@ def test_event_LeagueRound_init(setup_db):
     assert isinstance(event.competition, dartsense.competition.Competition)
     assert event.competition.id == pytest.setup_vars['testleague1_id']
 
+    # event matches has a list of the event's matches as found in the db
+    # it's a MatchList, without structure of particular order
+    assert hasattr(event, 'matches')
+    assert hasattr(event.matches, '__iter__')
+    assert len(event.matches) == 3
+
 
 def test_event_LeagueRound_update(setup_db):
     event = dartsense.event.Event(
