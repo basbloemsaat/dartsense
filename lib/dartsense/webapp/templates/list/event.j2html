@@ -2,9 +2,19 @@
 {% block content %}
 <h1> {{ event.name }} ({{ event.id }}) </h1>
 <hr>
-{#
-{% for match in event %}
-{% endfor %}
-#}
+<table class="table table-sm">
+    <tr>
+        <th>match_id</th>
+        <th>player_1</th>
+        <th>player_2</th>
+    </tr>
+    {% for match in event.matches %}
+    <tr>
+        <td> {{match.id}} </td>
+        <td> {{match.player_1.name}} </td>
+        <td> {{match.player_2.name}} </td>
+    </tr>
+    {% endfor %}
+</table>
 <hr>
 {% endblock %}

@@ -199,7 +199,6 @@ class Match:
             setattr(self, '_player_' + str(nr), None)
             setattr(self, '_player_' + str(nr) + '_id', player)
 
-
     def _get_event(self):
         if not self._event and self._event_id:
             self._event = dartsense.event.Event(id=self._event_id)
@@ -255,7 +254,3 @@ class MatchList(List_C):
                 self._elements.append(Match(
                     id=r['match_id'],
                 ))
-
-
-
-
