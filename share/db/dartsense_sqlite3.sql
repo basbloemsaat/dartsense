@@ -77,7 +77,8 @@ CREATE TABLE IF NOT EXISTS `group_permission` (
 CREATE TABLE `match` (
   `match_id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
 ,  `event_id` integer NOT NULL DEFAULT '0'
-,  `match_date` DATETIME NOT NULL
+,  `match_start` DATETIME NOT NULL
+,  `match_end` DATETIME NOT NULL
 ,  `match_date_round` VARCHAR(10) NULL DEFAULT NULL
 ,  `match_type` VARCHAR(10) NULL DEFAULT NULL
 ,  `player_1_id` integer NOT NULL

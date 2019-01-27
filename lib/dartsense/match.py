@@ -46,7 +46,7 @@ class Match:
         if id and not (player_1 or player_2 or event):
             sql = '''
                 SELECT 
-                    `match_id`, `event_id`, `match_date`, 
+                    `match_id`, `event_id`, `match_start`, 
                     `match_date_round`, `match_type`,
                     `player_1_id`, `player_1_id_orig`,
                     `player_1_score`, `player_1_180s`, `player_1_lollies`,
@@ -84,7 +84,7 @@ class Match:
                 UPDATE `match`
                 SET
                       `event_id` = %s
-                    , `match_date` = %s
+                    , `match_start` = %s
                     , `match_date_round` = %s
                     , `match_type` = %s
                     , `player_1_id` = %s
@@ -125,7 +125,7 @@ class Match:
             sql = '''
                 INSERT INTO `match`
                 (
-                    `event_id`, `match_date`, 
+                    `event_id`, `match_start`, 
                     `match_date_round`, `match_type`,
                     `player_1_id`, `player_1_id_orig`,
                     `player_1_score`, `player_1_180s`, `player_1_lollies`,

@@ -111,7 +111,7 @@ def setup_db():
     # matches
     sql = '''
         INSERT INTO `match` (
-            `event_id`, `match_date`, `match_date_round`, `match_type`,
+            `event_id`, `match_start`, `match_date_round`, `match_type`,
             `player_1_id`, `player_1_id_orig`,
             `player_1_score`, `player_1_180s`, `player_1_lollies`,
             `player_2_id`, `player_2_id_orig`,
