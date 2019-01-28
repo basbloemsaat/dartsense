@@ -1,6 +1,7 @@
 from flask import render_template, jsonify, g
 
 from dartsense.webapp import app
+from dartsense.webapp import helpers
 from dartsense.competition import Competition
 from dartsense.competition import CompetitionList
 from dartsense.organisation import Organisation
@@ -16,7 +17,10 @@ from dumper import dump
 @app.route('/list/')
 @app.route('/list')
 def list_index():
-    return "list page"
+    if (helpers.check_user('admin')):
+        return "list page"
+    else:
+        return "no access", 401
 
 
 @app.route('/list/competitions/')

@@ -16,6 +16,6 @@ app.jinja_env.auto_reload = True
 try:
     port = int(sys.argv[1])
 except (IndexError, ValueError):
-    port = 5897
+    port = 5896
 
-app.run('0.0.0.0', port=port, debug=True, ssl_context=('etc/dev/cert.pem', 'etc/dev/key.pem'),)
+app.run('0.0.0.0', port=port, debug=True) #, ssl_context=('etc/dev/cert.pem', 'etc/dev/key.pem'),)
