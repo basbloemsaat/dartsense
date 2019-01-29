@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS `competition` (
   PRIMARY KEY (`competition_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-INSERT INTO `competition` (`competition_id`, `competition_name`) VALUES
-    (0, 'none');
+INSERT INTO `competition` (`competition_id`, `competition_name`, `competition_type`) VALUES
+    (0, 'none', 'none');
 UPDATE `competition` set competition_id=0;
 
 CREATE TABLE IF NOT EXISTS `event` (
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `event` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `event` (`event_id`, `competition_id`, `event_type`, `event_name`) VALUES
-    (0, 0, 'none', 'default');
+    (0, 0, NULL, 'default');
 UPDATE `event` set event_id=0;
 
 CREATE TABLE IF NOT EXISTS `group` (
@@ -94,8 +94,8 @@ CREATE TABLE IF NOT EXISTS `group_permission` (
 CREATE TABLE `match` (
   `match_id` INT(11) NOT NULL AUTO_INCREMENT,
   `event_id` INT(11) NOT NULL DEFAULT '0',
-  `match_start` DATETIME NOT NULL,
-  `match_end` DATETIME NOT NULL,
+  `match_start` DATETIME NULL,
+  `match_end` DATETIME NULL,
   `match_date_round` VARCHAR(10) NULL DEFAULT NULL,
   `match_type` VARCHAR(10) NULL DEFAULT NULL,
   `player_1_id` INT(11) NOT NULL,
