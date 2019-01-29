@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `competition` (
 ,  `organisation_id` int(11) NOT NULL DEFAULT '0'
 );
 INSERT INTO `competition` (`competition_id`, `competition_name`, `competition_type`) VALUES
-    (0, 'none', '');
+    (0, 'none', 'none');
 CREATE TABLE IF NOT EXISTS `event` (
   `event_id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
 ,  `competition_id` integer NOT NULL DEFAULT '0'
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `event` (
 ,  CONSTRAINT `fk_event_competition_id` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`competition_id`)
 );
 INSERT INTO `event` (`event_id`, `competition_id`, `event_type`, `event_name`) VALUES
-    (0, 0, 'none', 'default');
+    (0, 0, NULL, 'default');
 CREATE TABLE IF NOT EXISTS `group` (
   `group_id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
 ,  `group_name` varchar(50) NOT NULL
@@ -77,8 +77,8 @@ CREATE TABLE IF NOT EXISTS `group_permission` (
 CREATE TABLE `match` (
   `match_id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
 ,  `event_id` integer NOT NULL DEFAULT '0'
-,  `match_start` DATETIME NOT NULL
-,  `match_end` DATETIME NOT NULL
+,  `match_start` DATETIME NULL
+,  `match_end` DATETIME NULL
 ,  `match_date_round` VARCHAR(10) NULL DEFAULT NULL
 ,  `match_type` VARCHAR(10) NULL DEFAULT NULL
 ,  `player_1_id` integer NOT NULL
