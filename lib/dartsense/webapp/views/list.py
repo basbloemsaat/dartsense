@@ -17,7 +17,7 @@ from dumper import dump
 @app.route('/list/')
 @app.route('/list')
 def list_index():
-    if (helpers.check_user('admin')):
+    if (helpers.check_user_permission('admin')):
         return "list page"
     else:
         return "no access", 401
