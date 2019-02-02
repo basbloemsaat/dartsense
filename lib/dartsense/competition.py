@@ -13,7 +13,11 @@ class Competition:
         self.name = name
 
         if id and not name:
-            sql = "SELECT competition_id, competition_name FROM competition where competition_id=%s LIMIT 1"
+            sql = """
+                SELECT competition_id, competition_name 
+                FROM competition where competition_id=%s 
+                LIMIT 1
+            """
             res = db.exec_select(sql, [id])
 
             if(len(res) > 0):
