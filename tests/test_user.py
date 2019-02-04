@@ -68,3 +68,5 @@ def test_user_login(setup_db):
     user = dartsense.user.User()
     assert not user.login('google', 'test_illegal@test.org')
     assert user.id == None
+
+
