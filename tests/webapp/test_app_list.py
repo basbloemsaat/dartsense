@@ -5,9 +5,7 @@ import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../lib/"))
 
-import http
-
-from pprint import pprint
+import re
 
 from dartsense.webapp import app as tl_app
 tl_app.config['DEBUG'] = True
@@ -20,34 +18,22 @@ def app(setup_db):
 
 
 def test_list_index(client):
+    tl_app.config['TEST_LOGIN'] = False
     res = client.get('/list')
     assert res.status_code == 401
 
     res = client.get('/list/')
     assert res.status_code == 401
 
+    tl_app.config['TEST_LOGIN'] = True
     res = client.get('/user', follow_redirects=True)
 
     cookie = res.headers['Set-Cookie']
-    pprint(cookie)
+    match = re.search(r'dartsense_session=([^;]+);',cookie)
+    sessionid = match.group(1)
 
-    # jar = http.cookiejar.CookieJar()
-    # jar.extract_cookies(res)
-
-    # pprint(jar)
-
-    # pprint(res.headers)
-    # # pprint(res.cookie('dartsense_session'))
-    # pprint(cookie)
-
-    # object_methods = [method_name for method_name in dir(res)]
-    #               # if callable(getattr(res, method_name))]
-
-    # pprint(object_methods)
-
-    # client.set_cookie('bla','bla')
-
-    res = client.get('/list/', headers={'Cookie': cookie})
+    client.set_cookie('localhost', 'dartsense_session',sessionid)
+    res = client.get('/list/')
     assert res.status_code == 200
     
 

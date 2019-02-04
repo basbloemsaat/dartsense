@@ -20,6 +20,7 @@ def app():
 
 
 def test_user_index(client):
+    tl_app.config['TEST_LOGIN'] = False
     res = client.get('/user')
     assert res.status_code == 302
 

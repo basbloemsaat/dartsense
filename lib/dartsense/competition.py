@@ -1,4 +1,3 @@
-from pprint import pprint
 from dartsense import List_C
 from dartsense import db
 
