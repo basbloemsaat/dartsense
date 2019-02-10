@@ -19,6 +19,7 @@ for key in config.oauth2:
 
 google = oauth_apps['google']
 
+
 @google.tokengetter
 def get_google_oauth_token():
     return session.get('google_token')
@@ -27,7 +28,8 @@ def get_google_oauth_token():
 @app.route('/user/')
 @app.route('/user')
 def user_index():
-    if 'DEV_SERVER' in app.config and app.config['DEV_SERVER']:
+    if ('DEV_SERVER' in app.config and app.config['DEV_SERVER']) or (
+            'TEST_LOGIN' in app.config and app.config['TEST_LOGIN']):
         # make sure there is no user with id=-1 in prod!
         session['user_id'] = -1
 

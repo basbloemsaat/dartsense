@@ -3,8 +3,6 @@ import sys
 import yaml
 
 
-from pprint import pprint
-
 if 'DARTSENSE_SESSION_SECRET' in os.environ:
     SESSION_SECRET = os.environ['DARTSENSE_SESSION_SECRET']
 elif os.environ['DARTSENSE_ENV'] == 'DEV' or os.environ['DARTSENSE_ENV'] == 'TEST':
@@ -22,7 +20,7 @@ if 'DARTSENSE_HOST' in os.environ and 'DARTSENSE_USERNAME' in os.environ and 'DA
         "password": os.environ['DARTSENSE_PASSWORD'],
         "schema": os.environ['DARTSENSE_SCHEMA'],
     }
-    session_type=''
+    session_type = ''
 
 elif os.environ['DARTSENSE_ENV'] == 'DEV' or os.environ['DARTSENSE_ENV'] == 'TEST':
     database = {
@@ -50,7 +48,7 @@ for key in oauth2:
         oauth2[key]["consumer_secret"] = os.environ[
             'DARTSENSE_' + key.upper() + '_SECRET']
     except KeyError as e:
-        pprint('No oauth2 config for ' + key)
+        print('No oauth2 config for ' + key)
         remove_keys.append(key)
 
 removed_keys = {}
@@ -59,8 +57,7 @@ for key in remove_keys:
 
 if not 'google' in oauth2 and (os.environ['DARTSENSE_ENV'] == 'DEV' or os.environ['DARTSENSE_ENV'] == 'TEST'):
     oauth2['google'] = removed_keys['google']
-    oauth2['google']['consumer_key']= 'test'
-    oauth2['google']['consumer_secret']= '12378127349734597012497'
+    oauth2['google']['consumer_key'] = 'test'
+    oauth2['google']['consumer_secret'] = '12378127349734597012497'
 
     print("WARNING: oauth2 development crap credentials used")
-
