@@ -30,7 +30,7 @@ class User:
             except (IndexError) as e:
                 pass
 
-    def get_permissions(self):
+    def _get_permissions(self):
         return []
 
     def login(self, provider=None, credential=None):
@@ -65,3 +65,4 @@ class User:
 
     name = property(_get_name)
     email = property(_get_email)
+    permissions = property(_get_permissions)

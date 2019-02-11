@@ -63,6 +63,8 @@ def main(argv):
     dartsense.db.exec_sql('DELETE FROM `player_alias` WHERE player_id > 0')
     dartsense.db.exec_sql('DELETE FROM `competition_player` WHERE player_id > 0')
     dartsense.db.exec_sql('DELETE FROM `player` WHERE player_id > 0')
+    dartsense.db.exec_sql('DELETE FROM `competition` WHERE competition_id > 0')
+
 
 
     data_files = [

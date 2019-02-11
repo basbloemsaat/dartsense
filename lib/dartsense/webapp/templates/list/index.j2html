@@ -1,0 +1,9 @@
+<h1>available lists</h1>
+<ul>
+    <li>
+        <a href="/list/organisations/">organisations</a>
+    </li>
+    <li>
+        <a href="/list/competitions/">competitions</a>
+    </li>
+</ul>

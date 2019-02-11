@@ -22,10 +22,9 @@ def test_user_init():
     assert hasattr(user, 'name')
     assert user.name == None
 
-    assert hasattr(user, 'get_permissions')
-    assert callable(user.get_permissions)
+    assert hasattr(user, 'permissions')
 
-    permissions = user.get_permissions()
+    permissions = user.permissions
 
     assert isinstance(permissions, list)
     assert len(permissions) == 0
@@ -69,3 +68,5 @@ def test_user_login(setup_db):
     user = dartsense.user.User()
     assert not user.login('google', 'test_illegal@test.org')
     assert user.id == None
+
+
