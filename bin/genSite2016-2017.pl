@@ -315,6 +315,8 @@ sub updatePage {
         . 'updated '
         . $updatetime;
 
+    $content .= '<p>Scores controleren? <a href="https://github.com/basbloemsaat/dartsense/raw/master/data/Austerlitz_seizoen_2019-2020.xlsx">Download een Excel met alle resultaten</a></p>';
+
     $mech->get( $pages->{$name}->{uri} );
     my $res = $mech->submit_form(
         form_name => 'aspnetForm',
