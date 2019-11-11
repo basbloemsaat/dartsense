@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use v5.020;
+use v5.018;
 use strict;
 use warnings;
 use utf8;
@@ -12,6 +12,7 @@ binmode STDIN,  ":encoding(UTF-8)";
 use Data::Printer;
 use DateTime;
 use Excel::Writer::XLSX;
+use File::Path::Expand;
 use File::Spec;
 use FindBin;
 use Getopt::Long;
@@ -38,7 +39,7 @@ GetOptions(
 
 die unless ( $options->{file} );
 
-my $config = LoadFile('/home/bas/.darts.yaml');
+my $config = LoadFile(expand_filename('~/.darts.yaml'));
 my $file   = File::Spec->rel2abs( $options->{file} );
 my $excel  = Spreadsheet::XLSX->new($file);
 
