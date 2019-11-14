@@ -7,58 +7,27 @@
 </head>
 
 <body>
-    <h1>x</h1>
+    <h1>SV Austerlitz darts</h1>
     <div id="dest"></div>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="./dartsapp.js"></script>
     <script>
-    var dartsapp = {};
-    (function() {
-        this.data = {};
-        this.data_indexes = {
-            "bydate": {},
-            "byplayer": {},
-        };
+    let files = [
+        'Austerlitz_seizoen_2016-2017.json',
+        'Austerlitz_seizoen_2017-2018.json',
+        'Austerlitz_seizoen_2018-2019.json',
+        'Austerlitz_seizoen_2019-2020.json',
+    ];
 
-        this.add_item_to_index = function(index, key, item) {
-            if (!this.data_indexes[index][key]) {
-                this.data_indexes[index][key] = [];
-            }
-            this.data_indexes[index][key].push(item);
-        }
-
-        this.parse_data = function(data) {
-            this.data = data;
-            console.log(data);
-
-            // meer manieren om naar de data te kijken: indexen maken.
-            for (let i = 0; i < data.length; i++) {
-                let item = data[i];
-                // console.log(item);
-
-                //d3.nest werkt hier ook, maar niet bij spelers
-                this.add_item_to_index('bydate', item['Date'], item);
-
-                if (item['Speler']) {
-                    this.add_item_to_index('byplayer', item['Speler'], item);
-                } else {
-                    this.add_item_to_index('byplayer', item['Speler1'], item);
-                    this.add_item_to_index('byplayer', item['Speler2'], item);
+    for (let i = 0; i < files.length; i++) {
+        let file_name = files[i];
+        d3.json('https://basbloemsaat.github.io/dartsense/uitslagen/' + file_name)
+            .then(
+                function(data) {
+                    dartsapp.add_data(data);
                 }
-            }
-
-            testvar = d3.nest()
-                .key(function(d) { return d.Date; }).object(data);
-
-        }
-
-    }).apply(dartsapp);
-
-    d3.json('https://basbloemsaat.github.io/dartsense/uitslagen/Austerlitz_seizoen_2019-2020.json')
-        .then(
-            function(data) {
-                dartsapp.parse_data(data);
-            }
-        )
+            )
+    }
     </script>
 </body>
 
