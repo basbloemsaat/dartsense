@@ -24,7 +24,7 @@
         d3.json('https://basbloemsaat.github.io/dartsense/uitslagen/' + file_name)
             .then(
                 function(data) {
-                    dartsapp.add_data(data);
+                    dartsapp.add_data(file_name, data);
                 }
             )
     }
