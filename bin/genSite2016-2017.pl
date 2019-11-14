@@ -46,6 +46,7 @@ my $excel  = Spreadsheet::XLSX->new($file);
 my $playerslookup = {};
 my @matches;
 my @players;
+my $date;
 
 my $lastdate;
 foreach my $sheet ( @{ $excel->{Worksheet} } ) {
@@ -55,7 +56,8 @@ foreach my $sheet ( @{ $excel->{Worksheet} } ) {
     my %names      = map { $_->{Val} => $i++ } @{ $sheet->{Cells}->[0] };
     if ( $sheet_name =~ /^koppel/i ) {
         #koppeltabel
-        my $date = $sheet->{Name} =~ s/^koppel.*\s+//ri; #/
+        $date = $sheet->{Name} =~ s/^koppel.*\s+//ri; #/
+	say($date);
 
         # p $date;
 
@@ -76,7 +78,7 @@ foreach my $sheet ( @{ $excel->{Worksheet} } ) {
     }
     else {
 
-        my $date = $sheet->{Name};
+        $date = $sheet->{Name};
         foreach my $row ( 1 .. $sheet->{MaxRow} ) {
             my $matchdata = {
                 date  => $date,
@@ -113,10 +115,15 @@ foreach my $sheet ( @{ $excel->{Worksheet} } ) {
 
         }
 
-        $lastdate = $date;
+	#	say "bla: $date";
     }
 
+    $lastdate = $date;
+    
+
 }
+
+say($lastdate);
 
 my $now = DateTime->now(
     time_zone => DateTime::TimeZone->new( name => 'local' ) );
