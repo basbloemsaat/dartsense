@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import getopt
 import inspect
@@ -71,12 +71,17 @@ def main(argv):
         next(iter_rows)
         for row in iter_rows:
             values = {
-                "Date": date_avond.strftime('%Y-%m  -%d'),
+                "Date": date_avond.strftime('%Y-%m-%d'),
                 "Type": type_avond
             }
             for key, cell in zip(header, row):
-                values[key] = cell.value
-                sheet_data.append(values)
+                values[key] = cell.value 
+                if values[key] == None:
+                    values[key] = 0
+            
+            sheet_data.append(values)
+
+    # pprint(sheet_data)
 
     if(sheet_data):
         filename = re.sub(r'xlsx$', r'json', parameters['filename'])
