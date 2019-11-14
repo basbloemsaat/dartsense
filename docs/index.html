@@ -1,9 +1,60 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>darts uitslagen</title>
+    <title></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
+
 <body>
-github pages index
+    <h1>x</h1>
+    <div id="dest"></div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+    var dartsapp = {};
+    (function() {
+        this.data = {};
+        this.indexes = {
+            "bydate": {},
+            "byplayer": {},
+        };
+
+        this.add_item_to_index = function(index, key, item) {
+            if (!this.indexes[index][key]) {
+                this.indexes[index][key] = [];
+            }
+            this.indexes[index][key].push(item);
+        }
+
+        this.parse_data = function(data) {
+            this.data = data;
+            console.log(data);
+
+            // meer manieren om naar de data te kijken: indexen maken.
+            for (let i = 0; i < data.length; i++) {
+                let item = data[i];
+                // console.log(item);
+
+                this.add_item_to_index('bydate', item['Date'], item);
+
+                if (item['Speler']) {
+                    this.add_item_to_index('byplayer', item['Speler'], item);
+                } else {
+                    this.add_item_to_index('byplayer', item['Speler1'], item);
+                    this.add_item_to_index('byplayer', item['Speler2'], item);
+                }
+            }
+        }
+
+    }).apply(dartsapp);
+
+    d3.json('https://basbloemsaat.github.io/dartsense/uitslagen/Austerlitz_seizoen_2019-2020.json')
+        .then(
+            function(data) {
+                dartsapp.parse_data(data);
+            }
+        )
+    </script>
 </body>
+
 </html>
