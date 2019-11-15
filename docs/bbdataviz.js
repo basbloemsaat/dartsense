@@ -6,7 +6,7 @@ var bbdataviz = {};
     this.parameters = {
         row_height: 20,
         row_offset: 25,
-        column_spacer: 5,
+        column_spacer: 25,
     }
 
     // svg table to assist in visualizing and making interactive
@@ -40,10 +40,10 @@ var bbdataviz = {};
 
     this.Table.prototype.resize = function() {
         let width = Math.round(0 + this.g.node().getBBox().width);
-        let height = Math.round(0 + this.g.node().getBBox().height + bbdataviz.parameters.row_height);
+        let height = Math.round(0 + this.g.node().getBBox().height + 10);
 
         this.svg.attr('viewBox', '0 0 ' + width + ' ' + height);
-        this.svg.attr('preserveAspectRatio', 'xMidYMid meet');
+        // this.svg.attr('preserveAspectRatio', 'xMidYMid meet');
 
     }
 
@@ -236,5 +236,48 @@ var bbdataviz = {};
         this.resize();
     }
 
+
+    this.LineChart = function(svg, xscale, yscale) {
+        this.parameters = {
+            chart_width: 800,
+            chart_height: 600,
+        };
+        this.svg = svg;
+        this.g = svg.append('g').attr('class', 'root');
+        // this.g.attr('width', this.parameters.width);
+        // this.g.attr('height', this.parameters.height);
+
+
+        this.xscale = xscale;
+        xscale.range([0, this.parameters.chart_width]);
+        this.x =
+            this.g.append('g')
+            .attr('class', 'xaxis')
+            .attr('transform', 'translate(50,' + this.parameters.chart_height + ')')
+            .call(d3.axisBottom(xscale));;
+
+        this.yscale = yscale;
+        yscale.range([0, this.parameters.chart_height]);
+        this.y = this.g.append('g').attr('class', 'yaxis')
+            .attr('transform', 'translate(50,0)')
+            .call(d3.axisLeft(yscale));;
+
+        this.canvas = this.g.append('g').attr('class', 'canvas');
+
+        this.resize();
+    }
+
+    this.LineChart.prototype.resize = function() {
+        console.log(this.g.node().getBBox());
+        let width = Math.round(0 + this.g.node().getBBox().width);
+        let height = Math.round(0 + this.g.node().getBBox().height);
+
+        this.svg.attr('viewBox', '0 0 ' + width + ' ' + height);
+    }
+
+    // set the data and (re)render the chart
+    this.LineChart.prototype.data = function(data) {
+
+    }
 
 }).apply(bbdataviz);

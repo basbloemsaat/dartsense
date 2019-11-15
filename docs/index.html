@@ -8,10 +8,17 @@
     svg#results {
         padding: 5px;
         width:100%;
+        height: auto;
+    }
+
+    svg#perdate{
+        border: 1px solid green;
+        width: 800px;
+        height: 600px;
     }
 
     text.header {
-        font-size: 1.2rem;
+        font-size: 0.8rem;
         font-weight: bold;
     }
     g.cell text {
@@ -22,23 +29,19 @@
 </head>
 
 <body>
-    <h1>_</h1>
+    <h3 id='title'>SV Austerlitz uitslagen t/m <span id="lastdate"></span></h3>
     <div id="dest">
-        <svg id="results"></svg>
         <svg id="perdate"></svg>
+        <svg id="results"></svg>
     </div>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="./bbdataviz.js"></script>
     <script src="./dartsapp.js"></script>
     <script>
-    d3.select('svg#results')
-        // .attr('height', '400px')
-        // .attr('width', document.body.clientWidth);
-
     let files = [
-        // 'Austerlitz_seizoen_2016-2017.json',
-        // 'Austerlitz_seizoen_2017-2018.json',
-        // 'Austerlitz_seizoen_2018-2019.json',
+        'Austerlitz_seizoen_2016-2017.json',
+        'Austerlitz_seizoen_2017-2018.json',
+        'Austerlitz_seizoen_2018-2019.json',
         'Austerlitz_seizoen_2019-2020.json',
     ];
 
@@ -64,6 +67,12 @@
         }, "header": { "text": "Finishes" } },
     ]);
 
+    let linechart = new bbdataviz.LineChart(
+        d3.select('svg#perdate'),
+        d3.scaleTime().range([0, 50]).domain([new Date('2019-01-01'),new Date('2019-12-01')]),
+        d3.scaleLinear().range([0, 50]).domain([1,10]),
+    );
+
     for (let i = 0; i < files.length; i++) {
         let file_name = files[i];
         d3.json('https://basbloemsaat.github.io/dartsense/uitslagen/' + file_name)
@@ -71,15 +80,14 @@
                 function(data) {
                     dartsapp.add_data(file_name, data);
                     s = dartsapp.calc_seasons();
+                    if(s['Austerlitz seizoen 2019-2020']) {
+                        resultstable.data(s['Austerlitz seizoen 2019-2020']['results']);
+                        d3.select('span#lastdate').text(dartsapp.lastdate.toLocaleDateString('nl-NL'));
+                    }
                 }
             )
     }
 
-    setTimeout(function() {
-        // s = dartsapp.calc_seasons();
-        // console.log(s['Austerlitz seizoen 2019-2020']);
-        resultstable.data(s['Austerlitz seizoen 2019-2020']['results']);
-    }, 1000);
     </script>
 </body>
 

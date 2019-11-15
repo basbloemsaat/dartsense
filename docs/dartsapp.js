@@ -6,6 +6,8 @@ var dartsapp = {};
         "byplayer": {},
     };
 
+    this.lastdate = new Date('2001-01-01')
+
     this.players_name_lookup = {
         "Andor": "Andor",
         "Anil": "Anil",
@@ -61,6 +63,12 @@ var dartsapp = {};
         // meer manieren om naar de data te kijken: indexen maken.
         for (let i = 0; i < data.length; i++) {
             let item = data[i];
+
+            // this.lastdate = Math.max(this.lastdate, item['Date'])
+            let itemdate = new Date(item['Date']);
+            if(itemdate.getTime() > dartsapp.lastdate.getTime()) {
+                dartsapp.lastdate = itemdate;
+            }
 
             item['Year'] = item['Date'].substr(0, 4);
             item['Seizoen'] = competitie_naam;
