@@ -4,7 +4,7 @@ var bbdataviz = {};
 (function() {
 
     this.parameters = {
-        row_height: 18,
+        row_height: 20,
         row_offset: 25,
         column_spacer: 5,
     }
@@ -39,7 +39,13 @@ var bbdataviz = {};
     }
 
     this.Table.prototype.resize = function() {
-        this.width = +this.svg.node().clientWidth;
+        // this.width = +this.svg.node().clientWidth;
+        let width = Math.round(0 + this.g.node().getBBox().width + 20);
+        let height = Math.round(0 + this.g.node().getBBox().height + bbdataviz.parameters.row_height);
+
+        this.svg.attr('viewBox', '0 0 ' + width + ' ' + height);
+        this.svg.attr('preserveAspectRatio', 'xMidYMid meet');
+
     }
 
     this.Table.prototype.render_cols = function() {
@@ -75,10 +81,10 @@ var bbdataviz = {};
             }
         }
 
-        let cols = this.headers.selectAll('text.colheader').data(cols_left.concat(col_mid).concat(cols_right), function(d) { return d.id });
+        let cols = this.headers.selectAll('text.header').data(cols_left.concat(col_mid).concat(cols_right), function(d) { return d.id });
         cols.exit().remove();
         cols.enter().append('text')
-            .classed('colheader', true)
+            .classed('header', true)
             .attr('data-columnid', function(d) { return d.id })
             .attr('text-anchor', function(d) {
                 if (d['header'] && d['header']['rotate']) {
@@ -90,7 +96,6 @@ var bbdataviz = {};
                 if (d['header'] && d['header']['text']) {
                     return d['header']['text'];
                 }
-                // return d.text 
             })
 
         this.reposition_columns();
@@ -99,7 +104,7 @@ var bbdataviz = {};
     this.Table.prototype.reposition_columns = function() {
         if (this.columns.length == 0) { return };
 
-        this.g.select('g.headers').selectAll('text.colheader').text(function(d) {
+        this.g.select('g.headers').selectAll('text.header').text(function(d) {
             if (d['header'] && d['header']['text']) {
                 return d['header']['text'];
             } else {
@@ -110,7 +115,7 @@ var bbdataviz = {};
         let column_lookup = this.column_lookup;
 
         // get cell widths
-        this.g.selectAll('text.colheader').each(function(d) {
+        this.g.selectAll('text.header').each(function(d) {
             let col = column_lookup[d3.select(this).attr('data-columnid')];
             let mw = this.getBBox().width;
 
@@ -151,7 +156,7 @@ var bbdataviz = {};
         }
 
         // reposition column cells and headers
-        this.g.selectAll('text.colheader').attr('transform', function(d) {
+        this.g.selectAll('text.header').attr('transform', function(d) {
             let colid = d3.select(this).attr('data-columnid');
             let col = column_lookup[colid];
             let retval = 'translate(' + col.pos + ',0)';
@@ -178,8 +183,6 @@ var bbdataviz = {};
 
     // set the data and (re)render the table
     this.Table.prototype.data = function(data) {
-        // console.log(data);
-
         let s = this.g.select('g.rows').selectAll('g.row')
             .data(data, function(d) {
                 return d.id;
@@ -215,7 +218,13 @@ var bbdataviz = {};
             let coldef = table.column_lookup[sel.attr('data-columnid')];
             // console.log(coldef, d);
             if (!coldef['newfunction']) {
-                sel.selectAll('text').text(d[coldef['content']]);
+                let content
+                if (typeof coldef['content'] == 'function') {
+                    content = coldef['content'](d);
+                } else {
+                    content = d[coldef['content']];
+                }
+                sel.selectAll('text').text(content);
             }
             sel
         });
@@ -225,14 +234,8 @@ var bbdataviz = {};
         })
 
         this.reposition_columns();
-        this.resize;
-
+        this.resize();
     }
-
-    this.Table.prototype.resize = function() {
-        this.svg.attr('height', (0 + this.g.node().getBBox().height + bbdataviz.parameters.row_height ));
-    }
-
 
 
 }).apply(bbdataviz);
