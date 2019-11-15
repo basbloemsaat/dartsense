@@ -8,7 +8,6 @@ var dartsapp = {};
     this.seasons = {};
     this.all_player_seasons = [];
 
-
     this.lastdate = new Date('2001-01-01')
 
     this.players_name_lookup = {
@@ -70,7 +69,7 @@ var dartsapp = {};
             // this.lastdate = Math.max(this.lastdate, item['Date'])
             let itemdate = new Date(item['Date']);
             item['Date'] = itemdate;
-            if(itemdate.getTime() > dartsapp.lastdate.getTime()) {
+            if (itemdate.getTime() > dartsapp.lastdate.getTime()) {
                 dartsapp.lastdate = itemdate;
             }
 
@@ -91,7 +90,7 @@ var dartsapp = {};
 
     this.calc_seasons = function() {
         let seasons = {};
-        
+
         let speler_ref = function(seizoen, speler_naam) {
             if (!seizoen['byplayer'][speler_naam]) {
                 seizoen['byplayer'][speler_naam] = {
@@ -162,9 +161,9 @@ var dartsapp = {};
             if (points) {
                 speler['Punten'] += points;
                 if (!speler['PuntenPerDate'][date]) {
-                    speler['PuntenPerDate'][date] = 0;
+                    speler['PuntenPerDate'][date] = { Date: date, Value: 0 };
                 }
-                speler['PuntenPerDate'][date] += points;
+                speler['PuntenPerDate'][date]['Value'] += points;
             }
             speler_gemiddelde(speler, date);
         }
@@ -172,9 +171,9 @@ var dartsapp = {};
         let speler_add_wedstrijden = function(speler, date, aantal) {
             speler['Wedstrijden'] += aantal;
             if (!speler['WedstrijdenPerDate'][date]) {
-                speler['WedstrijdenPerDate'][date] = 0;
+                speler['WedstrijdenPerDate'][date] = { Date: date, Value: 0 }
             }
-            speler['WedstrijdenPerDate'][date] += aantal;
+            speler['WedstrijdenPerDate'][date]['Value'] += aantal;
             speler_gemiddelde(speler, date);
         }
 
@@ -182,8 +181,17 @@ var dartsapp = {};
             if (speler['Wedstrijden'] > 0) {
                 speler['Gemiddelde'] = speler['Punten'] / speler['Wedstrijden'];
             }
-            if (speler['WedstrijdenPerDate'][date] > 0 && speler['PuntenPerDate'][date] > 0) {
-                speler['GemiddeldePerDate'][date] = speler['PuntenPerDate'][date] / speler['WedstrijdenPerDate'][date];
+            if (
+                speler['WedstrijdenPerDate'][date] &&
+                speler['WedstrijdenPerDate'][date]['Value'] > 0 &&
+                speler['PuntenPerDate'][date] &&
+                speler['PuntenPerDate'][date]['Value'] > 0
+            ) {
+                speler['GemiddeldePerDate'][date] = {
+                    Date: date,
+                    Value: (
+                        speler['PuntenPerDate'][date]['Value'] / speler['WedstrijdenPerDate'][date]['Value'])
+                };
             }
         }
 
@@ -259,17 +267,30 @@ var dartsapp = {};
 
 
         let all = dartsapp.all_player_seasons;
-        for (let i=0;i<all.length;i++) {
+        for (let i = 0; i < all.length; i++) {
             let ps = all[i];
 
-            console.log(ps);
-            // let keys = 
-            for (let entry of Object.entries(ps['PuntenPerDate'])) {
-                console.log(entry)
-            }
-            // ps['PuntenPerDate'] = ps['PuntenPerDate'].sort(function(a,b) {
-            //     return a.Date.getTime() - b.Date.getTime();
+            // console.log(ps);
+            // let chartable = {
+            //     PuntenPerDate: [],
+            //     PuntenCumulativePerDate: [],
+            //     GemiddeldePerDate: [],
+            // }
+            // for (let entry of Object.entries(ps['PuntenPerDate'])) {
+            //     chartable['PuntenPerDate'].push({ Date: entry[0], Value: entry[1] })
+            //     chartable['GemiddeldePerDate'].push({ Date: entry[0], Value: ps['GemiddeldePerDate'][entry[0]] })
+            // }
+
+            // chartable['PuntenPerDate'].sort(function(a, b) {
+            //     // console.log(a.Date, b.Date);
+            //     // debugger;
+            //     // return a.Date.getTime() - b.Date.getTime();
             // })
+
+            // ps['Chartable'] = chartable;
+            // // ps['PuntenPerDate'] = ps['PuntenPerDate'].sort(function(a,b) {
+            // //     return a.Date.getTime() - b.Date.getTime();
+            // // })
 
 
         }
