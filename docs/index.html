@@ -4,14 +4,26 @@
 <head>
     <title></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+    svg#demo {
+        border: 1px solid green;
+    }
+    </style>
 </head>
 
 <body>
-    <h1>SV Austerlitz darts</h1>
-    <div id="dest"></div>
+    <h1>_</h1>
+    <div id="dest">
+        <svg id="demo"></svg>
+    </div>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="./bbdataviz.js"></script>
     <script src="./dartsapp.js"></script>
     <script>
+    d3.select('svg#demo')
+        // .attr('height', '400px')
+        .attr('width', document.body.clientWidth);
+
     let files = [
         'Austerlitz_seizoen_2016-2017.json',
         'Austerlitz_seizoen_2017-2018.json',
@@ -19,15 +31,30 @@
         'Austerlitz_seizoen_2019-2020.json',
     ];
 
+    let demotable = new bbdataviz.Table(d3.select('svg#demo'), [
+        { "id": "Naam", "content": "Naam", "header": { "text": "Speler"} } ,
+        { "id": "Punten", "content": "Punten", "header": { "text": "Punten"} } ,
+        { "id": "Wedstrijden", "content": "Wedstrijden", "header": { "text": "Wedstrijden"} } ,
+        { "id": "Gemiddelde", "content": "Gemiddelde", "header": { "text": "Gemiddeld"} } ,
+    ]);
+
     for (let i = 0; i < files.length; i++) {
         let file_name = files[i];
         d3.json('https://basbloemsaat.github.io/dartsense/uitslagen/' + file_name)
             .then(
                 function(data) {
                     dartsapp.add_data(file_name, data);
+                    s = dartsapp.calc_seasons();
                 }
             )
     }
+
+    setTimeout(function() {
+        // s = dartsapp.calc_seasons();
+        // console.log(s['Austerlitz seizoen 2019-2020']);
+        demotable.data(s['Austerlitz seizoen 2019-2020']['results'])
+        demotable.resize();
+    }, 1000);
     </script>
 </body>
 
