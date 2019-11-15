@@ -13,8 +13,8 @@
 
     svg#perdate{
         border: 1px solid green;
-        width: 800px;
-        height: 600px;
+        width:100%;
+        height: auto;
     }
 
     text.header {
@@ -69,8 +69,8 @@
 
     let linechart = new bbdataviz.LineChart(
         d3.select('svg#perdate'),
-        d3.scaleTime().range([0, 50]).domain([new Date('2019-01-01'),new Date('2019-12-01')]),
-        d3.scaleLinear().range([0, 50]).domain([1,10]),
+        d3.scaleTime().range([0, 50]).domain([new Date('2019-08-30'),new Date('2020-05-21')]),
+        d3.scaleLinear().range([0, 50]).domain([0,150]),
     );
 
     for (let i = 0; i < files.length; i++) {
@@ -83,6 +83,8 @@
                     if(s['Austerlitz seizoen 2019-2020']) {
                         resultstable.data(s['Austerlitz seizoen 2019-2020']['results']);
                         d3.select('span#lastdate').text(dartsapp.lastdate.toLocaleDateString('nl-NL'));
+
+                        linechart.data(s['Austerlitz seizoen 2019-2020']['results']);
                     }
                 }
             )

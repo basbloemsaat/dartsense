@@ -5,6 +5,9 @@ var dartsapp = {};
         "bydate": {},
         "byplayer": {},
     };
+    this.seasons = {};
+    this.all_player_seasons = [];
+
 
     this.lastdate = new Date('2001-01-01')
 
@@ -66,11 +69,12 @@ var dartsapp = {};
 
             // this.lastdate = Math.max(this.lastdate, item['Date'])
             let itemdate = new Date(item['Date']);
+            item['Date'] = itemdate;
             if(itemdate.getTime() > dartsapp.lastdate.getTime()) {
                 dartsapp.lastdate = itemdate;
             }
 
-            item['Year'] = item['Date'].substr(0, 4);
+            item['Year'] = item['Date'].getYear();
             item['Seizoen'] = competitie_naam;
 
             //d3.nest werkt hier ook, maar niet bij spelers en ik loop er toch al door
@@ -87,7 +91,7 @@ var dartsapp = {};
 
     this.calc_seasons = function() {
         let seasons = {};
-
+        
         let speler_ref = function(seizoen, speler_naam) {
             if (!seizoen['byplayer'][speler_naam]) {
                 seizoen['byplayer'][speler_naam] = {
@@ -104,6 +108,7 @@ var dartsapp = {};
                     'WedstrijdenPerDate': {},
                 };
                 seizoen['results'].push(seizoen['byplayer'][speler_naam]);
+                dartsapp.all_player_seasons.push(seizoen['byplayer'][speler_naam])
             }
 
             return seizoen['byplayer'][speler_naam];
@@ -253,6 +258,23 @@ var dartsapp = {};
 
 
 
+        let all = dartsapp.all_player_seasons;
+        for (let i=0;i<all.length;i++) {
+            let ps = all[i];
+
+            console.log(ps);
+            // let keys = 
+            for (let entry of Object.entries(ps['PuntenPerDate'])) {
+                console.log(entry)
+            }
+            // ps['PuntenPerDate'] = ps['PuntenPerDate'].sort(function(a,b) {
+            //     return a.Date.getTime() - b.Date.getTime();
+            // })
+
+
+        }
+
+        dartsapp.seasons = seasons;
         return seasons;
     }
 }).apply(dartsapp);
