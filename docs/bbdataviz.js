@@ -39,8 +39,7 @@ var bbdataviz = {};
     }
 
     this.Table.prototype.resize = function() {
-        // this.width = +this.svg.node().clientWidth;
-        let width = Math.round(0 + this.g.node().getBBox().width + 20);
+        let width = Math.round(0 + this.g.node().getBBox().width);
         let height = Math.round(0 + this.g.node().getBBox().height + bbdataviz.parameters.row_height);
 
         this.svg.attr('viewBox', '0 0 ' + width + ' ' + height);
