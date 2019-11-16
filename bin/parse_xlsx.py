@@ -19,7 +19,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
 # print(os.path.dirname(__file__))
 
-import dartsense
+# import dartsense
 
 
 def main(argv):
@@ -85,8 +85,9 @@ def main(argv):
 
     if(sheet_data):
         filename = re.sub(r'xlsx$', r'json', parameters['filename'])
+        filename = re.sub(r'[^/]+/',r'', filename)
         if (filename != parameters['filename']):
-            filename = 'var/www/' + filename
+            filename = 'docs/uitslagen/' + filename
             pprint(filename)
             with open(filename, 'w') as outfile:
                 # pass
