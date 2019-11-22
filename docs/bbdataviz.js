@@ -248,36 +248,43 @@ var bbdataviz = {};
         // this.g.attr('width', this.parameters.width);
         // this.g.attr('height', this.parameters.height);
 
-
         this.xscale = xscale;
-        xscale.range([0, this.parameters.chart_width]);
         this.x =
             this.g.append('g')
             .attr('class', 'xaxis')
-            .attr('transform', 'translate(' + this.parameters.chart_margin + ',' + (this.parameters.chart_height + this.parameters.chart_margin) + ')')
-            .call(d3.axisBottom(xscale));;
 
         this.yscale = yscale;
-        yscale.range([this.parameters.chart_height, 0]);
-        this.y = this.g.append('g').attr('class', 'yaxis')
-            .attr('transform', 'translate(' + this.parameters.chart_margin + ',' + this.parameters.chart_margin + ')')
-            .call(d3.axisLeft(yscale));;
 
+        this.y = this.g.append('g').attr('class', 'yaxis')
         this.canvas = this.g.append('g').attr('class', 'canvas');
 
         this.resize();
     }
 
     this.LineChart.prototype.resize = function() {
-        let width = Math.round(0 + this.g.node().getBBox().width) + (this.parameters.chart_margin);
-        let height = Math.round(0 + this.g.node().getBBox().height) + this.parameters.chart_margin;
+        // let width = Math.round(0 + this.g.node().getBBox().width) + (this.parameters.chart_margin);
+        // let height = Math.round(0 + this.g.node().getBBox().height) + this.parameters.chart_margin;
+        let width = this.parameters.chart_width + (this.parameters.chart_margin * 2)
+        let height = this.parameters.chart_height + (this.parameters.chart_margin * 2)
 
+
+        this.xscale.range([0, this.parameters.chart_width]);
+        this.x.attr('transform', 'translate(' + this.parameters.chart_margin + ',' + (this.parameters.chart_height + this.parameters.chart_margin) + ')')
+            .call(d3.axisBottom(this.xscale));
+
+        this.yscale.range([this.parameters.chart_height, 0]);
+        this.y.attr('transform', 'translate(' + this.parameters.chart_margin + ',' + this.parameters.chart_margin + ')')
+            .call(d3.axisLeft(this.yscale));
+
+        this.canvas.attr('transform', 'translate(' + this.parameters.chart_margin + ',' + this.parameters.chart_margin + ')')
+
+        console.log(height);
         this.svg.attr('viewBox', '0 0 ' + width + ' ' + height);
     }
 
     // set the data and (re)render the chart
     this.LineChart.prototype.data = function(data) {
-        console.log(data);
+        // this.svg
     }
 
 }).apply(bbdataviz);

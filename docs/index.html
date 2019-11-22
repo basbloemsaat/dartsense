@@ -14,7 +14,7 @@
     svg#perdate{
         /*border: 1px solid green;*/
         padding: 5px;
-        width:50%;
+        width:100%;
         height: auto;
     }
 
@@ -73,6 +73,9 @@
         d3.scaleTime().range([0, 50]).domain([new Date('2019-08-30'),new Date('2020-05-21')]),
         d3.scaleLinear().range([0, 50]).domain([0,150]),
     );
+
+    linechart.parameters.chart_height = 300;
+    linechart.resize()
 
     for (let i = 0; i < files.length; i++) {
         let file_name = files[i];
