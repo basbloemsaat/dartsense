@@ -118,3 +118,5 @@ data/~*
 .pytest_cache/*
 /dev/
 /flask_session/
+
+data/svadarts.sqlite3db
