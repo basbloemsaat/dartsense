@@ -59,7 +59,7 @@ def load_xlsx(filename):
 
 
 def save_data_to_json(data, filename):
-    pprint(filename)
+    # pprint(filename)
     with open(filename, 'w') as outfile:
         json.dump(data, outfile)
 
@@ -100,6 +100,12 @@ def init_clean_db():
             speler1_lollies INT,
             speler2_finishes VARCHAR(32),
             speler1_finishes VARCHAR(32),
+            speler1_punten  INT,
+            speler2_punten  INT,
+            speler1_rating  INT,
+            speler2_rating  INT,
+            speler1_rating_adj  INT,
+            speler2_rating_adj  INT,
 
             UNIQUE (datum, round, speler1_naam, speler2_naam)
         ) ''')
@@ -189,7 +195,7 @@ def load_all_data_into_db():
 
     for speler in spelers:
         db.execute('''INSERT INTO speler (speler_naam) VALUES (?)''', [speler])
-        pprint(speler)
+        # pprint(speler)
 
     db.commit();
 

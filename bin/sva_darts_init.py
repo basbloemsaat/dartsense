@@ -26,7 +26,7 @@ def main(argv):
         if opt in ('-h', '--help'):
             usage()
 
-    pprint(parameters)
+    # pprint(parameters)
 
     sva.init_clean_db()
     sva.load_all_data_into_db()
