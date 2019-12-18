@@ -16,8 +16,8 @@ dartssqlitedb = os.path.join(
     os.path.dirname(__file__),
     "../data/svadarts.sqlite3db"
 )
-uri = 'file:' + dartssqlitedb + '?mode=ro'
 
+# uri = 'file:' + dartssqlitedb + '?mode=ro'
 # db = sqlite3.connect(uri, uri=True)
 db = sqlite3.connect(dartssqlitedb)
 # db.isolation_level = None
@@ -76,8 +76,18 @@ def exec_select_query(query, args=[], json_file=None):
 
 
 def init_clean_db():
-    os.remove(dartssqlitedb)
-    db = sqlite3.connect(dartssqlitedb)
+    # os.remove(dartssqlitedb)
+    # db = sqlite3.connect(dartssqlitedb)
+
+    db.execute('''
+        DROP TABLE IF EXISTS speler
+    ''')   
+    db.execute('''
+        DROP TABLE IF EXISTS game
+    ''') 
+    db.execute('''
+        DROP TABLE IF EXISTS adjustments
+    ''')
 
     db.execute('''
         CREATE TABLE speler (
@@ -123,10 +133,10 @@ def init_clean_db():
             UNIQUE (datum, speler_naam)
         ) ''')
 
-
+    db.commit()
 
 def load_all_data_into_db():
-    db = sqlite3.connect(dartssqlitedb)
+    # db = sqlite3.connect(dartssqlitedb)
     files = ['Austerlitz_seizoen_2016-2017.xlsx', 'Austerlitz_seizoen_2017-2018.xlsx',
              'Austerlitz_seizoen_2018-2019.xlsx', 'Austerlitz_seizoen_2019-2020.xlsx']
 
