@@ -83,22 +83,19 @@ def init_clean_db():
         DROP TABLE IF EXISTS speler
     ''')   
     db.execute('''
-        DROP TABLE IF EXISTS game
-    ''') 
-    db.execute('''
-        DROP TABLE IF EXISTS adjustments
-    ''')
-
-    db.execute('''
         CREATE TABLE speler (
             speler_naam VARCHAR(128)
         ) ''')
 
     db.execute('''
+        DROP TABLE IF EXISTS game
+    ''') 
+    db.execute('''
         CREATE TABLE game (
             game_id         INTEGER PRIMARY KEY,
-            game_order      INT,
+            comp            VARCHAR(64),
             datum           DATE,
+            game_order      INT,
             round           VARCHAR(16),
             speler1_naam    VARCHAR(128),
             speler2_naam    VARCHAR(128),
@@ -110,18 +107,30 @@ def init_clean_db():
             speler1_lollies INT,
             speler2_finishes VARCHAR(32),
             speler1_finishes VARCHAR(32),
-            speler1_punten  INT,
-            speler2_punten  INT,
-            speler1_rating  INT,
-            speler2_rating  INT,
-            speler1_rating_adj  INT,
-            speler2_rating_adj  INT,
-
             UNIQUE (datum, round, speler1_naam, speler2_naam)
         ) ''')
+
+    db.execute('''
+        DROP TABLE IF EXISTS game_data
+    ''') 
+    db.execute('''
+        CREATE TABLE game_data (
+            game_id INT,
+            speler_naam  VARCHAR(128),
+            speler_punten  INT,
+            speler_rating  INT,
+            speler_rating_adj  INT,
+            UNIQUE (game_id, speler_naam)
+        )
+    ''') 
+
+    db.execute('''
+        DROP TABLE IF EXISTS adjustments
+    ''')
     db.execute('''
         CREATE TABLE adjustments (
             adj_id          INTEGER PRIMARY KEY,
+            comp            VARCHAR(64),
             datum           DATE,
             adj_type        VARCHAR(32),
             speler_naam     VARCHAR(128),
@@ -155,6 +164,10 @@ def load_all_data_into_db():
             "../data/" + file
         )
 
+        comp = file[:-5];
+
+        pprint(comp);
+
         data = load_xlsx(xlsx_path)
         order = 1;
         for entry in data:
@@ -164,13 +177,14 @@ def load_all_data_into_db():
                     continue
 
                 db.execute('''INSERT INTO game (
-                    game_order, datum, round, speler1_naam, speler2_naam,
+                    comp, datum, game_order, round, speler1_naam, speler2_naam,
                     speler1_legs, speler2_legs, speler1_180s, speler2_180s, speler2_lollies,
                     speler1_lollies, speler2_finishes, speler1_finishes)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                 ''', [
-                    order, 
+                    comp,
                     entry['Date'],
+                    order, 
                     entry['Ronde'],
                     get_speler_naam(entry['Speler1']),
                     get_speler_naam(entry['Speler2']),
@@ -188,9 +202,10 @@ def load_all_data_into_db():
             else:
                 # pprint(entry)
                 db.execute('''INSERT INTO adjustments (
-                    datum, adj_type, speler_naam, speler_points, speler_180s, speler_lollies, speler_finishes) 
-                    VALUES (?,?,?,?,?,?,?)
+                    comp, datum, adj_type, speler_naam, speler_points, speler_180s, speler_lollies, speler_finishes) 
+                    VALUES (?,?,?,?,?,?,?,?)
                 ''', [
+                    comp,
                     entry['Date'],
                     entry['Type'],
                     get_speler_naam(entry['Speler']),
