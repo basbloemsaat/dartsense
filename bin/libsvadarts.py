@@ -120,6 +120,7 @@ def init_clean_db():
             speler_punten  INT,
             speler_rating  INT,
             speler_rating_adj  INT,
+            speler_game_number INT,
             UNIQUE (game_id, speler_naam)
         )
     ''') 
