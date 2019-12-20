@@ -179,8 +179,10 @@ def load_all_data_into_db():
 
                 db.execute('''INSERT INTO game (
                     comp, datum, game_order, round, speler1_naam, speler2_naam,
-                    speler1_legs, speler2_legs, speler1_180s, speler2_180s, speler2_lollies,
-                    speler1_lollies, speler2_finishes, speler1_finishes)
+                    speler1_legs, speler2_legs,
+                    speler1_180s, speler2_180s,
+                    speler1_lollies, speler2_lollies,
+                    speler1_finishes, speler2_finishes)
                     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                 ''', [
                     comp,
@@ -195,8 +197,8 @@ def load_all_data_into_db():
                     entry['Max2'],
                     entry['Lollies1'],
                     entry['Lollies2'],
-                    entry['Max1'],
-                    entry['Max2']
+                    entry['Finishes1'],
+                    entry['Finishes2']
                 ])
                 order = order + 1
 
