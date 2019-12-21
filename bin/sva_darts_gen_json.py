@@ -42,6 +42,9 @@ def main(argv):
 
 
     # per seizoen
+
+    data={}
+
     competitions = sva.exec_select_query('''
         SELECT DISTINCT comp
         FROM game
@@ -50,13 +53,59 @@ def main(argv):
     for competition in competitions:
         pprint(competition)
 
-        data = sva.exec_select_query('''
+        data['games'] = sva.exec_select_query('''
             SELECT *
             FROM game
             WHERE comp=?
+        ''', [competition['comp']])        
+
+        data['adjustments'] = sva.exec_select_query('''
+            SELECT * 
+            FROM adjustments a
+            where comp=?
         ''', [competition['comp']])
 
-        pprint(data)
+        data['standings'] = sva.exec_select_query('''
+            SELECT DISTINCT
+                x.speler_naam,
+                SUM(x.speler_punten) OVER (
+                    PARTITION BY x.speler_naam
+                    ORDER BY x.game_order ASC
+                    RANGE BETWEEN UNBOUNDED PRECEDING AND 
+                    UNBOUNDED FOLLOWING
+                ) AS speler_punten,
+                LAST_VALUE ( x.speler_rating ) OVER (
+                    PARTITION BY x.speler_naam
+                    ORDER BY x.game_order ASC
+                    RANGE BETWEEN UNBOUNDED PRECEDING AND 
+                    UNBOUNDED FOLLOWING
+                ) AS rating 
+            FROM (
+                SELECT 
+                    g.comp,
+                    g.game_order,
+                    gd.speler_naam,
+                    gd.speler_punten,
+                    gd.speler_rating
+                FROM game g
+                JOIN game_data gd on gd.game_id=g.game_id
+                WHERE comp=?
+                UNION ALL
+                SELECT
+                    a.comp,
+                    0,
+                    a.speler_naam,
+                    a.speler_points,
+                    0
+                FROM adjustments a
+                WHERE comp=?
+            ) as x
+            ORDER BY speler_punten DESC
+
+        ''', [competition['comp'],competition['comp']])
+
+        # pprint(data)
+        sva.save_data_to_json(data, competition['comp'] + '.json')
 
 
     # per speler
