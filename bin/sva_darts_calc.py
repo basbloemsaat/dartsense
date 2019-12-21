@@ -44,6 +44,7 @@ def main(argv):
         SELECT speler_naam, 1000 as rating, 0 as games FROM speler
     ''')
     spelers = {speler['speler_naam']:speler for speler in spelers_a}
+    pprint(spelers)
 
     competitions = sva.exec_select_query('''
         SELECT DISTINCT comp
@@ -90,6 +91,16 @@ def main(argv):
             speler2_punten = speler2_punten + game['speler2_180s'] 
             speler2_punten = speler2_punten + finishes_points(game['speler2_finishes'])
 
+            rating_speler1 = spelers[game['speler1_naam']]
+            rating_speler2 = spelers[game['speler2_naam']]
+            pprint(rating_speler1)
+
+            c = 400
+
+            eA = 1/(1+10^((rating_speler2['rating']-rating_speler1['rating'])/400))
+            eB = 1/(1+10^((rating_speler1['rating']-rating_speler2['rating'])/400))
+
+            pprint(eA)
             # pprint(str(speler1_punten) + '-' + str(speler2_punten))
 
         # bereken de rating

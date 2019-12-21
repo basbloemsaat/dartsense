@@ -75,6 +75,7 @@ def exec_select_query(query, args=[], json_file=None):
     return rows
 
 
+
 def init_clean_db():
     # os.remove(dartssqlitedb)
     # db = sqlite3.connect(dartssqlitedb)
