@@ -40,7 +40,6 @@ def load_xlsx(filename):
 
         header = [cell.value for cell in sheet[1]]
 
-        # pprint(header)
         iter_rows = sheet.rows
         next(iter_rows)
         for row in iter_rows:
@@ -59,7 +58,6 @@ def load_xlsx(filename):
 
 
 def save_data_to_json(data, filename):
-    # pprint(filename)
     with open(filename, 'w') as outfile:
         json.dump(data, outfile)
 
@@ -77,9 +75,6 @@ def exec_select_query(query, args=[], json_file=None):
 
 
 def init_clean_db():
-    # os.remove(dartssqlitedb)
-    # db = sqlite3.connect(dartssqlitedb)
-
     db.execute('''
         DROP TABLE IF EXISTS speler
     ''')   
@@ -147,7 +142,6 @@ def init_clean_db():
     db.commit()
 
 def load_all_data_into_db():
-    # db = sqlite3.connect(dartssqlitedb)
     files = ['Austerlitz_seizoen_2016-2017.xlsx', 'Austerlitz_seizoen_2017-2018.xlsx',
              'Austerlitz_seizoen_2018-2019.xlsx', 'Austerlitz_seizoen_2019-2020.xlsx']
 
@@ -224,8 +218,6 @@ def load_all_data_into_db():
 
     for speler in spelers:
         db.execute('''INSERT INTO speler (speler_naam) VALUES (?)''', [speler])
-        # pprint(speler)
 
     db.commit();
 
-    # pprint(order)
