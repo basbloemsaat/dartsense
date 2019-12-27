@@ -79,7 +79,7 @@
 
     for (let i = 0; i < files.length; i++) {
         let file_name = files[i];
-        d3.json('https://basbloemsaat.github.io/dartsense/uitslagen/' + file_name)
+        d3.json('./data/perseason/' + file_name)
             .then(
                 function(data) {
                     dartsapp.add_data(file_name, data);

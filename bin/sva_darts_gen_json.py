@@ -9,7 +9,7 @@ import libsvadarts as sva
 
 from pprint import pprint
 
-rootdir = '~/src/dartsense/data/'
+rootdir = '~/src/dartsense/docs/data/'
 
 
 def main(argv):
@@ -107,7 +107,7 @@ def main(argv):
 
         ''', [competition['comp'], competition['comp']])
 
-        filename = rootdir + competition['comp'] + '.json';
+        filename = rootdir +'/perseason/'+ competition['comp'] + '.json';
         pprint(filename)
 
         # pprint(data)
