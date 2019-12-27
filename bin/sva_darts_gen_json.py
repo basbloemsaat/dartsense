@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 
 import getopt
+import os
 import re
 import sys
 
 import libsvadarts as sva
 
 from pprint import pprint
+
+rootdir = '~/src/dartsense/data/'
+
 
 def main(argv):
     # parameters = {
@@ -40,10 +44,9 @@ def main(argv):
 
     # sva.save_data_to_json(data, json_filename)
 
-
     # per seizoen
 
-    data={}
+    data = {}
 
     competitions = sva.exec_select_query('''
         SELECT DISTINCT comp
@@ -57,7 +60,7 @@ def main(argv):
             SELECT *
             FROM game
             WHERE comp=?
-        ''', [competition['comp']])        
+        ''', [competition['comp']])
 
         data['adjustments'] = sva.exec_select_query('''
             SELECT * 
@@ -102,15 +105,15 @@ def main(argv):
             ) as x
             ORDER BY speler_punten DESC
 
-        ''', [competition['comp'],competition['comp']])
+        ''', [competition['comp'], competition['comp']])
+
+        filename = rootdir + competition['comp'] + '.json';
+        pprint(filename)
 
         # pprint(data)
-        sva.save_data_to_json(data, competition['comp'] + '.json')
-
+        sva.save_data_to_json(data, filename)
 
     # per speler
-
-
 
 
 def usage():
@@ -119,6 +122,6 @@ def usage():
         ''')
     sys.exit()
 
+
 if __name__ == "__main__":
     main(sys.argv[1:])
-

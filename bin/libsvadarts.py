@@ -58,6 +58,7 @@ def load_xlsx(filename):
 
 
 def save_data_to_json(data, filename):
+    filename = os.path.expanduser(filename)
     with open(filename, 'w') as outfile:
         json.dump(data, outfile)
 
