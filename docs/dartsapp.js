@@ -2,33 +2,63 @@ var dartsapp = {};
 (function() {
 
     this.data = {
-        seasons: [],
+        competitions: [],
         games: [],
         spelers: [],
     };
 
+    this.loaded = {
+        index: false,
+    }
+
+    this.available_data = {
+
+    }
+
     // data broker. retreives data on a need to have basis, ideally
-    this.DataBroker = function() {
-        if (dartsapp.data.seasons.length == 0) {
-            // basisdata nog niet opgehaald: ophalen
-            d3.json('./data/index.json')
+    this.DataBroker = function(callback, data2load) {
+        if (data2load === undefined) {
+            data2load = [];
+        }
+
+        var callback = this.callback = callback;
+        data2load.forEach(function(item) {
+            console.log(item)
+            d3.json('./data/' + item + '.json')
                 .then(
                     function(data) {
                         console.log(data)
                         // dartsapp.data
+                        dartsapp['loaded'][item] = true;
                     }
                 )
+        })
+
+
+    }
+
+    this.DataBroker.prototype._load_index = function(callback, data2load) {
+
+
+
+
+
+    }
+
+    this.DataBroker.prototype.get_competitions = function() {
+        if (!dartsapp['loaded']['index']) {
+            // basisdata nog niet opgehaald: ophalen
+            this._load_index();
         }
-    }
+        // while (!dartsapp['loaded']['index']) {
 
-    this.DataBroker.prototype._load_data = function() {
-
-
-    }
-
-    this.DataBroker.prototype.get_seasons = function() {
-        
+        // }
+        console.log('x')
     };
+
+    this.DataBroker.prototype._get_competitions = function() {}
+
+
 
 
 
