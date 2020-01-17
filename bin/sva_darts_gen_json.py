@@ -2,6 +2,7 @@
 
 import getopt
 import os
+import pathlib
 import re
 import sys
 
@@ -9,8 +10,7 @@ import libsvadarts as sva
 
 from pprint import pprint
 
-rootdir = '~/src/dartsense/docs/data/'
-
+rootdir = os.path.dirname(os.path.abspath(__file__)) + '/../docs/data/'
 
 def main(argv):
 
