@@ -136,6 +136,7 @@ def init_clean_db():
             speler_180s     INT,
             speler_lollies  INT,
             speler_finishes VARCHAR(32),
+            speler_games    INT,
 
             UNIQUE (datum, speler_naam)
         ) ''')
@@ -201,8 +202,9 @@ def load_all_data_into_db():
             else:
                 # pprint(entry)
                 db.execute('''INSERT INTO adjustments (
-                    comp, datum, adj_type, speler_naam, speler_points, speler_180s, speler_lollies, speler_finishes) 
-                    VALUES (?,?,?,?,?,?,?,?)
+                    comp, datum, adj_type, speler_naam, speler_points, speler_180s, speler_lollies, speler_finishes, 
+                        speler_games) 
+                    VALUES (?,?,?,?,?,?,?,?,?)
                 ''', [
                     comp,
                     entry['Date'],
@@ -212,6 +214,7 @@ def load_all_data_into_db():
                     entry['Max'],
                     entry['Lollies'],
                     entry['Finishes'],
+                    entry['Matches'],
                 ])
 
             # speler

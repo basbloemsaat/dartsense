@@ -24,7 +24,7 @@ def main(argv):
     ''')
     competitions = [c['comp'] for c in competitions]
     for competition in competitions:
-        pprint(competition)
+        # pprint(competition)
 
         data['games'] = sva.exec_select_query('''
             SELECT *
@@ -47,6 +47,12 @@ def main(argv):
                     RANGE BETWEEN UNBOUNDED PRECEDING AND 
                     UNBOUNDED FOLLOWING
                 ) AS speler_punten,
+                SUM(x.speler_games) OVER (
+                    PARTITION BY x.speler_naam
+                    ORDER BY x.game_order ASC
+                    RANGE BETWEEN UNBOUNDED PRECEDING AND 
+                    UNBOUNDED FOLLOWING
+                ) AS speler_games,
                 LAST_VALUE ( x.speler_rating ) OVER (
                     PARTITION BY x.speler_naam
                     ORDER BY x.game_order ASC
@@ -54,23 +60,25 @@ def main(argv):
                     UNBOUNDED FOLLOWING
                 ) AS rating 
             FROM (
+                SELECT
+                    a.comp,
+                    0 as game_order,
+                    a.speler_naam,
+                    a.speler_points as speler_punten,
+                    0 as speler_rating,
+                    a.speler_games
+                FROM adjustments a
+                WHERE comp=?
+                UNION ALL
                 SELECT 
                     g.comp,
                     g.game_order,
                     gd.speler_naam,
                     gd.speler_punten,
-                    gd.speler_rating
+                    gd.speler_rating,
+                    1 as speler_games
                 FROM game g
                 JOIN game_data gd on gd.game_id=g.game_id
-                WHERE comp=?
-                UNION ALL
-                SELECT
-                    a.comp,
-                    0,
-                    a.speler_naam,
-                    a.speler_points,
-                    0
-                FROM adjustments a
                 WHERE comp=?
             ) as x
             ORDER BY speler_punten DESC
@@ -78,7 +86,7 @@ def main(argv):
         ''', [competition, competition])
 
         filename = rootdir + '/perseason/' + competition + '.json'
-        pprint(filename)
+        # pprint(filename)
 
         # pprint(data)
         sva.save_data_to_json(data, filename)
@@ -94,6 +102,8 @@ def main(argv):
     for speler in spelers:
         pprint(speler)
 
+        filename = rootdir + '/perspeler/' + speler + '.json'
+        pprint(filename)
         #TODO
 
     # overzicht
@@ -102,7 +112,7 @@ def main(argv):
     data['spelers'] = spelers
     data['competitions'] = competitions
 
-    pprint(data)
+    # pprint(data)
 
     sva.save_data_to_json(data, rootdir + '/index.json')
 
