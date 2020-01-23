@@ -24,6 +24,7 @@ def main(argv):
     ''')
     competitions = [c['comp'] for c in competitions]
     for competition in competitions:
+        data = {}
         # pprint(competition)
 
         data['games'] = sva.exec_select_query('''
@@ -92,7 +93,6 @@ def main(argv):
         sva.save_data_to_json(data, filename)
 
     # per speler
-    data = {}
     spelers = sva.exec_select_query('''
         SELECT speler_naam
         FROM speler
@@ -100,11 +100,41 @@ def main(argv):
     ''')
     spelers = [s['speler_naam'] for s in spelers]
     for speler in spelers:
+        data = {}
         pprint(speler)
 
-        filename = rootdir + '/perspeler/' + speler + '.json'
+        data['games'] = sva.exec_select_query('''
+            SELECT 
+                comp
+                , g.datum
+                , g.game_id
+                , gd.speler_game_number
+                , g.speler1_180s
+                , g.speler1_finishes
+                , g.speler1_legs
+                , g.speler1_lollies
+                , g.speler1_naam    
+                , g.speler2_180s
+                , g.speler2_finishes
+                , g.speler2_legs
+                , g.speler2_lollies
+                , g.speler2_naam
+                
+                , gd.speler_punten
+                , gd.speler_rating
+                , gd.speler_rating_adj
+            FROM
+                game g
+                JOIN game_data gd ON gd.game_id = g.game_id
+                
+            WHERE   gd.speler_naam = ?
+            ORDER BY gd.speler_game_number
+        ''', [speler])
+
+        filename = rootdir + 'perspeler/' + speler + '.json'
         pprint(filename)
-        #TODO
+        
+        sva.save_data_to_json(data, filename)
 
     # overzicht
     data = {}
