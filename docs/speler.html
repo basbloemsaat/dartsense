@@ -5,8 +5,23 @@
     <title>dir</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
-    td.speler1, th.speler1 {
+    td.speler1,
+    th.speler1 {
         text-align: right;
+    }
+
+    .win {
+        background-color: #efe;
+    }
+
+    .loss {
+        background-color: #fee;
+    }
+
+    svg.chart {
+        border: 1px solid yellow;
+        width: 100%;
+        height: 20em;
     }
     </style>
 </head>
@@ -16,20 +31,26 @@
         <h1 id="title">speler</h1>
         <div class="row">
             <div class="col-lg-6">
-                <h2></h2>
+                <!-- <h2>punten</h2> -->
+                <!-- <svg id="punten" class="chart"></svg> -->
+            </div>
+            <div class="col-lg-6">
+                <!-- <h2>rating</h2> -->
+                <!-- <svg id="rating" class="chart"></svg> -->
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
                 <h2>wedstrijden</h2>
                 <table id="games" class="table">
-                    <thead> 
+                    <thead>
                         <th>datum</th>
                         <th class="speler1">speler</th>
                         <th></th>
                         <th></th>
                         <th></th>
                         <th>speler</th>
+                        <th>elo rating</th>
                         <th>seizoen</th>
                     </thead>
                     <tbody> </tbody>
@@ -42,16 +63,28 @@
     <script src="./dartsapp.js"></script>
     <script>
     let p = bbdataviz.url_params();
+    let s = p['speler'];
 
     let draw_page = function() {
+        dartsapp.data.spelers[p['speler']]['games'].sort(function(a, b) {
+            return b.game_id - a.game_id
+        })
         let gamerows = d3.select('table#games').select('tbody').selectAll('tr')
             .data(
-                dartsapp.data.spelers[p['speler']]['games'].sort(function(a, b) {
-                    console.log(a)
-                return b.game_id - a.game_id
-            })
-                );
+                dartsapp.data.spelers[p['speler']]['games']
+            );
         let newrows = gamerows.enter().append('tr')
+            .classed('win', function(d) {
+                return (
+                    (d.speler1_naam == s && d.speler1_legs > d.speler2_legs) ||
+                    (d.speler2_naam == s && d.speler2_legs > d.speler1_legs))
+
+            })
+            .classed('loss', function(d) {
+                return (
+                    (d.speler2_naam == s && d.speler1_legs > d.speler2_legs) ||
+                    (d.speler1_naam == s && d.speler2_legs > d.speler1_legs))
+            })
 
         newrows.append('td').text(function(d) { return d.datum })
         newrows.append('td')
@@ -61,10 +94,18 @@
         newrows.append('td').text(' - ')
         newrows.append('td').text(function(d) { return d.speler2_legs })
         newrows.append('td').text(function(d) { return d.speler2_naam })
+        newrows.append('td').text(function(d) { return d.speler_rating + ' (' + d.speler_rating_adj + ')' })
         newrows.append('td').text(function(d) { return d.comp })
+
+        dartsapp.data.spelers[p['speler']]['games'].sort(function(a, b) {
+            return a.game_id - b.game_id
+        })
+
+        // let puntenchart = 
+
     }
 
-    dartsapp.load_data(draw_page, { 'spelers': [p['speler']], })
+    dartsapp.load_data(draw_page, { 'spelers': [s], })
     </script>
 </body>
 

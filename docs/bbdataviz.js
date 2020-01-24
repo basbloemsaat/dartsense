@@ -253,6 +253,9 @@ var bbdataviz = {};
         this.resize();
     }
 
+    this.xyChart = function(svg) {
+        
+    }
 
     this.LineChart = function(svg, xscale, yscale) {
         this.parameters = {
