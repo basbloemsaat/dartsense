@@ -42,7 +42,26 @@ var dartsapp = {};
                     d3.json('./data/perspeler/' + to_load[i][s] + '.json')
                         .then(
                             function(data) {
+                                let seasons = {};
                                 dartsapp.data['spelers'][to_load[i][s]] = data;
+                                let games = data.games;
+                                games.sort(function(a, b) {
+                                    return a.game_id - b.game_id
+                                })
+                                for(let g in games) {
+                                    let game = games[g];
+                                    let c = game['comp']
+                                    if(!Object.keys(seasons).includes(c)) {
+                                        seasons[c] = 0
+                                    } 
+
+                                    seasons[c] += game.speler_punten;
+                                    game['comp_punten'] = seasons[c];
+
+                                    game['date'] = new Date(game['datum'] + ' 12:00');
+                                    game['timestamp'] = Date.parse(game['datum'] + ' 12:00');
+                                }
+
                                 collector();
                             }
                         )

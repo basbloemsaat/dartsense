@@ -23,6 +23,11 @@
         width: 100%;
         height: 20em;
     }
+
+    g.xaxis,
+    g.yaxis {
+        shape-rendering: crispEdges;
+    }
     </style>
 </head>
 
@@ -62,17 +67,32 @@
     <script src="./bbdataviz.js"></script>
     <script src="./dartsapp.js"></script>
     <script>
+    var puntenchart;
+    var ratingchart;
     let p = bbdataviz.url_params();
     let s = p['speler'];
 
     let draw_page = function() {
-        dartsapp.data.spelers[p['speler']]['games'].sort(function(a, b) {
+        let games = dartsapp.data.spelers[p['speler']]['games'];
+        let seasons = games.map(function(e) {
+            return e.comp;
+        }).filter(function(value, index, self) {return self.indexOf(value) === index;})
+        console.log(seasons);
+        let max_season_points = games.reduce(function(a, b) {
+            return Math.max(a.comp_punten || 0, b.comp_punten || 0);
+        })
+        let min_date = new Date(games.reduce(function(a, b) {
+            return Math.min(a.timestamp || a, b.timestamp || b);
+        }))
+        let max_date = new Date(games.reduce(function(a, b) {
+            return Math.max(a.timestamp || a, b.timestamp || b);
+        }))
+        console.log(min_date, max_date);
+        games.sort(function(a, b) {
             return b.game_id - a.game_id
         })
         let gamerows = d3.select('table#games').select('tbody').selectAll('tr')
-            .data(
-                dartsapp.data.spelers[p['speler']]['games']
-            );
+            .data(games, function(d) { return d.game_id });
         let newrows = gamerows.enter().append('tr')
             .classed('win', function(d) {
                 return (
@@ -97,11 +117,37 @@
         newrows.append('td').text(function(d) { return d.speler_rating + ' (' + d.speler_rating_adj + ')' })
         newrows.append('td').text(function(d) { return d.comp })
 
-        dartsapp.data.spelers[p['speler']]['games'].sort(function(a, b) {
+        games.sort(function(a, b) {
             return a.game_id - b.game_id
         })
 
-        // let puntenchart = 
+        {
+            puntenchart = new bbdataviz.xyChart(d3.select('svg#punten'));
+            let y_scale = d3.scaleLinear()
+                .domain([0, max_season_points])
+                .range([puntenchart.c_height, 0])
+            puntenchart.y_axis.call(
+                d3.axisLeft(y_scale)
+            )
+
+            let x_scale = d3.scaleTime()
+                .domain([min_date, max_date])
+                .range([0, puntenchart.c_width])
+
+            puntenchart.x_axis.call(
+                d3.axisBottom(x_scale.nice())
+                .tickFormat(function(date) {
+                    if (d3.timeYear(date) < date) {
+                        return d3.timeFormat('%b')(date);
+                    } else {
+                        return d3.timeFormat('%Y')(date);
+                    }
+                })
+            )
+
+        }
+
+        // ratingchart = new bbdataviz.xyChart(d3.select('svg#rating'));
 
     }
 
