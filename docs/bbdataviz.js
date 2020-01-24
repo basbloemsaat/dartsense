@@ -276,7 +276,7 @@ var bbdataviz = {};
         let width = Math.floor(size.width);
         let height = Math.floor(size.height);
 
-        this.content.attr('transform', 'translate('+this.parameters['margin_top']+','+this.parameters['margin_left']+')')
+        this.content.attr('transform', 'translate('+this.parameters['margin_left']+','+this.parameters['margin_top']+')')
         this.c_width = width - this.parameters['margin_left'] - this.parameters['margin_right']
         this.c_height = height - this.parameters['margin_top'] - this.parameters['margin_bottom']
         this.x_axis.attr('transform', 'translate(' + this.parameters['margin_left'] + ',' + (height - this.parameters['margin_bottom']) + ')')

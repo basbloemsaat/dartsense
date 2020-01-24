@@ -28,6 +28,11 @@
     g.yaxis {
         shape-rendering: crispEdges;
     }
+
+    path.line {
+        fill: none;
+        stroke: black;
+    }
     </style>
 </head>
 
@@ -74,12 +79,8 @@
 
     let draw_page = function() {
         let games = dartsapp.data.spelers[p['speler']]['games'];
-        let seasons = games.map(function(e) {
-            return e.comp;
-        }).filter(function(value, index, self) {return self.indexOf(value) === index;})
-        console.log(seasons);
         let max_season_points = games.reduce(function(a, b) {
-            return Math.max(a.comp_punten || 0, b.comp_punten || 0);
+            return Math.max(a.comp_punten || a || 0, b.comp_punten || b || 0);
         })
         let min_date = new Date(games.reduce(function(a, b) {
             return Math.min(a.timestamp || a, b.timestamp || b);
@@ -87,9 +88,8 @@
         let max_date = new Date(games.reduce(function(a, b) {
             return Math.max(a.timestamp || a, b.timestamp || b);
         }))
-        console.log(min_date, max_date);
         games.sort(function(a, b) {
-            return b.game_id - a.game_id
+            return b.speler_game_number - a.speler_game_number
         })
         let gamerows = d3.select('table#games').select('tbody').selectAll('tr')
             .data(games, function(d) { return d.game_id });
@@ -118,7 +118,7 @@
         newrows.append('td').text(function(d) { return d.comp })
 
         games.sort(function(a, b) {
-            return a.game_id - b.game_id
+            return a.speler_game_number - b.speler_game_number
         })
 
         {
@@ -144,6 +144,32 @@
                     }
                 })
             )
+
+            let games_per_season = d3.nest()
+                .key(function(d) { return d.comp })
+                .entries(games)
+
+            let line = d3.line()
+                .curve(d3.curveStepAfter)
+                .x(function(d) {
+                    return x_scale(d.date)
+                })
+                .y(function(d) {
+                    console.log(d)
+                    return y_scale(d.comp_punten)
+                })
+
+            let lines = puntenchart.content.selectAll('path.line')
+                .data(games_per_season)
+                .enter()
+                .append('path')
+                .classed('line', true)
+                .attr("d", function(d) {
+                    return line(d.values);
+                });
+
+            // lines.enter()
+
 
         }
 
