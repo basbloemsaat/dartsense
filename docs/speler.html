@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>dir</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+    td.speler1, th.speler1 {
+        text-align: right;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h1 id="title">speler</h1>
+        <div class="row">
+            <div class="col-lg-6">
+                <h2></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>wedstrijden</h2>
+                <table id="games" class="table">
+                    <thead> 
+                        <th>datum</th>
+                        <th class="speler1">speler</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>speler</th>
+                        <th>seizoen</th>
+                    </thead>
+                    <tbody> </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="./bbdataviz.js"></script>
+    <script src="./dartsapp.js"></script>
+    <script>
+    let p = bbdataviz.url_params();
+
+    let draw_page = function() {
+        let gamerows = d3.select('table#games').select('tbody').selectAll('tr')
+            .data(
+                dartsapp.data.spelers[p['speler']]['games'].sort(function(a, b) {
+                    console.log(a)
+                return b.game_id - a.game_id
+            })
+                );
+        let newrows = gamerows.enter().append('tr')
+
+        newrows.append('td').text(function(d) { return d.datum })
+        newrows.append('td')
+            .classed('speler1', true)
+            .text(function(d) { return d.speler1_naam })
+        newrows.append('td').text(function(d) { return d.speler1_legs })
+        newrows.append('td').text(' - ')
+        newrows.append('td').text(function(d) { return d.speler2_legs })
+        newrows.append('td').text(function(d) { return d.speler2_naam })
+        newrows.append('td').text(function(d) { return d.comp })
+    }
+
+    dartsapp.load_data(draw_page, { 'spelers': [p['speler']], })
+    </script>
+</body>
+
+</html>
