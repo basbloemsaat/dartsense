@@ -9,6 +9,23 @@ var bbdataviz = {};
         column_spacer: 25,
     }
 
+    this.url_params = function() {
+        var url = window.location.href;
+        let url_params = {};
+        var hashes = url.split("?")[1];
+        if (hashes) {
+            var hash = hashes.split('&');
+
+            for (var i = 0; i < hash.length; i++) {
+                let params = hash[i].split("=");
+                url_params[params[0]] = params[1];
+            }
+        }
+
+        return url_params;
+    }
+
+
     // svg table to assist in visualizing and making interactive
     // columns = [
     //   {
@@ -236,6 +253,9 @@ var bbdataviz = {};
         this.resize();
     }
 
+    this.xyChart = function(svg) {
+        
+    }
 
     this.LineChart = function(svg, xscale, yscale) {
         this.parameters = {

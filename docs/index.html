@@ -2,101 +2,57 @@
 <html>
 
 <head>
-    <title></title>
+    <title>dir</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <style>
-    svg#results {
-        padding: 5px;
-        width:100%;
-        height: auto;
-    }
-
-    svg#perdate{
-        /*border: 1px solid green;*/
-        padding: 5px;
-        width:100%;
-        height: auto;
-    }
-
-    text.header {
-        font-size: 0.8rem;
-        font-weight: bold;
-    }
-    g.cell text {
-        font-size: 1rem;
-    }
-
-    </style>
 </head>
 
 <body>
-    <h3 id='title'>SV Austerlitz uitslagen t/m <span id="lastdate"></span></h3>
-    <div id="dest">
-        <svg id="perdate"></svg>
-        <svg id="results"></svg>
+    <div class="container-fluid">
+        <h1>overzicht</h1>
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>seizoenen</h2>
+                <table id="seizoenen">
+                    <tbody> </tbody>
+                </table>
+            </div>
+            <div class="col-lg-6">
+                <h2>spelers</h2>
+                <table id="spelers">
+                    <tbody> </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="./bbdataviz.js"></script>
     <script src="./dartsapp.js"></script>
     <script>
-        let db = new dartsapp.DataBroker();
+    let draw_page = function() {
+        let seizoenrows = d3.select('table#seizoenen').select('tbody').selectAll('tr')
+            .data(dartsapp.data.index.competitions);
+        let newseizoenrows = seizoenrows.enter()
+            .append('tr')
+        newseizoenrows.append('td')
+        .append('a')
+        .attr('href', function(d) {
+            return 'seizoen.html?seizoen=' + d;
+        })
+        .text(function(d) { return d; })
 
-    // let files = [
-    //     'Austerlitz_seizoen_2016-2017.json',
-    //     'Austerlitz_seizoen_2017-2018.json',
-    //     'Austerlitz_seizoen_2018-2019.json',
-    //     'Austerlitz_seizoen_2019-2020.json',
-    // ];
+        let spelerrows = d3.select('table#spelers').select('tbody').selectAll('tr')
+            .data(dartsapp.data.index.spelers);
+        let newspelerrows = spelerrows.enter()
+            .append('tr')
+        newspelerrows.append('td')
+        .append('a')
+        .attr('href', function(d) {
+            return 'speler.html?speler=' + d;
+        })
+        .text(function(d) { return d; })
+    }
 
-    // let resultstable = new bbdataviz.Table(d3.select('svg#results'), [
-    //     { "id": "Naam", "content": "Naam", "header": { "text": "Speler" } },
-    //     { "id": "Punten", "content": "Punten", "header": { "text": "Punten" } },
-    //     { "id": "Wedstrijden", "content": "Wedstrijden", "header": { "text": "Wedstrijden" } },
-    //     {
-    //         "id": "Gemiddelde",
-    //         "content": function(d) {
-    //             return (''+(Math.round(d.Gemiddelde * 100)+0.000001) / 100).substr(0,4);
-    //         },
-    //         "header": { "text": "Gemiddeld" }
-    //     },
-    //     { "id": "Max", "content": function(d){
-    //         return d['180s'].reduce(function(c,e) {return c+e[1]},0);
-    //     }, "header": { "text": "180s" } },
-    //     { "id": "Lollies", "content": function(d){
-    //         return d['Lollies'].reduce(function(c,e) {return c+e[1]},0);
-    //     }, "header": { "text": "Lollies" } },
-    //     { "id": "Finishes", "content": function(d){
-    //         return(d.Finishes.map(function(e) {return e[1]} ).sort().join(','));
-    //     }, "header": { "text": "Finishes" } },
-    // ]);
-
-    // let linechart = new bbdataviz.LineChart(
-    //     d3.select('svg#perdate'),
-    //     d3.scaleTime().range([0, 50]).domain([new Date('2019-08-30'),new Date('2020-05-21')]),
-    //     d3.scaleLinear().range([0, 50]).domain([0,150]),
-    // );
-
-    // linechart.parameters.chart_height = 300;
-    // linechart.resize()
-
-    // for (let i = 0; i < files.length; i++) {
-    //     let file_name = files[i];
-    //     d3.json('./data/perseason/' + file_name)
-    //         .then(
-    //             function(data) {
-    //                 console.log(data)
-    //                 dartsapp.add_data(file_name, data);
-    //                 s = dartsapp.calc_seasons();
-    //                 if(s['Austerlitz seizoen 2019-2020']) {
-    //                     resultstable.data(s['Austerlitz seizoen 2019-2020']['results']);
-    //                     d3.select('span#lastdate').text(dartsapp.lastdate.toLocaleDateString('nl-NL'));
-
-    //                     linechart.data(s['Austerlitz seizoen 2019-2020']['results']);
-    //                 }
-    //             }
-    //         )
-    // }
-
+    dartsapp.load_data(draw_page, {'index':true,})
     </script>
 </body>
 
