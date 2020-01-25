@@ -28,10 +28,20 @@
         shape-rendering: crispEdges;
     }
 
+    g.yaxis path.domain {
+        stroke-opacity: 0;
+    }
+
     path.line {
         fill: none;
         stroke: black;
         stroke-width: 1.5;
+    }
+
+    g.tick line {
+        stroke: lightgrey;
+        stroke-opacity: 0.3;
+        shape-rendering: crispEdges;
     }
     </style>
 </head>
@@ -139,6 +149,7 @@
             .range([puntenchart.c_height, 0])
         puntenchart.y_axis.call(
             d3.axisLeft(y_scale_punten)
+            .tickSize(-puntenchart.c_width)
         )
 
         let y_scale_rating = d3.scaleLinear()
