@@ -151,7 +151,6 @@ var bbdataviz = {};
             }
         })
 
-
         // position columns
         let left = 0;
         let right = this.width;
@@ -255,7 +254,7 @@ var bbdataviz = {};
 
     this.xyChart = function(svg) {
         this.parameters = {
-            "margin_left": 25,
+            "margin_left": 40,
             "margin_top": 5,
             "margin_right": 15,
             "margin_bottom": 25,
@@ -282,55 +281,5 @@ var bbdataviz = {};
         this.x_axis.attr('transform', 'translate(' + this.parameters['margin_left'] + ',' + (height - this.parameters['margin_bottom']) + ')')
         this.y_axis.attr('transform', 'translate('+this.parameters['margin_left']+','+this.parameters['margin_top']+')')
     }
-
-    // this.LineChart = function(svg, xscale, yscale) {
-    //     this.parameters = {
-    //         chart_width: 800,
-    //         chart_height: 600,
-    //         chart_margin: 30,
-    //     };
-    //     this.svg = svg;
-    //     this.g = svg.append('g').attr('class', 'root');
-    //     // this.g.attr('width', this.parameters.width);
-    //     // this.g.attr('height', this.parameters.height);
-
-    //     this.xscale = xscale;
-    //     this.x =
-    //         this.g.append('g')
-    //         .attr('class', 'xaxis')
-
-    //     this.yscale = yscale;
-
-    //     this.y = this.g.append('g').attr('class', 'yaxis')
-    //     this.canvas = this.g.append('g').attr('class', 'canvas');
-
-    //     this.resize();
-    // }
-
-    // this.LineChart.prototype.resize = function() {
-    //     // let width = Math.round(0 + this.g.node().getBBox().width) + (this.parameters.chart_margin);
-    //     // let height = Math.round(0 + this.g.node().getBBox().height) + this.parameters.chart_margin;
-    //     let width = this.parameters.chart_width + (this.parameters.chart_margin * 2)
-    //     let height = this.parameters.chart_height + (this.parameters.chart_margin * 2)
-
-
-    //     this.xscale.range([0, this.parameters.chart_width]);
-    //     this.x.attr('transform', 'translate(' + this.parameters.chart_margin + ',' + (this.parameters.chart_height + this.parameters.chart_margin) + ')')
-    //         .call(d3.axisBottom(this.xscale));
-
-    //     this.yscale.range([this.parameters.chart_height, 0]);
-    //     this.y.attr('transform', 'translate(' + this.parameters.chart_margin + ',' + this.parameters.chart_margin + ')')
-    //         .call(d3.axisLeft(this.yscale));
-
-    //     this.canvas.attr('transform', 'translate(' + this.parameters.chart_margin + ',' + this.parameters.chart_margin + ')')
-
-    //     console.log(height);
-    //     this.svg.attr('viewBox', '0 0 ' + width + ' ' + height);
-    // }
-
-    // // set the data and (re)render the chart
-    // this.LineChart.prototype.data = function(data) {
-    //     // this.svg
-    // }
 
 }).apply(bbdataviz);

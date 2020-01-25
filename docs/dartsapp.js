@@ -48,18 +48,27 @@ var dartsapp = {};
                                 games.sort(function(a, b) {
                                     return a.game_order - b.game_order
                                 })
-                                for(let g in games) {
-                                    let game = games[g];
-                                    let c = game['comp']
-                                    if(!Object.keys(seasons).includes(c)) {
+                                let avonden = data.avonden;
+
+                                avonden.sort(function(a, b) {
+                                    let ca = a.datum.replace(/-/g, '')
+                                    let cb = b.datum.replace(/-/g, '')
+                                    return ca - cb
+                                })
+
+                                for (let a in avonden) {
+                                    let avond = avonden[a];
+                                    let c = avond['comp']
+
+                                    if (!Object.keys(seasons).includes(c)) {
                                         seasons[c] = 0
-                                    } 
+                                    }
 
-                                    seasons[c] += game.speler_punten;
-                                    game['comp_punten'] = seasons[c];
+                                    seasons[c] += avond.punten;
+                                    avond['comp_punten'] = seasons[c];
 
-                                    game['date'] = new Date(game['datum'] + ' 12:00');
-                                    game['timestamp'] = Date.parse(game['datum'] + ' 12:00');
+                                    avond['date'] = new Date(avond['datum'] + ' 12:00');
+                                    avond['timestamp'] = Date.parse(avond['datum'] + ' 12:00');
                                 }
 
                                 collector();
