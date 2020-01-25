@@ -101,12 +101,11 @@ def main(argv):
     spelers = [s['speler_naam'] for s in spelers]
     for speler in spelers:
         data = {}
-        pprint(speler)
-
         data['games'] = sva.exec_select_query('''
             SELECT 
-                comp
+                g.comp
                 , g.datum
+                , g.game_order
                 , g.game_id
                 , gd.speler_game_number
                 , g.speler1_180s
@@ -130,6 +129,50 @@ def main(argv):
             WHERE   gd.speler_naam = ?
             ORDER BY gd.speler_game_number
         ''', [speler])
+
+        data['avonden'] = sva.exec_select_query('''
+            SELECT 
+                datum
+                , comp
+                , last_rating AS rating
+                , SUM (speler_rating_adj) as rating_adj
+                , SUM(speler_punten) as punten
+                , SUM(CASE WHEN speler1_naam = speler_naam THEN speler1_180s ELSE speler2_180s END) AS m180s
+                , SUM(CASE WHEN speler1_naam = speler_naam THEN speler1_lollies ELSE speler2_lollies END) AS lollies
+                , GROUP_CONCAT(CASE WHEN speler1_naam = speler_naam THEN speler1_finishes ELSE speler2_finishes END) AS finishes
+                , 1 as game_count
+                , 'game' as type
+            FROM (
+                SELECT 
+                    *
+                    , LAST_VALUE(gd.speler_rating) OVER (
+                        PARTITION BY datum
+                        ORDER BY g.game_order ASC
+                        RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+                    ) as last_rating
+                FROM
+                    game g
+                    JOIN game_data gd ON gd.game_id = g.game_id
+                WHERE gd.speler_naam = ?
+            ) AS a
+            GROUP BY datum
+
+            UNION
+            SELECT 
+                datum
+                , comp
+                , 0 as rating
+                , 0 as rating_adj
+                , speler_points
+                , speler_180s
+                , speler_lollies
+                , speler_finishes
+                , speler_games
+                , adj_type
+            FROM adjustments
+            WHERE speler_naam = ?
+
+        ''', [speler, speler])
 
         filename = rootdir + 'perspeler/' + speler + '.json'
         pprint(filename)
