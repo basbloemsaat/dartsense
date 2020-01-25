@@ -46,7 +46,7 @@ var dartsapp = {};
                                 dartsapp.data['spelers'][to_load[i][s]] = data;
                                 let games = data.games;
                                 games.sort(function(a, b) {
-                                    return a.game_id - b.game_id
+                                    return a.game_order - b.game_order
                                 })
                                 for(let g in games) {
                                     let game = games[g];

@@ -12,6 +12,7 @@ from pprint import pprint
 c = 400
 k = 24
 minrating = 1000
+startrating = 1100
 
 
 def finishes_points(f):
@@ -67,7 +68,7 @@ def main(argv):
 
     spelers_a = sva.exec_select_query('''
         SELECT speler_naam, ? as rating, 0 as games FROM speler
-    ''', [minrating])
+    ''', [startrating])
     spelers = {speler['speler_naam']: speler for speler in spelers_a}
 
     competitions = sva.exec_select_query('''
@@ -87,7 +88,7 @@ def main(argv):
                 speler2_naam, speler2_legs, speler2_finishes, speler2_180s
             FROM game
             WHERE comp=?
-            ORDER BY datum, game_order
+            ORDER BY game_order
         ''', [comp])
 
         # bereken de punten
@@ -126,7 +127,7 @@ def main(argv):
             rating_speler1 = spelers[game['speler1_naam']]
             rating_speler2 = spelers[game['speler2_naam']]
 
-            # als één van beide spelers in zijn eerste 16 wedstrijden zit: geen aftrek
+            # TODO als één van beide spelers in zijn eerste 16 wedstrijden zit: geen aftrek
             # als een ervaren speler tegen speler in zijn eerste 16 speelt: minder winst, geen verlies
             # minimum rating is 1000
 

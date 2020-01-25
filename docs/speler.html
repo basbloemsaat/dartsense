@@ -80,6 +80,7 @@
     let draw_page = function() {
         let games = dartsapp.data.spelers[p['speler']]['games'];
         let max_season_points = games.reduce(function(a, b) {
+            console.log(a,b)
             return Math.max(a.comp_punten || a || 0, b.comp_punten || b || 0);
         })
         let min_date = new Date(games.reduce(function(a, b) {
@@ -89,7 +90,7 @@
             return Math.max(a.timestamp || a, b.timestamp || b);
         }))
         games.sort(function(a, b) {
-            return b.speler_game_number - a.speler_game_number
+            return b.game_order - a.game_order
         })
         let gamerows = d3.select('table#games').select('tbody').selectAll('tr')
             .data(games, function(d) { return d.game_id });
@@ -118,7 +119,7 @@
         newrows.append('td').text(function(d) { return d.comp })
 
         games.sort(function(a, b) {
-            return a.speler_game_number - b.speler_game_number
+            return a.game_order - b.game_order
         })
 
         {
@@ -155,7 +156,7 @@
                     return x_scale(d.date)
                 })
                 .y(function(d) {
-                    console.log(d)
+                    // console.log(d)
                     return y_scale(d.comp_punten)
                 })
 

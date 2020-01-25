@@ -105,8 +105,9 @@ def main(argv):
 
         data['games'] = sva.exec_select_query('''
             SELECT 
-                comp
+                g.comp
                 , g.datum
+                , g.game_order
                 , g.game_id
                 , gd.speler_game_number
                 , g.speler1_180s

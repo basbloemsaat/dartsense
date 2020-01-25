@@ -92,6 +92,7 @@ def init_clean_db():
             game_id         INTEGER PRIMARY KEY,
             comp            VARCHAR(64),
             datum           DATE,
+            file_order      INT,
             game_order      INT,
             round           VARCHAR(16),
             speler1_naam    VARCHAR(128),
@@ -175,7 +176,7 @@ def load_all_data_into_db():
                     continue
 
                 db.execute('''INSERT INTO game (
-                    comp, datum, game_order, round, speler1_naam, speler2_naam,
+                    comp, datum, file_order, round, speler1_naam, speler2_naam,
                     speler1_legs, speler2_legs,
                     speler1_180s, speler2_180s,
                     speler1_lollies, speler2_lollies,
@@ -223,5 +224,25 @@ def load_all_data_into_db():
     for speler in spelers:
         db.execute('''INSERT INTO speler (speler_naam) VALUES (?)''', [speler])
 
+    db.commit();
+
+    db.execute('''
+        UPDATE 
+            game 
+        SET 
+            game_order = ( 
+                SELECT a.rn
+                FROM
+                ( 
+                    SELECT
+                        g1.game_id as x,
+                        ROW_NUMBER() OVER ( 
+                           ORDER BY g1.datum, g1.file_order
+                        ) AS rn
+                    FROM game g1
+                ) AS a
+                WHERE a.x = game_id
+            ) 
+    ''')
     db.commit();
 
