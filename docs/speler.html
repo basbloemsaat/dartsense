@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>dir</title>
+    <title>overzicht speler</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
@@ -38,6 +38,7 @@
         stroke: black;
         stroke-width: 1.5;
     }
+
     path.rating_raw {
         stroke: gray;
         opacity: 0.2
@@ -67,8 +68,34 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
+                <h2>per tegenstander</h2>
+                <table id="tegenstanders" class="table table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="4">laatste 12 maanden</th>
+                            <th colspan="4">vanaf 2016</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>aantal</th>
+                            <th>gewonnen</th>
+                            <th>verloren</th>
+                            <th>rating</th>
+                            <th>aantal</th>
+                            <th>gewonnen</th>
+                            <th>verloren</th>
+                            <th>rating</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
                 <h2>wedstrijden</h2>
-                <table id="games" class="table">
+                <table id="games" class="table table-hover table-sm">
                     <thead>
                         <th>datum</th>
                         <th class="speler1">speler</th>
@@ -96,6 +123,77 @@
 
     let draw_page = function() {
         let games = dartsapp.data.spelers[p['speler']]['games'];
+
+        let per_tegenstander = {}
+        let yearago = new Date();
+        // in deze context doen we niet moeilijk over schrikkeljaren
+        yearago.setDate(yearago.getDate() - 365);
+
+        for (let i in games) {
+            let game = games[i]
+            let game_speler = 2
+            let game_tegenstander = 1
+            if (game['speler1_naam'] == s) {
+                game_speler = 1
+                game_tegenstander = 2
+            }
+
+            let tegenstander_naam = game['speler' + game_tegenstander + '_naam']
+            if (!(tegenstander_naam in per_tegenstander)) {
+                per_tegenstander[tegenstander_naam] = {
+                    "games": 0,
+                    "wins": 0,
+                    "losses": 0,
+                    "rating_adj": 0,
+                    "games12": 0,
+                    "wins12": 0,
+                    "losses12": 0,
+                    "rating_adj12": 0,
+                }
+            }
+
+            let ya = game.date >= yearago
+            per_tegenstander[tegenstander_naam]['games']++
+            per_tegenstander[tegenstander_naam]['rating_adj'] += game['speler_rating_adj']
+            if (ya) {
+                per_tegenstander[tegenstander_naam]['games12']++
+                per_tegenstander[tegenstander_naam]['rating_adj12'] += game['speler_rating_adj']
+            }
+
+            if (game['speler' + game_speler + '_legs'] < game['speler' + game_tegenstander + '_legs']) {
+                per_tegenstander[tegenstander_naam]['losses']++
+                if (ya) {
+                    per_tegenstander[tegenstander_naam]['losses12']++
+                }
+            } else {
+                per_tegenstander[tegenstander_naam]['wins']++
+                if (ya) {
+                    per_tegenstander[tegenstander_naam]['wins12']++
+                }
+            }
+
+
+
+        }
+        let pt = d3.entries(per_tegenstander)
+            .sort(function(a, b) {
+                return (b.value.games12 - a.value.games12) * 1000 + (b.value.games - a.value.games);
+            });
+        console.log(pt)
+        let ptrows = d3.select('table#tegenstanders').select('tbody').selectAll('tr')
+            .data(pt, function(d) { return d.key });
+        let newptrows = ptrows.enter().append('tr')
+        newptrows.append('td').text(function(d) { return d["key"] })
+        newptrows.append('td').text(function(d) { return d["value"]["games12"] })
+        newptrows.append('td').text(function(d) { return d["value"]["wins12"] })
+        newptrows.append('td').text(function(d) { return d["value"]["losses12"] })
+        newptrows.append('td').text(function(d) { return d["value"]["rating_adj12"] })
+        newptrows.append('td').text(function(d) { return d["value"]["games"] })
+        newptrows.append('td').text(function(d) { return d["value"]["wins"] })
+        newptrows.append('td').text(function(d) { return d["value"]["losses"] })
+        newptrows.append('td').text(function(d) { return d["value"]["rating_adj"] })
+
+        // displayvolgorde
         games.sort(function(a, b) {
             return b.game_order - a.game_order
         })

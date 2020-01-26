@@ -56,6 +56,11 @@ var dartsapp = {};
                                     return ca - cb
                                 })
 
+                                for (let g in games) {
+                                    let game = games[g];
+                                    game['date'] = new Date(game['datum'] + ' 12:00');
+                                }
+
                                 for (let a in avonden) {
                                     let avond = avonden[a];
                                     let c = avond['comp']
