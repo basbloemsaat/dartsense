@@ -3,6 +3,7 @@
 
 <head>
     <title>dir</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
     td.speler1,
@@ -37,6 +38,10 @@
         stroke: black;
         stroke-width: 1.5;
     }
+    path.rating_raw {
+        stroke: gray;
+        opacity: 0.2
+    }
 
     g.tick line {
         stroke: lightgrey;
@@ -48,6 +53,7 @@
 
 <body>
     <div class="container-fluid">
+        <a href="/index.html">&larr; overzicht</a>
         <h1 id="title">speler</h1>
         <div class="row">
             <div class="col-lg-6">
@@ -86,6 +92,7 @@
     var ratingchart;
     let p = bbdataviz.url_params();
     let s = p['speler'];
+    d3.select('h1#title').text(s)
 
     let draw_page = function() {
         let games = dartsapp.data.spelers[p['speler']]['games'];
@@ -202,6 +209,7 @@
             .enter()
             .append('path')
             .classed('line', true)
+            .classed('punten', true)
             .attr("d", function(d) {
                 return line_punten(d.values);
             });
@@ -224,10 +232,19 @@
         ratingchart.content
             .append('path')
             .classed('line', true)
+            .classed('rating_raw', true)
             .attr("d", function(d) {
                 return line_rating(avonden);
             });
 
+        line_rating.curve(d3.curveBundle.beta(0.7))
+        ratingchart.content
+            .append('path')
+            .classed('line', true)
+            .classed('rating_smooth', true)
+            .attr("d", function(d) {
+                return line_rating(avonden);
+            });
     }
 
     dartsapp.load_data(draw_page, { 'spelers': [s], })
