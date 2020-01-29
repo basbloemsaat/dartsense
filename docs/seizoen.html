@@ -5,55 +5,7 @@
     <title>overzicht seizoen</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <style>
-    td.speler1,
-    th.speler1 {
-        text-align: right;
-    }
-
-    .win {
-        background-color: #efe;
-    }
-
-    .loss {
-        background-color: #fee;
-    }
-
-    td.datum {
-        white-space: nowrap;
-    }
-
-    svg.chart {
-        width: 100%;
-        height: 20em;
-    }
-
-    g.xaxis,
-    g.yaxis {
-        shape-rendering: crispEdges;
-    }
-
-    g.yaxis path.domain {
-        stroke-opacity: 0;
-    }
-
-    path.line {
-        fill: none;
-        stroke: black;
-        stroke-width: 1.5;
-    }
-
-    path.rating_raw {
-        stroke: gray;
-        opacity: 0.2
-    }
-
-    g.tick line {
-        stroke: lightgrey;
-        stroke-opacity: 0.3;
-        shape-rendering: crispEdges;
-    }
-    </style>
+    <link rel="stylesheet" type="text/css" href="darts.css">
 </head>
 
 <body>
@@ -125,6 +77,9 @@
         standnewrows.append('td').text(function(d) { return d.speler_games })
         standnewrows.append('td').text(function(d) { return (Math.round(100 * d.speler_punten / d.speler_games) / 100 + '0').substr(0, 4) })
         standnewrows.append('td').text(function(d) { return d.rating })
+        standnewrows.append('td').text(function(d) { return d.speler_180s })
+        standnewrows.append('td').text(function(d) { return d.speler_finishes })
+        standnewrows.append('td').text(function(d) { return d.speler_lollies })
 
         let games = dartsapp.data.competitions[s].games;
         games.sort(function(a, b) {
@@ -140,8 +95,12 @@
         newrows.append('td')
             .classed('speler1', true)
             .text(function(d) { return d.speler1_naam })
-        newrows.append('td').text(function(d) { return d.speler1_legs })
-        newrows.append('td').text(' - ')
+        newrows.append('td')
+            .classed('speler1', true)
+            .text(function(d) { return d.speler1_legs })
+        newrows.append('td')
+            .classed('center', true)
+            .text(' - ')
         newrows.append('td').text(function(d) { return d.speler2_legs })
         newrows.append('td').text(function(d) { return d.speler2_naam })
         newrows.append('td').text(function(d) {

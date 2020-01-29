@@ -40,7 +40,7 @@ def main(argv):
         ''', [competition])
 
         data['standings'] = sva.exec_select_query('''
-            SELECT DISTINCT
+           SELECT DISTINCT
                 x.speler_naam,
                 SUM(x.speler_punten) OVER (
                     PARTITION BY x.speler_naam
@@ -54,20 +54,41 @@ def main(argv):
                     RANGE BETWEEN UNBOUNDED PRECEDING AND 
                     UNBOUNDED FOLLOWING
                 ) AS speler_games,
-                LAST_VALUE ( x.speler_rating ) OVER (
+                LAST_VALUE ( x.speler_rating) OVER (
                     PARTITION BY x.speler_naam
                     ORDER BY x.game_order ASC
                     RANGE BETWEEN UNBOUNDED PRECEDING AND 
                     UNBOUNDED FOLLOWING
-                ) AS rating 
-            FROM (
+                ) AS rating,
+                SUM(x.speler_180s) OVER (
+                    PARTITION BY x.speler_naam
+                    ORDER BY x.game_order ASC
+                    RANGE BETWEEN UNBOUNDED PRECEDING AND 
+                    UNBOUNDED FOLLOWING
+                ) AS speler_180s,
+                GROUP_CONCAT(x.speler_finishes, ',' ) OVER (
+                    PARTITION BY x.speler_naam
+                    ORDER BY x.game_order ASC
+                    RANGE BETWEEN UNBOUNDED PRECEDING AND 
+                    UNBOUNDED FOLLOWING
+                ) AS speler_finishes,
+                SUM(x.speler_lollies) OVER (
+                    PARTITION BY x.speler_naam
+                    ORDER BY x.game_order ASC
+                    RANGE BETWEEN UNBOUNDED PRECEDING AND 
+                    UNBOUNDED FOLLOWING
+                ) AS speler_lollies
+                FROM (
                 SELECT
                     a.comp,
                     0 as game_order,
                     a.speler_naam,
                     a.speler_points as speler_punten,
                     0 as speler_rating,
-                    a.speler_games
+                    a.speler_games,
+                    a.speler_180s,
+                    NULLIF(a.speler_finishes,'0') AS speler_finishes,
+                    a.speler_lollies
                 FROM adjustments a
                 WHERE comp=?
                 UNION ALL
@@ -77,7 +98,23 @@ def main(argv):
                     gd.speler_naam,
                     gd.speler_punten,
                     gd.speler_rating,
-                    1 as speler_games
+                    1 as speler_games,
+                    CASE 
+                        WHEN g.speler1_naam = gd.speler_naam
+                        THEN g.speler1_180s
+                        ELSE g.speler2_180s
+                    END,
+                    NULLIF(CASE 
+                        WHEN g.speler1_naam = gd.speler_naam
+                        THEN g.speler1_finishes
+                        ELSE g.speler2_finishes
+                    END,'0'),
+                    CASE 
+                        WHEN g.speler1_naam = gd.speler_naam
+                        THEN g.speler1_lollies
+                        ELSE g.speler2_lollies
+                    END
+                    
                 FROM game g
                 JOIN game_data gd on gd.game_id=g.game_id
                 WHERE comp=?
