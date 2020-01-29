@@ -8,6 +8,7 @@ var dartsapp = {};
         },
         'games': [],
         'spelers': {},
+        'competitions': {},
     };
 
     this.loaded = {
@@ -23,7 +24,8 @@ var dartsapp = {};
         // function die checkt of alles geladen is. Als alles is geladen wordt
         // de callback aangeroepen, anders return zonder actie
         let collector = function() {
-            // todo: check of alles geladen is
+            // todo: check of alles geladen is. Nu laden we nog maar één ding,
+            // dus yagni
             callback();
         }
 
@@ -80,6 +82,17 @@ var dartsapp = {};
                             }
                         )
                 }
+            } else if (i == 'seizoenen') {
+                for (let s in to_load[i]) {
+                    d3.json('./data/perseason/' + to_load[i][s] + '.json')
+                        .then(function(data) {
+                                dartsapp.data['competitions'][to_load[i][s]] = data;
+                                collector();
+                            }
+
+                        )
+                }
+
             } else {
                 console.log(i)
             }
