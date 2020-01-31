@@ -266,7 +266,7 @@ if ( $options->{updatesite} ) {
     my $res = $mech->submit_form(
         form_name => 'aspnetForm',
         fields    => {
-            'ctl00$Content$gebruikersnaam' => $config->{website}->{username},
+            'ctl00$Content$GebruikersnaamTb' => $config->{website}->{username},
             'ctl00$Content$wachtwoord'     => $config->{website}->{password},
         },
         button => 'ctl00$Content$SubmitBtn'
@@ -318,12 +318,11 @@ sub updatePage {
     my $content
         = "<h1>$pages->{$name}->{title}</h1>"
         . "<h3>Bijgewerkt t/m $updateuntil</h3>"
+        . '<p>Voor veel meer details: <a href="https://basbloemsaat.github.io/dartsense/seizoen.html?seizoen=Austerlitz_seizoen_2019-2020">gedetailleerd overzicht</a></p>'
         . $table
         . '<p><hr>'
         . 'updated '
         . $updatetime;
-
-    $content .= '<p>Scores controleren? <a href="https://github.com/basbloemsaat/dartsense/raw/master/data/Austerlitz_seizoen_2019-2020.xlsx">Download een Excel met alle resultaten</a></p>';
 
     $mech->get( $pages->{$name}->{uri} );
     my $res = $mech->submit_form(
