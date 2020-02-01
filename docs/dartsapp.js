@@ -11,6 +11,8 @@ var dartsapp = {};
         'competitions': {},
     };
 
+    this.root = './';
+
     this.loaded = {
         'index': false,
     }
@@ -31,7 +33,7 @@ var dartsapp = {};
 
         for (let i in to_load) {
             if (i == 'index') {
-                d3.json('./data/index.json')
+                d3.json(this.root + 'data/index.json')
                     .then(
                         function(data) {
                             dartsapp.data['index'] = data;
@@ -41,7 +43,7 @@ var dartsapp = {};
                     )
             } else if (i == 'spelers') {
                 for (let s in to_load[i]) {
-                    d3.json('./data/perspeler/' + to_load[i][s] + '.json')
+                    d3.json(this.root + 'data/perspeler/' + to_load[i][s] + '.json')
                         .then(
                             function(data) {
                                 let seasons = {};
@@ -84,7 +86,7 @@ var dartsapp = {};
                 }
             } else if (i == 'seizoenen') {
                 for (let s in to_load[i]) {
-                    d3.json('./data/perseason/' + to_load[i][s] + '.json')
+                    d3.json(this.root + 'data/perseason/' + to_load[i][s] + '.json')
                         .then(function(data) {
                                 dartsapp.data['competitions'][to_load[i][s]] = data;
                                 collector();
