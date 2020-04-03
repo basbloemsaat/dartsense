@@ -3,4 +3,4 @@
 
 # dartsense
 
-http://basbloemsaat.github.io/dartsense/
+moved to https://svausterlitz.github.io/darts/
